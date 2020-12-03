@@ -1,0 +1,92 @@
+<span *ngIf="show" class="label label-success">{{mensaje}}</span>
+           <mk-box header="Datos bancarios" [isCollapsable]="false" [isRemovable]="false">
+            <form #formBancos="ngForm" (ngSubmit)="onSubmit()">
+                <div class="col-md-6">
+                         <div class="form-group">
+              <label for="exampleInputEmail1">Entidad Bancaria * </label>
+              <span *ngIf="entidad.touched && !entidad.valid" class="label label-danger">Entidad es requerida</span>
+              <input type="text" name="entidad" #entidad="ngModel" [(ngModel)]="dataBanco.entidad"  class="form-control"  placeholder="Entidad Bancaria" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Beneficiario Cta Bancaria * </label>
+                <span *ngIf="beneficiario.touched && !beneficiario.valid" class="label label-danger">Beneficiario es requerido</span>
+                <input class="form-control" type="text"  name="beneficiario" #beneficiario="ngModel" [(ngModel)]="dataBanco.beneficiario"  placeholder="Beneficiario Cta Bancaria" required>
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Persona que recibirá el detalle del pago * </label>
+                  <span *ngIf="persona.touched && !persona.valid" class="label label-danger">Persona es requerida</span>
+                  <input class="form-control" type="text" name="persona" #persona="ngModel" [(ngModel)]="dataBanco.persona"  placeholder="Persona que recibirá el detalle del pago " required>
+                </div>
+                  <div class="form-group">
+                      <label for="exampleInputEmail1">Domicilio Entidad Bancaria * </label>
+                      <span *ngIf="dom_entidad.touched && !dom_entidad.valid" class="label label-danger">Domicilio  es requerido</span>
+                      <textarea class="form-control"  name="dom_entidad" #dom_entidad="ngModel" [(ngModel)]="dataBanco.dom_entidad"  rows="2" placeholder="Domicilio Entidad Bancaria" required></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="exampleInputEmail1">Ciudad * </label>
+                      <span *ngIf="ciudad.touched && !ciudad.valid" class="label label-danger">Ciudad  es requerida</span>
+                      <input class="form-control" type="text" name="ciudad" #ciudad="ngModel" [(ngModel)]="dataBanco.ciudad" placeholder="Ciudad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Sucursal * </label>
+                        <span *ngIf="sucursal.touched && !sucursal.valid" class="label label-danger">Sucursal  es requerida</span>
+                        <input class="form-control" type="text" name="sucursal" #sucursal="ngModel" [(ngModel)]="dataBanco.sucursal" placeholder="Sucursal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Tipo de cuenta y moneda * </label>
+                        <span *ngIf="tipocuenta.touched && !tipocuenta.valid" class="label label-danger">Tipo de cuenta  es requerido</span>
+                        <input class="form-control" type="text"  name="tipocuenta" #tipocuenta="ngModel" [(ngModel)]="dataBanco.tipocuenta" placeholder="Tipo de cuenta y moneda" required>
+                      </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Numero de Cuenta * </label>
+                            <span *ngIf="numerocta.touched && !numerocta.valid" class="label label-danger">Numero cta  es requerido</span>
+                            <input class="form-control" type="text" name="numerocta" #numerocta="ngModel" [(ngModel)]="dataBanco.numerocta" placeholder="Numero de Cuenta" required>
+                          </div>
+                </div>
+      <div class="col-md-6">
+            
+                  <div class="form-group">
+                      <label for="exampleInputEmail1">ABA o Ruting * </label>
+                      <span *ngIf="aba.touched && !aba.valid" class="label label-danger">ABA o Ruting es requerido</span>
+                      <input class="form-control" type="text" name="aba" #aba="ngModel" [(ngModel)]="dataBanco.aba"  placeholder="ABA o Ruting" required>
+                  </div>
+                  <div class="form-group">
+                          <label for="exampleInputEmail1">Código Swift / Bank Swift Code * </label>
+                          <span *ngIf="swift.touched && !swift.valid" class="label label-danger">Codigo Swift es requerido</span>
+                          <input class="form-control" type="text" name="swift" #swift="ngModel" [(ngModel)]="dataBanco.swift"  placeholder="Código Swift / Bank Swift Code" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nombre contacto en el banco * </label>
+                        <span *ngIf="contactobco.touched && !contactobco.valid" class="label label-danger">Nombre contacto  en el banco es requerido</span>
+                        <input class="form-control" type="text"  name="contactobco" #contactobco="ngModel" [(ngModel)]="dataBanco.contactobco"  placeholder="Nombre del contacto en el banco" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Teléfono de contacto en el banco * </label>
+                      <span *ngIf="tlfcontacto.touched && !tlfcontacto.valid" class="label label-danger">Teléfono de contacto  en el banco es requerido</span>
+                      <input class="form-control" type="text"  name="tlfcontacto" #tlfcontacto="ngModel" [(ngModel)]="dataBanco.tlfcontacto"  placeholder="Teléfono de contacto en el banco" required>
+                  </div>
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Nombre del banco intermediario</label>
+                        <input class="form-control" type="text"  name="bancointer" #bancointer="ngModel" [(ngModel)]="dataBanco.bancointer"  placeholder="Nombre del banco intermediario">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">ABA o Ruting del banco intermediario</label>
+                        <textarea class="form-control" rows="3"  name="abainter" #abainter="ngModel" [(ngModel)]="dataBanco.abainter"  placeholder="ABA o Ruting del banco intermediario"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label" for="exampleCheck1">Condición de pago / Agreed payment terms:45 días<br> 
+                            Moneda de Transacciones / Currency : US Dollar<br>
+                            Las facturas deberán llegar por e-mail a la siguiente dirección/
+                             All invoices should be sent to the following e-mail addresses: facturacion@adops.pe</label>
+                             <span *ngIf="condicion.touched && !condicion.valid" class="label label-danger">Aceptar las condiciones</span>
+                             <input type="checkbox" class="form-check-input" id="exampleCheck1"  name="condicion" #condicion="ngModel" [(ngModel)]="dataBanco.condicion"  value="1" required>
+                      </div>
+                     </div>
+      <div class="col-md-12">
+          <div class="card-footer">
+            <button type="submit" class="btn  btn-info btn-lg" [disabled]="!formBancos.form.valid">Enviar datos</button>
+            </div>
+          </div>
+        </form>
+      </mk-box>
+      

@@ -1,0 +1,43 @@
+<div class="hold-transition login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      
+        <img src="assets/img/logo-adops.png"/><br>
+        <!--<b>Adops </b>Exchange-->
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
+      <!--<p class="login-box-msg">Ingresar para iniciar sesión</p>-->
+
+      <form #formData="ngForm" (ngSubmit)="loginUser()">
+        <div class="form-group has-feedback">
+          <div *ngIf="error_user" class="label label-danger"> Error de acceso</div>
+          <input type="text" name="usuario" #usuario.usuario="ngModel" [(ngModel)]="usuario.usuario"  class="form-control" placeholder="Usuario">
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input type="password" name="password" #usuario.password="ngModel" [(ngModel)]="usuario.password"  class="form-control" placeholder="Password">
+          <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
+        <div class="row"> 
+          <!-- /.col -->
+          <div class="col-xs-4">
+            <button type="submit" class="btn btn-primary btn-block btn-flat">Ingresar</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <div class="social-auth-links text-center">
+    
+     
+      </div>
+      <!-- /.social-auth-links -->
+
+      <a href="">Olvide mi contraseña</a><br>
+      <!--<a routerLink="/register" class="text-center">Registrarme</a>-->
+
+    </div>
+    <!-- /.login-box-body -->
+  </div>
+</div>

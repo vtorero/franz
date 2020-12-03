@@ -1,0 +1,157 @@
+<mk-box [isCollapsable]="false" [isRemovable]="false">
+<div class="input-group date" style="width:400px;float:right">
+  <div class="input-group-addon">Período&nbsp;&nbsp;
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  <input class="form-control" [owlDateTimeTrigger]="dt" [max]="startDate" [owlDateTime]="dt" [(ngModel)]="selectedMoment">
+                  <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
+                  <div class="input-group-addon"> 
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input class="form-control" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" [max]="startDate" [(ngModel)]="selectedMoment2">
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+
+  </div>
+  <div class="input-group date" style="width:100%">
+
+</div>
+    <div class="box-footer" style="float:right">
+        <button type="button"  (click)="enviaFechas()"  class="btn  btn-info btn-lg">Consultar</button>
+     
+      </div>
+  </mk-box>
+<div class="row">
+    <div class="col-md-3 col-xs-12">
+        <div class="small-box btn_ingreso">
+            <div class="inner">
+                <h3> {{ingreso_total}}
+                  <sup style="font-size: 20px">$</sup>
+                </h3>
+              <p>Ingresos</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-money"></i>
+            </div>
+            <a href="#" class="small-box-footer">&nbsp;</a>
+          </div>
+
+  </div>
+  <div class="col-md-3 col-xs-12">
+      <div class="small-box btn_cpm">
+          <div class="inner">
+              <h3> {{ingreso_cpm}}
+                <sup style="font-size: 20px">$</sup>
+              </h3>
+            <p>CPM</p>
+          </div>
+          <div class="icon">
+            <i class="fa ion-stats-bars"></i>
+          </div>
+          <a href="#" class="small-box-footer">&nbsp;</a>
+        </div>
+   
+  </div>
+  <div class="col-md-3 col-xs-12">
+      <div class="small-box btn_imp">
+          <div class="inner">
+              <h3> {{impresiones}}
+                <sup style="font-size: 20px"></sup>
+              </h3>
+            <p>Impresiones</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-eye"></i>
+          </div>
+          <a href="#" class="small-box-footer">&nbsp;</a>
+        </div>
+  </div>
+  <div class="col-md-3 col-xs-12">
+
+      <div class="small-box btn_per">
+          <div class="inner">
+              <h3>  {{inicio}} al {{final}}  
+                <sup style="font-size: 20px"></sup>
+              </h3>
+            <p>Período</p>
+          </div>
+          <div class="icon">
+            <i class="fa fa-calendar-check-o"></i>
+          </div>
+          <a href="#" class="small-box-footer">&nbsp;</a>
+        </div>
+
+   <!-- <mk-box-info header="Periodo" iconBackgroundColor="red" iconStyleClass="fa fa-calendar-check-o">
+     {{fecha1}} / {{fecha2}}
+    </mk-box-info>-->
+  </div>
+</div>
+<mk-box header="Ingresos diarios" [isCollapsable]="true" [isRemovable]="false">
+  <div class="col-md-12 col-xs-12">
+    <div class="chart-container">   
+      <div id="barChartContent2"><canvas id="canvas2"></canvas></div>
+    </div> 
+  </div>
+</mk-box>
+<mk-box header="Por dispositivo y Creatividad"  [isCollapsable]="true" [isRemovable]="true">
+<div class="row">
+<div class="col-md-6 col-xs-12">
+  <div class="chart-container">   
+     
+        <div id="pieChartContent"><canvas id="canvas"></canvas></div>
+    
+       <div *ngIf="cargando" style="margin-left: 120px;"><img src="assets/img/load.gif"></div>
+  </div> 
+</div>
+<div class="col-md-6 col-xs-12">
+  <div class="chart-container">    
+      <div id="barChartContent4"><canvas id="canvas4"></canvas></div>
+    <div *ngIf="cargando" style="margin-left: 120px"><img src="assets/img/load.gif"></div>
+  </div> 
+</div>
+
+</div>
+</mk-box>
+
+
+<mk-box header="Datos consultados por día" [isCollapsable]="true" [isRemovable]="false">
+  <!--<div class="example-header mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" 
+      placeholder="Escriba algo para filtrar">
+    </mat-form-field>
+</div>-->
+<br>
+<div class="example-container mat-elevation-z8">
+</div>
+
+<div class="example-container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort>
+    <!--  Columna ID-->
+    <ng-container matColumnDef="dimensiondate">
+          <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Fecha</span></mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.dimensiondate}} </mat-cell>
+    </ng-container>
+   <!-- Columna Apellido -->
+    <ng-container matColumnDef="columnad_exchange_ad_ecpm">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">CPM (USD)</span></mat-header-cell>
+          <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_ad_ecpm}} </mat-cell>
+    </ng-container>
+
+      <!-- Columna Nacionalidad -->
+    <ng-container matColumnDef="columnad_exchange_estimated_revenue">
+          <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Ingresos (USD)</span></mat-header-cell>
+          <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_estimated_revenue}} </mat-cell>
+    </ng-container>
+
+     <!-- Columna Edad -->
+     <ng-container matColumnDef="columnad_exchange_impressions">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Impresiones</span></mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.columnad_exchange_impressions}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+</div>
+</mk-box>

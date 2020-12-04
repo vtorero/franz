@@ -14,7 +14,7 @@ $db = new mysqli("localhost","marife","libido16","frdash");
 
 //mysqli_set_charset($db, 'utf8');
 if (mysqli_connect_errno()) {
-    printf("Conexión fallida: %s\n", mysqli_connect_error());
+    printf("Conexiónes fallida: %s\n", mysqli_connect_error());
     exit();
 }
 $data=array();

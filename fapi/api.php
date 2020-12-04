@@ -8,7 +8,6 @@ if($method == "OPTIONS") {
     die();
 }
 require_once 'vendor/autoload.php';
-
 $app = new Slim\Slim();
 $db = new mysqli("localhost","marife","libido16","frdash");
 

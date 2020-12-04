@@ -10,7 +10,7 @@ $app->get("/hola/:nombre",function($nombre)use ($app){
 });
 
 function prueba1(){
-    echo "prueba 1";
+    echo "prueba 11";
 }
 
 $app->get("/pruebas(/:uno(/:dos))",'prueba1',function($uno=NULL,$dos=NULL){

@@ -128,14 +128,15 @@ and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc")
 
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT * FROM  productos");  
+    $resultado = $db->query("SELECT codigo,nombre,costo,IGV,precio_sugerido  FROM  productos");  
     $clientes=array();
         while ($fila = $resultado->fetch_array()) {
             
             $clientes[]=$fila;
         }
-        $data = array("status"=>200,"data"=>$clientes);
-        echo  json_encode($data);
+        $respuesta=json_encode($clientes);
+        echo  $respuesta;
+        
     });
 
 
@@ -407,7 +408,7 @@ if(count($contar)>0){
          $json = $app->request->getBody();
         $data = json_decode($json, true);
 
-        $resultado = $db->query("SELECT * FROM api.usuarios where usuario='".$data['usuario']."' and password='".$data['password']."'");  
+        $resultado = $db->query("SELECT * FROM usuarios where nombre='".$data['usuario']."' and contrasena='".$data['password']."'");  
         $usuario=array();
         while ($fila = $resultado->fetch_object()) {
         $usuario[]=$fila;

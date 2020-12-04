@@ -4,14 +4,15 @@ export const adminLteConf = {
   // isSidebarLeftExpandOnOver: false,
   // isSidebarLeftMouseOver: false,
   // isSidebarLeftMini: true,
-  // sidebarRightSkin: 'dark',
+   sidebarRightSkin: 'dark',
   // isSidebarRightCollapsed: true,
   // isSidebarRightOverContent: true,
   // layout: 'normal',
   sidebarLeftMenu: [
     {label: 'OPCIONES PRINCIPALES', separator: true},
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
-    {label: 'Productos', route: 'general/formulario',iconClasses: 'fa fa-tasks'},  
+    {label: 'Proveedores', route: 'general/formulario',iconClasses: 'fa fa-tasks'},  
+    {label: 'Productos', route: 'general/productos',iconClasses: 'fa fa-tasks'},  
     {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
     /*{label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
       {label: 'General', route: 'general/formulario'},  

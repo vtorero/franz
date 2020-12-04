@@ -21,8 +21,15 @@ export class ApiService {
     
    }
    headers: HttpHeaders = new HttpHeaders({ "Content-type":"application/json" });
-   getProductos(): Observable<any>{
+
+/*   getProductos(): Observable<any>{
     return this._http.get(this.url);
+}*/
+
+getProductos() {
+  return this._http.get(Global.BASE_API_URL+'api.php/productos',
+   { headers: this.headers }
+  ).pipe(map(result => result));
 }
 
 getReportes(inicio: string, final: string,empresa:string) {

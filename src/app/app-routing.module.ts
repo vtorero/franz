@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PagoComponent } from './pago/pago.component';
 import { GeneralComponent } from './general/general.component';
+import {ProductosComponent} from './productos/productos.component';
 
 const routes: Routes = [
   {path:'pagos',
@@ -20,9 +21,15 @@ const routes: Routes = [
       {
         path: 'formulario',
         component: GeneralComponent
-      }
-    ]
-    },
+      },
+    {
+      path: 'productos',
+      component:  ProductosComponent
+    
+    }
+  ]
+  }
+  ,
   {
   path: 'dash',
   data: {

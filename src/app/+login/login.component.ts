@@ -38,14 +38,14 @@ constructor(private router:Router,private login:LoginService) {
               sessionStorage.removeItem("hashsession"); 
               localStorage.setItem("currentUser",data['data'][0]['usuario']);
               localStorage.setItem("currentNombre",data['data'][0]['nombre']);
-              localStorage.setItem("currentAvatar",data['data'][0]['imagen']);
-              localStorage.setItem("currentEmpresa",data['data'][0]['empresa']);
+              localStorage.setItem("currentAvatar",data['data'][0]['avatar']);
+              localStorage.setItem("currentEmpresa",data['data'][0]['nombre']);
               sessionStorage.setItem("hashsession",data['data'][0]['hash']);
-              this.router.navigate(['dash']);
+              this.router.navigate(['general/productos']);
 
             }else{
               this.error_user = true;
-              console.log(this.error_user)
+              //console.log(this.error_user)
             }
             
           });

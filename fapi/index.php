@@ -13,8 +13,6 @@ function prueba1(){
     echo "prueba 1";
 }
 
-
-
 $app->get("/pruebas(/:uno(/:dos))",'prueba1',function($uno=NULL,$dos=NULL){
 echo $uno.'<br>';
 echo $dos.'<br>';

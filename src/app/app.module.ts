@@ -30,6 +30,7 @@ import { PaginatorEspañol } from './modelos/paginator-espanol';
 import { AlertModule as MkAlertModule } from 'angular-admin-lte';
 import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.component';
 import { ProductosComponent } from './productos/productos.component';
+import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
 
 
 
@@ -55,13 +56,14 @@ import { ProductosComponent } from './productos/productos.component';
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]
   ,
-
+  entryComponents: [DialogoarticuloComponent],
   declarations: [
     AppComponent,
     PagoComponent,
     HomeComponent,
     GeneralComponent,
     ProductosComponent,
+    DialogoarticuloComponent,
     
     
       ],

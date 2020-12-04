@@ -2,8 +2,11 @@ import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import {ApiService} from '../api.service';
 import { BrowserModule } from '@angular/platform-browser';
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { DialogoarticuloComponent } from '../dialogoarticulo/dialogoarticulo.component';
 import { MatSort } from '@angular/material/sort';
+import { Producto } from '../modelos/producto';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-productos',
@@ -12,7 +15,7 @@ import { MatSort } from '@angular/material/sort';
 })
 
 @NgModule({
-  imports: [BrowserModule,MatPaginatorModule],
+  imports: [BrowserModule,MatPaginatorModule,MatDialog],
 
 })
 
@@ -21,7 +24,7 @@ export class ProductosComponent implements OnInit {
   displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService) {}
+  constructor(private api:ApiService,public dialog: MatDialog) {}
 
   renderDataTable() {  
     this.api.getProductos().subscribe(x => {  
@@ -49,6 +52,39 @@ export class ProductosComponent implements OnInit {
     });
     
 
+  }
+
+  columnas: string[] = ['codigo', 'nombre', 'costo','IGV','precio', 'borrar'];
+
+  datos: Producto[] = [new Producto('1','papas',0,0,0),];
+
+  ds = new MatTableDataSource<Producto>(this.datos);
+
+  @ViewChild(MatTable) tabla1: MatTable<Producto>;
+
+  
+
+  abrirDialogo() {
+    const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
+      data: new Producto('', '', 0,0,0)
+    });
+
+    dialogo1.afterClosed().subscribe(art => {
+      if (art != undefined)
+        this.agregar(art);
+    });
+  }
+
+  borrarFila(cod: number) {
+    if (confirm("Realmente quiere borrarlo?")) {
+      this.datos.splice(cod, 1);
+      this.tabla1.renderRows();
+    }
+  }
+
+  agregar(art: Producto) {
+    this.datos.push(new Producto(art.codigo, art.nombre, art.costo,art.igv,art.precio));
+    this.tabla1.renderRows();
   }
 
 }

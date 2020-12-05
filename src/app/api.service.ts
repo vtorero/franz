@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { Impresiones } from './modelos/impresiones';
 import { Datosgeneral } from './modelos/datosgeneral';
 import { Databanco } from './modelos/databanco';
+import { Producto } from './modelos/producto';
 
 
 @Injectable({
@@ -31,6 +32,13 @@ getProductos() {
    { headers: this.headers }
   ).pipe(map(result => result));
 }
+
+public GuardarProducto(datos:Producto):Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  let json = JSON.stringify(datos);
+   return this._http.post(Global.BASE_API_URL+'api.php/producto',
+    {json:json},{ headers: headers });
+  }
 
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';

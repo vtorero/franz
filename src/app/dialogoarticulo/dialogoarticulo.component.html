@@ -1,17 +1,18 @@
 <div>
   <h1 mat-dialog-title>Producto</h1>
   <div mat-dialog-content>
-      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 900px; padding: 1rem;">
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
           <mat-form-field>
-              <input matInput [(ngModel)]="data.codigo" type="text" placeholder="Ingrese código">
+              <input matInput [(ngModel)]="data.codigo" type="text" placeholder="Ingrese código" required>
           </mat-form-field>
-
           <mat-form-field>
-              <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre">
+              <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre" required>
           </mat-form-field>
-
           <mat-form-field>
-              <input matInput [(ngModel)]="data.precio" type="number" placeholder="Ingrese precio">
+            <input matInput [(ngModel)]="data.costo" type="number" placeholder="S/.Ingrese costo" required>
+        </mat-form-field>
+          <mat-form-field>
+              <input matInput [(ngModel)]="data.precio" type="number" placeholder="S/.Ingrese precio sugerido" required>
           </mat-form-field>
 
       </div>

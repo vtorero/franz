@@ -77,14 +77,27 @@ export class ProductosComponent implements OnInit {
 
   borrarFila(cod: number) {
     if (confirm("Realmente quiere borrarlo?")) {
-      this.datos.splice(cod, 1);
+      this.dataSource.splice(cod, 1);
       
     }
   }
 
   agregar(art: Producto) {
-    this.datos.push(new Producto(art.codigo, art.nombre, art.costo,art.igv,art.precio));
+    //this.datos.push(new Producto(art.codigo, art.nombre, art.costo,art.igv,art.precio));
     console.log(art);
+    this.api.GuardarProducto(art).subscribe(
+      data=>{
+        //this.show=true;
+        //this.mensaje=data['messaje'];
+        //console.log(this.show)
+        },
+      erro=>{console.log(erro)}
+        );
+
+
+
+
+
     this.renderDataTable();
   }
 

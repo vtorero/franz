@@ -129,29 +129,42 @@ and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc")
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT codigo,nombre,costo,IGV,precio_sugerido  FROM  productos");  
-    $clientes=array();
+    $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
-            $clientes[]=$fila;
+            $prods[]=$fila;
         }
-        $respuesta=json_encode($clientes);
+        $respuesta=json_encode($prods);
         echo  $respuesta;
         
     });
 
 
-    $app->post("/impresos",function() use($db,$app){
-     $query ="INSERT INTO impresos VALUES (NULL,"
-      ."'{$app->request->post("nombre")}',"
-      ."'{$app->request->post("correo")}',now())";
-      $insert= $db->query($query);
-       if($insert){
-       $result = array("STATUS"=>true,"messaje"=>"usuario creado correctamente");
-        }else{
-        $result = array("STATUS"=>false,"messaje"=>"usuario no creado");
-        }
-         echo json_encode($result);
+    $app->post("/producto",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+    
+           $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
+            $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
+            $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
+            $precio=(is_array($data->precio))? array_shift($data->precio): $data->precio;
+    
+        
+            $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria) VALUES ("
+          ."'{$codigo}',"
+          ."'{$nombre}',"
+          ."{$costo},"
+          ."{$precio},1".")";
+       
+          $insert=$db->query($query);
+                   
+           $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$query);
+            echo  json_encode($result);
         });
+
+
 
 
 

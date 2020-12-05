@@ -31,6 +31,7 @@ import { AlertModule as MkAlertModule } from 'angular-admin-lte';
 import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.component';
 import { ProductosComponent } from './productos/productos.component';
 import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -51,6 +52,9 @@ import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.comp
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule,
     MkAlertModule,AlertModule
  
   ],

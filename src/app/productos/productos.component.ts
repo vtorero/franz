@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material';
 
 export class ProductosComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido'];
+  displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,public dialog: MatDialog) {}
@@ -54,7 +54,7 @@ export class ProductosComponent implements OnInit {
 
   }
 
-  columnas: string[] = ['codigo', 'nombre', 'costo','IGV','precio', 'borrar'];
+  columnas: string[] = ['codigo', 'nombre', 'costo','IGV','precio'];
 
   datos: Producto[] = [new Producto('1','papas',0,0,0),];
 
@@ -78,13 +78,14 @@ export class ProductosComponent implements OnInit {
   borrarFila(cod: number) {
     if (confirm("Realmente quiere borrarlo?")) {
       this.datos.splice(cod, 1);
-      this.tabla1.renderRows();
+      
     }
   }
 
   agregar(art: Producto) {
     this.datos.push(new Producto(art.codigo, art.nombre, art.costo,art.igv,art.precio));
-    this.tabla1.renderRows();
+    console.log(art);
+    this.renderDataTable();
   }
 
 }

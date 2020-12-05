@@ -10,13 +10,18 @@ export class DialogoarticuloComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogoarticuloComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Producto) {}
+    @ Inject(MAT_DIALOG_DATA) public data: Producto) {}
 
   ngOnInit() {
   }
 
   cancelar() {
     this.dialogRef.close();
+  }
+
+  agregar(art: Producto) {
+      //console.log(art.nombre+"aca");
+ 
   }
 
 }

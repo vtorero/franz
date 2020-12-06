@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material';
 
 export class ProductosComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido','borrar'];
+  displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,public dialog: MatDialog) {}

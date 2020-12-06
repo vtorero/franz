@@ -40,6 +40,18 @@ public GuardarProducto(datos:Producto):Observable<any> {
     {json:json},{ headers: headers });
   }
 
+  public EliminarProducto(datos:Producto):Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+     return this._http.post(Global.BASE_API_URL+'api.php/productodel',
+      {json:json},{ headers: headers });
+    }
+  
+    getCategorias() {
+      return this._http.get(Global.BASE_API_URL+'api.php/categorias',
+       { headers: this.headers }
+      ).pipe(map(result => result));
+    }
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';
   return this._http.post(url,{

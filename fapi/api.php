@@ -139,6 +139,32 @@ $app->get("/productos",function() use($db,$app){
         
     });
 
+    $app->get("/categorias",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $resultado = $db->query("SELECT id,nombre  FROM  categorias");  
+        $prods=array();
+            while ($fila = $resultado->fetch_array()) {
+                
+                $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+            echo  $respuesta;
+            
+        });
+
+    $app->post("/productodel",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+           $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
+           $query ="DELETE FROM productos WHERE codigo="."'{$codigo}'";
+           $db->query($query);
+                   
+           $result = array("STATUS"=>true,"messaje"=>"Producto eliminado correctamente","string"=>$query);
+            echo  json_encode($result);
+        });
+
 
     $app->post("/producto",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");

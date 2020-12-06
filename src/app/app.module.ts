@@ -32,6 +32,7 @@ import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.co
 import { ProductosComponent } from './productos/productos.component';
 import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CategoriaComponent } from './productos/categoria/categoria.component';
 
 
 
@@ -67,7 +68,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     HomeComponent,
     GeneralComponent,
     ProductosComponent,
+    CategoriaComponent,
     DialogoarticuloComponent,
+    CategoriaComponent,
     
     
       ],

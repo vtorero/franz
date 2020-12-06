@@ -9,12 +9,17 @@ export const adminLteConf = {
   // isSidebarRightOverContent: true,
   // layout: 'normal',
   sidebarLeftMenu: [
-    {label: 'OPCIONES PRINCIPALES', separator: true},
+    {label: 'MENU', separator: true},
+    {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
+      {label: 'Mantenimiento', route: 'general/productos'},  
+      {label: 'Categorias', route: 'categorias'}
+      
+    ]},  
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
     {label: 'Proveedores', route: 'general/formulario',iconClasses: 'fa fa-tasks'},  
-    {label: 'Productos', route: 'general/productos',iconClasses: 'fa fa-tasks'},  
-    {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
-    /*{label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
+    
+   /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},*/
+    {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
       {label: 'General', route: 'general/formulario'},  
       {label: 'Datos Bancarios', route: 'pagos/formulario'},
         

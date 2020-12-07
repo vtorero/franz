@@ -14,8 +14,7 @@ import { MatDialog } from '@angular/material';
   styles: []
 })
 @NgModule({
-  imports: [BrowserModule,MatPaginatorModule,MatDialog],
-
+  imports: [BrowserModule,MatPaginatorModule,MatDialog]
 })
 
 export class CategoriaComponent implements OnInit {
@@ -45,6 +44,26 @@ export class CategoriaComponent implements OnInit {
     this.dataSource.filter = filterValue;
 }
 
+abrirDialog(templateRef,cod) {
+  let dialogRef = this.dialog.open(templateRef, {
+      width: '600px' });
+  
+
+  dialogRef.afterClosed().subscribe(result => {
+    if(!this.cancela){
+      if(cod){
+        this.api.EliminarProducto(cod).subscribe(
+          data=>{
+          },
+          erro=>{console.log(erro)}
+            );
+        this.renderDataTable();
+      }
+
+    }
+  
+});
+}
 
   ngOnInit() {
     this.renderDataTable();  

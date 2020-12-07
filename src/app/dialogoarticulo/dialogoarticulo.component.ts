@@ -3,8 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {Producto} from '../modelos/producto';
 @Component({
   selector: 'app-dialogoarticulo',
-  templateUrl: './dialogoarticulo.component.html',
-  styleUrls: ['./dialogoarticulo.component.css']
+  templateUrl: './dialogoarticulo.component.html'
 })
 export class DialogoarticuloComponent implements OnInit {
 

@@ -152,6 +152,25 @@ $app->get("/productos",function() use($db,$app){
             
         });
 
+
+    $app->post("/categoria",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+        var_dump($data);
+        die();
+            $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data["nombre"];
+           
+            $query ="INSERT INTO categorias (nombre) VALUES ("."'{$nombre}"."')";
+       
+          $insert=$db->query($query);
+                   
+           $result = array("STATUS"=>true,"messaje"=>"Categoria creada correctamente","string"=>$query);
+            echo  json_encode($result);
+        });
+
+
     $app->post("/productodel",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
            $json = $app->request->getBody();

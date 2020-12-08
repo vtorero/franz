@@ -85,6 +85,7 @@ export class ProductosComponent implements OnInit {
   }
   abrirDialog(templateRef,cod) {
     console.log(cod);
+    
     let dialogRef = this.dialogo.open(templateRef, {
         width: '500px' });
     

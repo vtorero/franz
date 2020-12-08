@@ -10,6 +10,7 @@ import { Impresiones } from './modelos/impresiones';
 import { Datosgeneral } from './modelos/datosgeneral';
 import { Databanco } from './modelos/databanco';
 import { Producto } from './modelos/producto';
+import { Categoria } from './modelos/categoria';
 
 
 @Injectable({
@@ -52,6 +53,14 @@ public GuardarProducto(datos:Producto):Observable<any> {
        { headers: this.headers }
       ).pipe(map(result => result));
     }
+
+    public GuardarCategoria(datos:Categoria):Observable<any> {
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      let json = JSON.stringify(datos);
+       return this._http.post(Global.BASE_API_URL+'api.php/categoria',
+        {json:json},{ headers: headers });
+      }
+
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';
   return this._http.post(url,{

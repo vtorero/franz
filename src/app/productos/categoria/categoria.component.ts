@@ -2,8 +2,7 @@ import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import {ApiService} from '../../api.service';
 import { BrowserModule } from '@angular/platform-browser';
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { DialogoarticuloComponent } from '../../dialogoarticulo/dialogoarticulo.component';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Categoria } from '../../modelos/categoria';
 import { MatDialog } from '@angular/material';
@@ -24,7 +23,7 @@ export class CategoriaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,public dialog: MatDialog) {}
-  datos: Categoria[] = [new Categoria('1',''),];
+  datos: Categoria[] = [new Categoria(''),];
 
   renderDataTable() {  
     this.api.getCategorias().subscribe(x => {  
@@ -44,14 +43,19 @@ export class CategoriaComponent implements OnInit {
     this.dataSource.filter = filterValue;
 }
 
-addCategoria(){
-  console.log(this.datos);
+addCategoria(cod){
+  console.log(cod);
+  this.api.GuardarCategoria(cod).subscribe(
+    data=>{
+    },
+    erro=>{console.log(erro)}
+      );
+  this.renderDataTable();
 }
 
 abrirDialog(templateRef,cod) {
   let dialogRef = this.dialog.open(templateRef, {
       width: '600px' });
-  
 
   dialogRef.afterClosed().subscribe(result => {
     if(!this.cancela){

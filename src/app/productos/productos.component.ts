@@ -25,7 +25,7 @@ export class ProductosComponent implements OnInit {
   displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog: MatDialog) {}
+  constructor(private api:ApiService,public dialog:MatDialog,public dialogo:MatDialog) {}
 
   renderDataTable() {  
     this.api.getProductos().subscribe(x => {  
@@ -84,11 +84,11 @@ export class ProductosComponent implements OnInit {
 
   }
   abrirDialog(templateRef,cod) {
-    let dialogRef = this.dialog.open(templateRef, {
+    console.log(cod);
+    let dialogRef = this.dialogo.open(templateRef, {
         width: '500px' });
     
-  
-    dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){
         if(cod){
           this.api.EliminarProducto(cod).subscribe(

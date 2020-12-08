@@ -61,7 +61,7 @@ import { CategoriaComponent } from './productos/categoria/categoria.component';
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]
   ,
-  entryComponents: [DialogoarticuloComponent],
+  entryComponents: [DialogoarticuloComponent,ProductosComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -71,9 +71,7 @@ import { CategoriaComponent } from './productos/categoria/categoria.component';
     CategoriaComponent,
     DialogoarticuloComponent,
     CategoriaComponent,
-    
-    
-      ],
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

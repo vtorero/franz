@@ -37,22 +37,21 @@
   
   </ng-container>
   </mk-box>
-  <button (click)="abrirDialog(dialog)">Agregar Categoria</button>
-  <ng-template #dialog>
+  <button mat-raised-button (click)="abrirDialog(dialog)">Agregar Categoria</button>
+    <ng-template #dialog>
     <div>
       <h1 mat-dialog-title>Agregar Categoria</h1>
       <div mat-dialog-content>
           <div style="display: flex;flex-direction: column; margin:1rem auto; width: 500px; padding: 1rem;">
                    <mat-form-field>
-                  <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre" required>
+                  <input matInput [(ngModel)]="datos.nombre" type="text" placeholder="Ingrese nombre" required>
               </mat-form-field>
-     
-    
+       
           </div>
       </div>
       <div mat-dialog-actions>
           <button mat-button (click)="cancelar()">Cancelar</button>
-          <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+          <button mat-button (click)="addCategoria()">Confirmar</button>
       </div>
       </div>
   </ng-template>

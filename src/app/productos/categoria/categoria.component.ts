@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material';
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
-  styles: []
+  styleUrls: []
 })
 @NgModule({
   imports: [BrowserModule,MatPaginatorModule,MatDialog]
@@ -24,7 +24,7 @@ export class CategoriaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,public dialog: MatDialog) {}
-
+  datos: Categoria[] = [new Categoria('1',''),];
 
   renderDataTable() {  
     this.api.getCategorias().subscribe(x => {  
@@ -42,6 +42,10 @@ export class CategoriaComponent implements OnInit {
     filterValue = filterValue.trim(); 
     filterValue = filterValue.toLowerCase(); 
     this.dataSource.filter = filterValue;
+}
+
+addCategoria(){
+  console.log(this.datos);
 }
 
 abrirDialog(templateRef,cod) {

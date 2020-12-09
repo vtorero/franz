@@ -22,9 +22,9 @@ export class CategoriaComponent implements OnInit {
   displayedColumns = ['codigo','nombre','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  datos: Categoria = new Categoria('');
   constructor(private api:ApiService,public dialog: MatDialog) {}
-  datos: Categoria[] = [new Categoria(''),];
-
+  
   renderDataTable() {  
     this.api.getCategorias().subscribe(x => {  
     this.dataSource = new MatTableDataSource();
@@ -43,16 +43,30 @@ export class CategoriaComponent implements OnInit {
     this.dataSource.filter = filterValue;
 }
 
-addCategoria(cod){
-  console.log(cod);
-  this.api.GuardarCategoria(cod).subscribe(
+addCategoria(cate:any){
+this.agregar(cate);
+  this.renderDataTable();
+}
+
+agregar(art: Categoria) {
+  console.log(art);
+  if(art){
+  this.api.GuardarCategoria(art).subscribe(
     data=>{
-    },
+      //this.show=true;
+      //this.mensaje=data['messaje'];
+      //console.log(this.show)
+      },
     erro=>{console.log(erro)}
       );
   this.renderDataTable();
 }
+}
+cancelar(){
+  this.dialog.closeAll();
+  this.cancela=true;
 
+}
 abrirDialog(templateRef,cod) {
   let dialogRef = this.dialog.open(templateRef, {
       width: '600px' });
@@ -60,7 +74,7 @@ abrirDialog(templateRef,cod) {
   dialogRef.afterClosed().subscribe(result => {
     if(!this.cancela){
       if(cod){
-        this.api.EliminarProducto(cod).subscribe(
+        this.api.EliminarCategoria(cod).subscribe(
           data=>{
           },
           erro=>{console.log(erro)}

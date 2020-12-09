@@ -158,18 +158,29 @@ $app->get("/productos",function() use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-        var_dump($data);
-        die();
-            $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data["nombre"];
+        
+            $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
            
-            $query ="INSERT INTO categorias (nombre) VALUES ("."'{$nombre}"."')";
-       
-          $insert=$db->query($query);
+            $query ="INSERT INTO categorias (nombre) VALUES ('"."{$nombre}"."')";
+            var_dump($query);
+          $db->query($query);
                    
            $result = array("STATUS"=>true,"messaje"=>"Categoria creada correctamente","string"=>$query);
             echo  json_encode($result);
         });
 
+        $app->post("/categoriadel",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+               $codigo=(is_array($data->id))? array_shift($data->id): $data->id;
+               $query ="DELETE FROM categorias WHERE id="."'{$codigo}'";
+               $db->query($query);
+                       
+               $result = array("STATUS"=>true,"messaje"=>"Categoria eliminada correctamente","string"=>$query);
+                echo  json_encode($result);
+            });        
 
     $app->post("/productodel",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");

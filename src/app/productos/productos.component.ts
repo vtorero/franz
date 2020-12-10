@@ -23,7 +23,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ProductosComponent implements OnInit {
   dataSource:any;
   cancela:boolean=false;
-  displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido','borrar'];
+  displayedColumns = ['codigo','nombre','nombrecategoria','costo','IGV','precio_sugerido','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,public dialog:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
@@ -62,7 +62,7 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto('', '', 0,0,0,0)
+      data: new Producto('', '', '',0,0,0,0)
     });
 
     dialogo1.afterClosed().subscribe(art => {

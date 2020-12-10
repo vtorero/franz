@@ -128,7 +128,7 @@ and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc")
 
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT codigo,nombre,costo,IGV,precio_sugerido  FROM  productos");  
+    $resultado = $db->query("SELECT codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

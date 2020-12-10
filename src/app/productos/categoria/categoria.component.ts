@@ -82,9 +82,9 @@ abrirDialog(templateRef,cod) {
           data=>{
             console.log(data);
             if(data['STATUS']==true){
-          this.toastr.success('Aviso', data['messaje']);
+          this.toastr.success(data['messaje']);
             }else{
-            this.toastr.error('Aviso', data['messaje']);
+            this.toastr.error(data['messaje']);
             }
           },
           erro=>{console.log(erro)}

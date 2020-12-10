@@ -29,7 +29,7 @@ export class CategoriaComponent implements OnInit {
   constructor(private api:ApiService,public dialog: MatDialog,private toastr: ToastrService) {}
   
   renderDataTable() {  
-    this.toastr.error('Hello world!', 'Toastr fun!');
+   
     this.api.getCategorias().subscribe(x => {  
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = x; 
@@ -57,12 +57,15 @@ agregar(art: Categoria) {
   if(art){
   this.api.GuardarCategoria(art).subscribe(
     data=>{
-      //this.show=true;
-      //this.mensaje=data['messaje'];
+      console.log(data);
+      this.toastr.success('Aviso', data['messaje']);
+       //this.show=true;
+      //this.mensaje=;
       //console.log(this.show)
       },
     erro=>{console.log(erro)}
       );
+  this.dialog.closeAll();
   this.renderDataTable();
 }
 }
@@ -80,6 +83,7 @@ abrirDialog(templateRef,cod) {
       if(cod){
         this.api.EliminarCategoria(cod).subscribe(
           data=>{
+          this.toastr.success('Aviso', data['messaje']);
           },
           erro=>{console.log(erro)}
             );

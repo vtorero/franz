@@ -141,7 +141,7 @@ $app->get("/productos",function() use($db,$app){
 
     $app->get("/categorias",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,nombre  FROM  categorias");  
+        $resultado = $db->query("SELECT id,nombre  FROM  categorias order by id");  
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
                 
@@ -162,10 +162,9 @@ $app->get("/productos",function() use($db,$app){
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
            
             $query ="INSERT INTO categorias (nombre) VALUES ('"."{$nombre}"."')";
-            var_dump($query);
-          $db->query($query);
+                     $db->query($query);
                    
-           $result = array("STATUS"=>true,"messaje"=>"Categoria creada correctamente","string"=>$query);
+           $result = array("STATUS"=>true,"messaje"=>"Categoria creada correctamente");
             echo  json_encode($result);
         });
 

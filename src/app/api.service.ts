@@ -54,6 +54,10 @@ public GuardarProducto(datos:Producto):Observable<any> {
       ).pipe(map(result => result));
     }
 
+    getCategoriaSelect():Observable<Categoria[]>{
+      return this._http.get<Categoria[]>(Global.BASE_API_URL+'api.php/categorias', { headers: this.headers });
+    }
+
     public GuardarCategoria(datos:Categoria):Observable<any> {
       let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
       let json = JSON.stringify(datos);

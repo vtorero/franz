@@ -4,6 +4,7 @@ export class Producto {
         public nombre:string,
         public costo: number,
         public igv : number,
-        public precio:number
+        public precio:number,
+        public categoria:number
     ){}
 }

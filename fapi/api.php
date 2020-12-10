@@ -162,9 +162,12 @@ $app->get("/productos",function() use($db,$app){
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
            
             $query ="INSERT INTO categorias (nombre) VALUES ('"."{$nombre}"."')";
-                     $db->query($query);
-                   
+            $proceso=$db->query($query);
+            if($proceso){
            $result = array("STATUS"=>true,"messaje"=>"Categoria creada correctamente");
+            }else{
+            $result = array("STATUS"=>false,"messaje"=>"Ocurrio un error en la creación");
+            }
             echo  json_encode($result);
         });
 
@@ -175,9 +178,12 @@ $app->get("/productos",function() use($db,$app){
                $data = json_decode($j['json']);
                $codigo=(is_array($data->id))? array_shift($data->id): $data->id;
                $query ="DELETE FROM categorias WHERE id="."'{$codigo}'";
-               $db->query($query);
-                       
-               $result = array("STATUS"=>true,"messaje"=>"Categoria eliminada correctamente","string"=>$query);
+               $operacion=$db->query($query);
+               if($operacion){        
+               $result = array("STATUS"=>true,"messaje"=>"Categoria eliminada correctamente");
+            }else{
+                $result = array("STATUS"=>false,"messaje"=>'Ocurrio un error');
+            }
                 echo  json_encode($result);
             });        
 
@@ -205,17 +211,19 @@ $app->get("/productos",function() use($db,$app){
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio))? array_shift($data->precio): $data->precio;
+            $categoria=(is_array($data->categoria))? array_shift($data->categoria): $data->categoria;
     
         
             $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
           ."{$costo},"
-          ."{$precio},1".")";
+          ."{$precio},"
+          ."{$categoria}".")";
        
           $insert=$db->query($query);
                    
-           $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$query);
+           $result = array("STATUS"=>true,"messaje"=>"Producto creado correctamente");
             echo  json_encode($result);
         });
 

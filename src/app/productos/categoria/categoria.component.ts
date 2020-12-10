@@ -59,9 +59,6 @@ agregar(art: Categoria) {
     data=>{
       console.log(data);
       this.toastr.success('Aviso', data['messaje']);
-       //this.show=true;
-      //this.mensaje=;
-      //console.log(this.show)
       },
     erro=>{console.log(erro)}
       );
@@ -83,7 +80,12 @@ abrirDialog(templateRef,cod) {
       if(cod){
         this.api.EliminarCategoria(cod).subscribe(
           data=>{
+            console.log(data);
+            if(data['STATUS']==true){
           this.toastr.success('Aviso', data['messaje']);
+            }else{
+            this.toastr.error('Aviso', data['messaje']);
+            }
           },
           erro=>{console.log(erro)}
             );

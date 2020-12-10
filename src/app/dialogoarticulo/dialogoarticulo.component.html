@@ -14,6 +14,14 @@
           <mat-form-field>
               <input matInput [(ngModel)]="data.precio" type="number" placeholder="S/.Ingrese precio sugerido" required>
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Categoria</mat-label>
+            <mat-select [(ngModel)]="data.categoria">
+              <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
+                {{cat.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
       </div>
   </div>

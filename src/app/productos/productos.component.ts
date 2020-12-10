@@ -7,6 +7,7 @@ import { DialogoarticuloComponent } from '../dialogoarticulo/dialogoarticulo.com
 import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-productos',
@@ -25,7 +26,7 @@ export class ProductosComponent implements OnInit {
   displayedColumns = ['codigo','nombre','costo','IGV','precio_sugerido','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog:MatDialog,public dialogo:MatDialog) {}
+  constructor(private api:ApiService,public dialog:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
 
   renderDataTable() {  
     this.api.getProductos().subscribe(x => {  
@@ -52,8 +53,8 @@ export class ProductosComponent implements OnInit {
   }
 
 
-  datos: Producto[] = [new Producto('1','papas',0,0,0)];
-  ds = new MatTableDataSource<Producto>(this.datos);
+  //datos: Producto[] = [new Producto('1','papas',0,0,0)];
+  //ds = new MatTableDataSource<Producto>(this.datos);
 
   @ViewChild(MatTable) tabla1: MatTable<Producto>;
 
@@ -61,7 +62,7 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto('', '', 0,0,0)
+      data: new Producto('', '', 0,0,0,0)
     });
 
     dialogo1.afterClosed().subscribe(art => {
@@ -70,30 +71,23 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  borrarFila(cod: number) {
-    if (confirm("Realmente quiere borrarlo?")) {
-      console.log(cod);
-      this.datos.slice(cod,1);
-      //this.renderDataTable();
-      
-    }
-  }
   cancelar(){
     this.dialog.closeAll();
     this.cancela=true;
 
   }
+
   abrirDialog(templateRef,cod) {
-    console.log(cod);
-    
-    let dialogRef = this.dialogo.open(templateRef, {
+         let dialogRef = this.dialogo.open(templateRef, {
         width: '500px' });
     
       dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){
+        console.log('cancela')
         if(cod){
           this.api.EliminarProducto(cod).subscribe(
             data=>{
+            this.toastr.success('Aviso', data['messaje']);
             },
             erro=>{console.log(erro)}
               );
@@ -110,6 +104,7 @@ export class ProductosComponent implements OnInit {
     if(art){
     this.api.GuardarProducto(art).subscribe(
       data=>{
+        this.toastr.success('Aviso', data['messaje']);
         //this.show=true;
         //this.mensaje=data['messaje'];
         //console.log(this.show)

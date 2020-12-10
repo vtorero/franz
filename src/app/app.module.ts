@@ -33,6 +33,8 @@ import { ProductosComponent } from './productos/productos.component';
 import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CategoriaComponent } from './productos/categoria/categoria.component';
+import { ToastrModule } from 'ngx-toastr';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -56,7 +58,10 @@ import { CategoriaComponent } from './productos/categoria/categoria.component';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
-    MkAlertModule,AlertModule
+    MkAlertModule,AlertModule,
+    CommonModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot()
  
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]

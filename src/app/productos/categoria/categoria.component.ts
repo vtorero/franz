@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Categoria } from '../../modelos/categoria';
 import { MatDialog } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-categoria',
@@ -13,7 +15,8 @@ import { MatDialog } from '@angular/material';
   styleUrls: []
 })
 @NgModule({
-  imports: [BrowserModule,MatPaginatorModule,MatDialog]
+  imports: [BrowserModule,MatPaginatorModule,MatDialog,
+  ]
 })
 
 export class CategoriaComponent implements OnInit {
@@ -23,9 +26,10 @@ export class CategoriaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   datos: Categoria = new Categoria('');
-  constructor(private api:ApiService,public dialog: MatDialog) {}
+  constructor(private api:ApiService,public dialog: MatDialog,private toastr: ToastrService) {}
   
   renderDataTable() {  
+    this.toastr.error('Hello world!', 'Toastr fun!');
     this.api.getCategorias().subscribe(x => {  
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = x; 
@@ -89,7 +93,6 @@ abrirDialog(templateRef,cod) {
 
   ngOnInit() {
     this.renderDataTable();  
-
   }
 
 }

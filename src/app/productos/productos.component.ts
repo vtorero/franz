@@ -3,7 +3,7 @@ import {ApiService} from '../api.service';
 import { BrowserModule } from '@angular/platform-browser';
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { DialogoarticuloComponent } from '../dialogoarticulo/dialogoarticulo.component';
+import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
 import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';
@@ -65,9 +65,17 @@ export class ProductosComponent implements OnInit {
       data: new Producto('', '', '',0,0,0,0)
     });
 
+ 
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
         this.agregar(art);
+    });
+  }
+
+  abrirDialogoEdit(cod) {
+    console.log(cod);
+    const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
+      data: cod
     });
   }
 

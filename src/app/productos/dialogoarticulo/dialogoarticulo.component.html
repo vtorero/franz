@@ -12,11 +12,11 @@
             <input matInput [(ngModel)]="data.costo" type="number" placeholder="S/.Ingrese costo" required>
         </mat-form-field>
           <mat-form-field>
-              <input matInput [(ngModel)]="data.precio" type="number" placeholder="S/.Ingrese precio sugerido" required>
+              <input matInput [(ngModel)]="data.precio_sugerido" type="number" placeholder="S/.Ingrese precio sugerido" required>
           </mat-form-field>
           <mat-form-field>
             <mat-label>Categoria</mat-label>
-            <mat-select [(ngModel)]="data.categoria">
+            <mat-select [(ngModel)]="data.id_categoria">
               <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
                 {{cat.nombre}}
               </mat-option>

@@ -6,7 +6,7 @@ export class Producto {
         public costo: number,
         public igv : number,
         public precio:number,
-        public categoria:number
+        public id_categoria:number
         
     ){}
 }

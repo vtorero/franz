@@ -128,7 +128,7 @@ and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc")
 
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -211,7 +211,7 @@ $app->get("/productos",function() use($db,$app){
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio))? array_shift($data->precio): $data->precio;
-            $categoria=(is_array($data->categoria))? array_shift($data->categoria): $data->categoria;
+            $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
     
         
             $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria) VALUES ("

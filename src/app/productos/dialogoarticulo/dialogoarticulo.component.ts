@@ -1,9 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { ApiService } from '../api.service';
-import { Categoria } from '../modelos/categoria';
-import {Producto} from '../modelos/producto';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { ApiService } from '../../api.service';
+import {Producto} from '../../modelos/producto';
 @Component({
   selector: 'app-dialogoarticulo',
   templateUrl: './dialogoarticulo.component.html'
@@ -15,7 +13,7 @@ export class DialogoarticuloComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogoarticuloComponent>,
     @ Inject(MAT_DIALOG_DATA) public data: Producto,private api:ApiService) {}
 
-    getTypeT(): void {
+    getCate(): void {
       this.api.getCategoriaSelect().subscribe(data => {
         if(data) {
           this.dataSource = data;
@@ -26,7 +24,7 @@ export class DialogoarticuloComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.getTypeT();
+    this.getCate();
   
 }
 

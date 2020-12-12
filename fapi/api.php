@@ -210,7 +210,7 @@ $app->get("/productos",function() use($db,$app){
            $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
-            $precio=(is_array($data->precio))? array_shift($data->precio): $data->precio;
+            $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
     
         
@@ -227,8 +227,31 @@ $app->get("/productos",function() use($db,$app){
             echo  json_encode($result);
         });
 
+        $app->post("/productoedit",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+            $json = $app->request->getBody();
+            $j = json_decode($json,true);
+            $data = json_decode($j['json']);
+             
+            $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
+            $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
+            $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
+            $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
+            $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
 
-
+            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria." WHERE codigo=".$codigo;
+            try { 
+            $db->query($sql);
+             $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
+             echo  json_encode($result);
+            }
+             catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+        }
+                               
+        
+         });
+ 
 
 
     $app->post("/productos",function() use($db,$app){

@@ -8,6 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
+import { EditarProductoComponent } from './editar-producto/editar-producto.component';
 
 @Component({
   selector: 'app-productos',
@@ -26,7 +27,7 @@ export class ProductosComponent implements OnInit {
   displayedColumns = ['codigo','nombre','nombrecategoria','costo','IGV','precio_sugerido','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
+  constructor(private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
 
   renderDataTable() {  
     this.api.getProductos().subscribe(x => {  
@@ -62,25 +63,33 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto('', '', '',0,0,0,0)
+      data: new Producto('', '', '',0,0,0,0,0)
     });
 
- 
-    dialogo1.afterClosed().subscribe(art => {
-      if (art != undefined)
+     dialogo1.afterClosed().subscribe(art => {
+       if (art!= undefined)
         this.agregar(art);
-    });
+      });
   }
 
   abrirDialogoEdit(cod) {
-    console.log(cod);
-    const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
+    const dialogo2 = this.dialog2.open(EditarProductoComponent, {
       data: cod
     });
+
+     dialogo2.afterClosed().subscribe(art => {
+      if(!this.cancela){
+       if (art!= undefined)
+        this.editar(cod);
+        this.renderDataTable();
+      }
+      });
+  
   }
 
   cancelar(){
     this.dialog.closeAll();
+    this.dialog2.closeAll();
     this.cancela=true;
 
   }
@@ -91,8 +100,7 @@ export class ProductosComponent implements OnInit {
     
       dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){
-        console.log('cancela')
-        if(cod){
+          if(cod){
           this.api.EliminarProducto(cod).subscribe(
             data=>{
             this.toastr.success('Aviso', data['messaje']);
@@ -107,20 +115,27 @@ export class ProductosComponent implements OnInit {
 });
 }
   agregar(art: Producto) {
-    //this.datos.push(new Producto(art.codigo, art.nombre, art.costo,art.igv,art.precio));
-    console.log(art);
     if(art){
     this.api.GuardarProducto(art).subscribe(
       data=>{
         this.toastr.success('Aviso', data['messaje']);
-        //this.show=true;
-        //this.mensaje=data['messaje'];
-        //console.log(this.show)
         },
       erro=>{console.log(erro)}
         );
-    this.renderDataTable();
+      this.renderDataTable();
   }
+}
+
+editar(art: Producto) {
+  if(art){
+  this.api.EditarProducto(art).subscribe(
+    data=>{
+      this.toastr.success('Aviso', data['messaje']);
+      },
+    erro=>{console.log(erro)}
+      );
+    this.renderDataTable();
+}
 }
 
 }

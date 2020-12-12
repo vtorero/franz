@@ -34,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { CategoriaComponent } from './productos/categoria/categoria.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 
 
 
@@ -65,7 +66,7 @@ import { CommonModule } from '@angular/common';
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]
   ,
-  entryComponents: [DialogoarticuloComponent,ProductosComponent],
+  entryComponents: [DialogoarticuloComponent,ProductosComponent,EditarProductoComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -75,6 +76,7 @@ import { CommonModule } from '@angular/common';
     CategoriaComponent,
     DialogoarticuloComponent,
     CategoriaComponent,
+    EditarProductoComponent,
     ],
   bootstrap: [AppComponent]
 })

@@ -47,6 +47,14 @@ public GuardarProducto(datos:Producto):Observable<any> {
      return this._http.post(Global.BASE_API_URL+'api.php/productodel',
       {json:json},{ headers: headers });
     }
+
+    public EditarProducto(datos:Producto):Observable<any> {
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      let json = JSON.stringify(datos);
+       return this._http.post(Global.BASE_API_URL+'api.php/productoedit',
+        {json:json},{ headers: headers });
+      }
+    
   
     getCategorias() {
       return this._http.get(Global.BASE_API_URL+'api.php/categorias',

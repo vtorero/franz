@@ -1,9 +1,9 @@
 <div>
-  <h1 mat-dialog-title>Agregar Producto</h1>
+  <h1 mat-dialog-title>Editar Producto: {{data.nombre}}</h1>
   <div mat-dialog-content>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
           <mat-form-field>
-              <input matInput [(ngModel)]="data.codigo" type="text" placeholder="Ingrese código" required>
+              <input matInput [(ngModel)]="data.codigo" type="text" readonly>
           </mat-form-field>
           <mat-form-field>
               <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre" required>

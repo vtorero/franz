@@ -35,6 +35,7 @@ import { CategoriaComponent } from './productos/categoria/categoria.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
+import { ProveedoresComponent } from './proveedores/proveedores.component';
 
 
 
@@ -77,6 +78,7 @@ import { EditarProductoComponent } from './productos/editar-producto/editar-prod
     DialogoarticuloComponent,
     CategoriaComponent,
     EditarProductoComponent,
+    ProveedoresComponent,
     ],
   bootstrap: [AppComponent]
 })

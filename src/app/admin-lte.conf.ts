@@ -15,9 +15,11 @@ export const adminLteConf = {
       {label: 'Categorias', route: 'categorias'}
       
     ]},  
+     {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
+      {label: 'Listado', route: 'general/proveedores'},  
+      {label: 'Agregar', route: 'general/productos'}  
+    ]},  
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
-    {label: 'Proveedores', route: 'general/formulario',iconClasses: 'fa fa-tasks'},  
-    
    /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},*/
     {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
       {label: 'General', route: 'general/formulario'},  

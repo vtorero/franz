@@ -253,51 +253,19 @@ $app->get("/productos",function() use($db,$app){
          });
  
 
-
-    $app->post("/productos",function() use($db,$app){
-     $query ="INSERT INTO productos VALUES (NULL,"
-      ."'{$app->request->post("name")}',"
-      ."'{$app->request->post("description")}',"
-      ."'{$app->request->post("price")}'"
-      .")";
-      $insert= $db->query($query);
-       if($insert){
-       $result = array("STATUS"=>true,"messaje"=>"Producto creado correctamente");
-        }else{
-        $result = array("STATUS"=>false,"messaje"=>"Producto no creado");
-        }
-         echo json_encode($result);
-        });
-
-        $app->put("/productos/:id",function($id) use($db,$app){
-        $query ="UPDATE productos SET "
-        ."name ='{$app->request->post("name")}',"
-        ."description = '{$app->request->post("description")}',"
-        ."price = {$app->request->post("price")} "
-        ." WHERE id={$id}";
-        echo $query;
-        $update= $db->query($query);
-        if($update){
-            $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente");
-        }else{
-            $result = array("STATUS"=>false,"messaje"=>"Producto no actualizado");
-        }
-
-         echo json_encode($result);
-
-    });        
-        
-    $app->delete("/productos/:id",function($id) use($db,$app){
-
-    $query ="DELETE FROM productos where id = {$id}";
-    $delete = $db->query($query);
-    if($delete){
-        $result = array("STATUS"=>true,"messaje"=>"Producto eliminado correctamente");
-    }else{
-        $result = array("STATUS"=>false,"messaje"=>"Producto no eliminado");
-    }
-     echo json_encode($result);
-    });
+         $app->get("/proveedores",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+            $resultado = $db->query("SELECT `id`, `razon_social`, `tipo_documento`, `ruc`, `num_documento`, `telefono` FROM `proveedores`");  
+            $prods=array();
+                while ($fila = $resultado->fetch_array()) {
+                    
+                    $prods[]=$fila;
+                }
+                $respuesta=json_encode($prods);
+                echo  $respuesta;
+                
+            });
+         
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

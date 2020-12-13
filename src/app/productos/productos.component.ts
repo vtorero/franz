@@ -53,13 +53,7 @@ export class ProductosComponent implements OnInit {
 
   }
 
-
-  //datos: Producto[] = [new Producto('1','papas',0,0,0)];
-  //ds = new MatTableDataSource<Producto>(this.datos);
-
   @ViewChild(MatTable) tabla1: MatTable<Producto>;
-
-  
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {

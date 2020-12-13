@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 
 export class HeaderInnerComponent {
 usuario:string;
+notificaciones:number=4;
 public imagen:string
 
   constructor(){}

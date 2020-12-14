@@ -3,7 +3,7 @@ import {ApiService} from '../api.service';
 import { BrowserModule } from '@angular/platform-browser';
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { DialogoarticuloComponent } from './dialogoarticulo/dialogoarticulo.component';
+import { DialogoarticuloComponent } from './AddProducto/AddProducto.component';
 import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';

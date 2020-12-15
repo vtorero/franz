@@ -18,114 +18,7 @@ if (mysqli_connect_errno()) {
 }
 $data=array();
 
-$app->post("/tablaconsulta",function() use($db,$app){
-  header("Content-type: application/json; charset=utf-8");
-    $json = $app->request->getBody();
-    $dat = json_decode($json, true);
-    $hash=$dat['emp'];
-    $arraymeses=array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-    $arraynros=array('01','02','03','04','05','06','07','08','09','10','11','12');
-    $mes1=substr($dat['ini'], 0,3);
-    $mes2=substr($dat['fin'], 0,3);
-    $dia1=substr($dat['ini'], 3,2);
-    $dia2=substr($dat['fin'], 3,2);
-    $ano1=substr($dat['ini'], 5,4);
-    $ano2=substr($dat['fin'], 5,4);
-    $fmes1=str_replace($arraymeses,$arraynros,$mes1);
-    $fmes2=str_replace($arraymeses,$arraynros,$mes2);
-    $ini=$ano1.'-'.$fmes1.'-'.$dia1;
-    $fin=$ano2.'-'.$fmes2.'-'.$dia2;
-
-     $datocliente=$db->query("SELECT * FROM api.usuarios where hash='".$hash."'");
-       $infocliente=array();
-  while ($cliente = $datocliente->fetch_array()) {
-            $infocliente[]=$cliente;
-        }
-     
-        $tasa=(float) $infocliente[0]["tasa"];
-         $cpm=(float) $infocliente[0]["cpm"];
-        $emp=$infocliente[0]["empresa"];
-
-        if($emp=='Latina.pe' and $fmes1=='08' and $fmes2=='08'){
-            $tasa=1;
-            $cpm=1;
-
-        }
-        $numeromes=(int)$fmes1;
-        if($emp=='America Economia' and $numeromes>=10 and $ano1=='2020'){
-            $tasa=0.70;
-            $cpm=0.70;
-        }
-        
-
-$sql_txt="SELECT dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue*".$cpm.")/(sum(columnad_exchange_impressions))*1000,2) columnad_exchange_ad_ecpm,FORMAT(SUM(columnad_exchange_impressions),0) columnad_exchange_impressions,FORMAT(SUM(columnad_exchange_estimated_revenue*".$tasa."),2) columnad_exchange_estimated_revenue FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' 
-and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc";
-      $resultado_diario = $db->query($sql_txt);  
-    $infotabla=array();
-        while ($filatabla = $resultado_diario->fetch_array()) {
-                        $infotabla[]=$filatabla;
-        }
-        
-        
-        $respuesta=json_encode($infotabla);
-        echo  $respuesta;
-
-});
-
-
-
-$app->post("/tabla",function() use($db,$app){
-  header("Content-type: application/json; charset=utf-8");
-    $json = $app->request->getBody();
-    $dat = json_decode($json, true);
-    $date = new DateTime();
-    $date->modify('last day of this month');
-    $date->format('Y-m-d');
-    $ini=substr( $date->format('Y-m-d'),0,7).'-01';
-    $fin = substr($date->format('Y-m-d'),0,10);
-    $hash=$dat['emp'];
-
-
-     $datocliente=$db->query("SELECT * FROM api.usuarios where hash='".$hash."'");
-  $infocliente=array();
-  
-  while ($cliente = $datocliente->fetch_array()) {
-            $infocliente[]=$cliente;
-        }
-
-        $tasa=(float) $infocliente[0]["tasa"];
-         $cpm=(float) $infocliente[0]["cpm"];
-        $emp=$infocliente[0]["empresa"];
-
-        if($emp=='Latina.pe' and $fmes1=='08' and $fmes2=='08'){
-            $tasa=1;
-            $cpm=1;
-
-        }
-        $numeromes=(int)$fmes1;
-        if($emp=='America Economia' and $numeromes>=10 and $ano1=='2020'){
-            $tasa=0.70;
-            $cpm=0.70;
-        }
-
-      $resultado_diario = $db->query("SELECT dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue*".$cpm.")/(sum(columnad_exchange_impressions))*1000,2) columnad_exchange_ad_ecpm,
-        FORMAT(SUM(columnad_exchange_impressions),0) columnad_exchange_impressions,FORMAT(SUM(columnad_exchange_estimated_revenue*".$tasa."),2) columnad_exchange_estimated_revenue FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' 
-and dimensiondate between '".$ini."' and '".$fin."' GROUP BY 1 order by 1 desc");  
-    $infotabla=array();
-        while ($filatabla = $resultado_diario->fetch_array()) {
-                        $infotabla[]=$filatabla;
-        }
-        
-        
-        $respuesta=json_encode($infotabla);
-        echo  $respuesta;
-
-});
-
-
-
+/*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
@@ -139,7 +32,7 @@ $app->get("/productos",function() use($db,$app){
         
     });
 
-    $app->get("/categorias",function() use($db,$app){
+$app->get("/categorias",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $resultado = $db->query("SELECT id,nombre  FROM  categorias order by id");  
         $prods=array();
@@ -252,7 +145,7 @@ $app->get("/productos",function() use($db,$app){
         
          });
  
-
+/*Proveedores*/
 $app->get("/proveedores",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
             $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores`");  
@@ -294,6 +187,19 @@ $app->post("/proveedor",function() use($db,$app){
        $result = array("STATUS"=>true,"messaje"=>"Proveedor registrado correctamente","string"=>$query);
         echo  json_encode($result);
     });
+
+/**Compras */
+
+$app->get("/compras",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
 
 $app->post("/bancosget",function() use($db,$app) {

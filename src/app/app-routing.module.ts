@@ -6,6 +6,7 @@ import { GeneralComponent } from './general/general.component';
 import {ProductosComponent} from './productos/productos.component';
 import { CategoriaComponent } from './productos/categoria/categoria.component';
 import {ProveedoresComponent} from './proveedores/proveedores.component';
+import { ComprasComponent } from './compras/compras.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,10 @@ const routes: Routes = [
   {path:'general',
   
     children: [
+      {
+        path:'compras',
+        component:ComprasComponent
+      },
       {
         path: 'formulario',
         component: GeneralComponent

@@ -14,6 +14,11 @@ export const adminLteConf = {
       {label: 'Mantenimiento', route: 'general/productos'},  
       {label: 'Categorias', route: 'categorias'}
       
+    ]}, 
+    {label: 'Compras',iconClasses: 'fa fa-tasks',children:[
+      {label: 'Registrar', route: 'general/compras'},  
+      {label: 'Reportes', route: 'general/dash'}
+      
     ]},  
      {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/proveedores'},  

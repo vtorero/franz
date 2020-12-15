@@ -1,0 +1,62 @@
+<mk-box header="Mantenimiento Productos" [isCollapsable]="false" [isRemovable]="false">
+<div class="example-header mat-elevation-z8">
+    <mat-form-field>
+       <input matInput (keyup)="applyFilter($event.target.value)" 
+      placeholder="Escriba algo para filtrar">
+    </mat-form-field>
+  </div>
+<div class="example-container mat-elevation-z8">
+<mat-table [dataSource]="dataSource" matSort>
+    <!--  Columna ID-->
+    <ng-container matColumnDef="codigo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+    </ng-container>
+   <!-- Columna Apellido -->
+    <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.nombre}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="nombrecategoria">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Categoria</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.nombrecategoria}} </mat-cell>
+</ng-container>
+
+      <!-- Columna Nacionalidad -->
+    <ng-container matColumnDef="costo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Costo</mat-header-cell>
+          <mat-cell *matCellDef="let row">S/. {{row.costo}} </mat-cell>
+    </ng-container>
+
+     <!-- Columna Edad -->
+     <ng-container matColumnDef="IGV">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">IGV</span></mat-header-cell>
+          <mat-cell *matCellDef="let row">S/. {{row.IGV}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="precio_sugerido">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Precio sugerido</span></mat-header-cell>
+      <mat-cell *matCellDef="let row">S/. {{row.precio_sugerido}} </mat-cell>
+</ng-container>
+<ng-container matColumnDef="borrar">
+      <th mat-header-cell *matHeaderCellDef> Opciones </th>
+      <td mat-cell *matCellDef="let row ">
+            <button class="btn" (click)="abrirDialogoEdit(row)">Editar</button>&nbsp;
+            <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
+        
+        <ng-template #dialogTemplate>
+         <h5>Eliminar el producto: {{row.nombre}} ?</h5>
+         <button mat-button (click)="cancelar()">Cancelar</button>
+         <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+        </ng-template>
+      </td>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]></mat-paginator>
+</div>
+<ng-container>
+
+</ng-container>
+</mk-box>
+<button mat-raised-button (click)="abrirDialogo()">Agregar Producto</button>

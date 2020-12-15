@@ -1,0 +1,4 @@
+obs 20/11
+Grafico x creatividad leyenda a la derecha y top 5
+Graficos x dia totalizado y la fecha mas corta
+Fecha,ingresos,impresiones,cpm

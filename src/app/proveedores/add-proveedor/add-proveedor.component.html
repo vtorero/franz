@@ -1,0 +1,32 @@
+<div>
+  <h1 mat-dialog-title>Agregar Proveedor</h1>
+  <div mat-dialog-content>
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
+          <mat-form-field>
+              <input matInput [(ngModel)]="data.num_documento" type="text" placeholder="Ingrese Ruc" (focusout)="onLoadDatos($event)"  required>
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput [(ngModel)]="data.razon_social" type="text" placeholder="Ingrese Razon Social" required>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.estado" type="text" placeholder="Estado" required>
+        </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.direccion" type="text" placeholder="Dirección" required>
+        </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.departamento" type="text" placeholder="Departamento" required>
+          </mat-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="data.provincia" type="text" placeholder="Provincia" required>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="data.distrito" type="text" placeholder="Distrito" required>
+          </mat-form-field>
+          </div>
+  </div>
+  <div mat-dialog-actions>
+      <button mat-button (click)="cancelar()">Cancelar</button>
+      <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+  </div>
+  </div>

@@ -11,6 +11,7 @@ import { Datosgeneral } from './modelos/datosgeneral';
 import { Databanco } from './modelos/databanco';
 import { Producto } from './modelos/producto';
 import { Categoria } from './modelos/categoria';
+import { Proveedor } from './modelos/proveedor';
 
 
 @Injectable({
@@ -89,6 +90,13 @@ getProveedores() {
   ).pipe(map(result => result));
 }
 
+public GuardarProveedor(datos:Proveedor):Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  let json = JSON.stringify(datos);
+   return this._http.post(Global.BASE_API_URL+'api.php/proveedor',
+    {json:json},{ headers: headers });
+  }
+  
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';
   return this._http.post(url,{
@@ -96,6 +104,12 @@ getReportes(inicio: string, final: string,empresa:string) {
       fin: final,
       emp:empresa
   }, { headers: this.headers }).pipe(map(data => data));
+}
+
+getProveedor(ruc:string) {
+  return this._http.get(Global.BASE_API_SUNAT+'ruc/'+ruc+'?token='+Global.TOKEN_API_PERU,
+  { headers: this.headers }
+  ).pipe(map(result => result));
 }
 
 

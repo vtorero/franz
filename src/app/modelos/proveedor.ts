@@ -2,7 +2,11 @@ export class Proveedor {
     constructor(
         public codigo:string,
         public razon_social:string,
-        public tipo_documento:string,
-        public num_documento: string,
+        public estado:string,
+        public direccion:string,
+        public departamento:string,
+        public provincia:string,
+        public distrito:string,
+        public num_documento: string
     ){}
 }

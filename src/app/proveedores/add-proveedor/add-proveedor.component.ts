@@ -17,7 +17,24 @@ export class AddProveedorComponent implements OnInit {
 
   ) { }
 
+  onLoadDatos(event:any){
+    this.api.getProveedor(event.target.value).subscribe(data => {
+      if(data) {
+        console.log(data);
+        this.data.razon_social=data['razonSocial']
+        this.data.direccion=data['direccion']
+        this.data.estado=data['estado']
+        this.data.departamento=data['departamento']
+        this.data.provincia=data['provincia']
+        this.data.distrito=data['distrito']
+      }
+    } );
+ }
+
   ngOnInit() {
+  }
+  cancelar() {
+    this.dialogRef.close();
   }
 
 }

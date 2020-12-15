@@ -253,9 +253,9 @@ $app->get("/productos",function() use($db,$app){
          });
  
 
-         $app->get("/proveedores",function() use($db,$app){
+$app->get("/proveedores",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
-            $resultado = $db->query("SELECT `id`, `razon_social`, `tipo_documento`, `ruc`, `num_documento`, `telefono` FROM `proveedores`");  
+            $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores`");  
             $prods=array();
                 while ($fila = $resultado->fetch_array()) {
                     
@@ -264,8 +264,37 @@ $app->get("/productos",function() use($db,$app){
                 $respuesta=json_encode($prods);
                 echo  $respuesta;
                 
-            });
-         
+});
+     
+$app->post("/proveedor",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+        $ruc=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
+        $razon_social=(is_array($data->razon_social))? array_shift($data->razon_social): $data->razon_social;
+        $direccion=(is_array($data->direccion))? array_shift($data->direccion): $data->direccion;
+        $departamento=(is_array($data->departamento))? array_shift($data->departamento): $data->departamento;
+        $provincia=(is_array($data->provincia))? array_shift($data->provincia): $data->provincia;
+        $distrito=(is_array($data->distrito))? array_shift($data->distrito): $data->distrito;
+        $num_documento=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
+
+        
+        $query ="INSERT INTO proveedores (razon_social, direccion, num_documento, departamento,provincia,distrito) VALUES ("
+      ."'{$razon_social}',"
+      ."'{$direccion}',"
+      ."'{$ruc}',"
+      ."'{$departamento}',"
+      ."'{$provincia}',"
+      ."'{$distrito}'".")";
+   
+      $insert=$db->query($query);
+               
+       $result = array("STATUS"=>true,"messaje"=>"Proveedor registrado correctamente","string"=>$query);
+        echo  json_encode($result);
+    });
+
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

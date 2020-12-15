@@ -13,7 +13,7 @@ import { AddProveedorComponent } from './add-proveedor/add-proveedor.component';
 export class ProveedoresComponent implements OnInit {
   dataSource: any;
   cancela: boolean = false;
-  displayedColumns = ['codigo', 'razon_social', 'tipo_documento', 'num_documento', 'borrar'];
+  displayedColumns = ['num_documento', 'razon_social', 'departamento','provincia','distrito', 'borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService, public dialog: MatDialog, public dialog2: MatDialog, public dialogo: MatDialog, private toastr: ToastrService) { }
@@ -45,7 +45,7 @@ export class ProveedoresComponent implements OnInit {
 
   abrirDialog(templateRef, cod) {
     let dialogRef = this.dialogo.open(templateRef, {
-      width: '500px'
+      width: '550px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -53,7 +53,7 @@ export class ProveedoresComponent implements OnInit {
         if (cod) {
           this.api.EliminarProducto(cod).subscribe(
             data => {
-              this.toastr.success('Aviso', data['messaje']);
+              this.toastr.success( data['messaje']);
             },
             erro => { console.log(erro) }
           );
@@ -65,19 +65,31 @@ export class ProveedoresComponent implements OnInit {
     });
   }
 
+
+  
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddProveedorComponent, {
-      data: new Proveedor('', '', '','')
+      data: new Proveedor('', '','', '','','','','')
     });
-
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
      console.log("·");
-       //this.agregar(art);
+       this.agregar(art);
       }
       );
   }
 
+  agregar(art: Proveedor) {
+    if(art){
+    this.api.GuardarProveedor(art).subscribe(
+      data=>{
+        this.toastr.success('Aviso', data['messaje']);
+        },
+      erro=>{console.log(erro)}
+        );
+      this.renderDataTable();
+  }
+}
 
   ngOnInit() {
     this.renderDataTable()

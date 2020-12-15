@@ -8,24 +8,28 @@
   <div class="example-container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort>
       <!--  Columna ID-->
-      <ng-container matColumnDef="codigo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      <ng-container matColumnDef="num_documento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>RUC</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.num_documento}} </mat-cell>
       </ng-container>
      <!-- Columna Apellido -->
       <ng-container matColumnDef="razon_social">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Razon Social</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.razon_social}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="tipo_documento">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Documento</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.tipo_documento}} </mat-cell>
+      <ng-container matColumnDef="departamento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Departamento</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.departamento}} </mat-cell>
   </ng-container>
   
         <!-- Columna Nacionalidad -->
-      <ng-container matColumnDef="num_documento">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Numero documento</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.num_documento}} </mat-cell>
+      <ng-container matColumnDef="provincia">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Provincia</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.provincia}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="distrito">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Distrito</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.distrito}} </mat-cell>
       </ng-container>
 
   <ng-container matColumnDef="borrar">

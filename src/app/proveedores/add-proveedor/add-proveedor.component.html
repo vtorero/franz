@@ -3,27 +3,27 @@
   <div mat-dialog-content>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
           <mat-form-field>
-              <input matInput [(ngModel)]="data.num_documento" type="text" placeholder="Ingrese Ruc" required>
+              <input matInput [(ngModel)]="data.num_documento" type="text" placeholder="Ingrese Ruc" (focusout)="onLoadDatos($event)"  required>
           </mat-form-field>
           <mat-form-field>
-              <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre" required>
+              <input matInput [(ngModel)]="data.razon_social" type="text" placeholder="Ingrese Razon Social" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput [(ngModel)]="data.costo" type="number" placeholder="Ingrese costo" required>
+            <input matInput [(ngModel)]="data.estado" type="text" placeholder="Estado" required>
         </mat-form-field>
           <mat-form-field>
-              <input matInput [(ngModel)]="data.precio_sugerido" type="number" placeholder="S/.Ingrese precio sugerido" required>
-          </mat-form-field>
+            <input matInput [(ngModel)]="data.direccion" type="text" placeholder="Dirección" required>
+        </mat-form-field>
           <mat-form-field>
-            <mat-label>Categoria</mat-label>
-            <mat-select [(ngModel)]="data.id_categoria">
-              <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
-                {{cat.nombre}}
-              </mat-option>
-            </mat-select>
+            <input matInput [(ngModel)]="data.departamento" type="text" placeholder="Departamento" required>
           </mat-form-field>
-
-      </div>
+        <mat-form-field>
+            <input matInput [(ngModel)]="data.provincia" type="text" placeholder="Provincia" required>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [(ngModel)]="data.distrito" type="text" placeholder="Distrito" required>
+          </mat-form-field>
+          </div>
   </div>
   <div mat-dialog-actions>
       <button mat-button (click)="cancelar()">Cancelar</button>

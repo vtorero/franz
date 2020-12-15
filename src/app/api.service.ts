@@ -29,6 +29,12 @@ export class ApiService {
     return this._http.get(this.url);
 }*/
 
+getApi(ruta:string){
+  return this._http.get(Global.BASE_API_URL+'api.php/'+ruta,
+  { headers: this.headers }
+ ).pipe(map(result => result));
+}
+
 getProductos() {
   return this._http.get(Global.BASE_API_URL+'api.php/productos',
    { headers: this.headers }

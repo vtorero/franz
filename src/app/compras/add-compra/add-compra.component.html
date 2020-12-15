@@ -1,0 +1,39 @@
+<div>
+  <h1 mat-dialog-title>Registrar Compra</h1>
+  <div mat-dialog-content>
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
+        <mat-form-field>
+          <mat-label>Comprobante</mat-label>
+          <mat-select [(ngModel)]="data.comprobante">
+            <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.index">
+              {{cat}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+          <mat-form-field>
+              <input matInput [(ngModel)]="data.num_comprobante" type="text" placeholder="Ingrese Numero" required>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
+        </mat-form-field>
+       
+          <input class="form-control" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha">
+          <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
+   
+          <mat-form-field>
+            <mat-label>Categoria</mat-label>
+            <mat-select [(ngModel)]="data.id_categoria">
+              <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
+                {{cat.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+      </div>
+  </div>
+  <div mat-dialog-actions>
+      <button mat-button (click)="cancelar()">Cancelar</button>
+      <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+  </div>
+  </div>

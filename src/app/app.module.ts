@@ -37,6 +37,8 @@ import { CommonModule } from '@angular/common';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor.component';
+import { ComprasComponent } from './compras/compras.component';
+import { AddCompraComponent } from './compras/add-compra/add-compra.component';
 
 
 
@@ -68,7 +70,12 @@ import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]
   ,
-  entryComponents: [DialogoarticuloComponent,ProductosComponent,EditarProductoComponent,AddProveedorComponent],
+  entryComponents: 
+  [DialogoarticuloComponent,
+    ProductosComponent,
+    EditarProductoComponent,
+    AddProveedorComponent,
+    AddCompraComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -81,6 +88,8 @@ import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor
     EditarProductoComponent,
     ProveedoresComponent,
     AddProveedorComponent,
+    ComprasComponent,
+    AddCompraComponent,
     ],
   bootstrap: [AppComponent]
 })

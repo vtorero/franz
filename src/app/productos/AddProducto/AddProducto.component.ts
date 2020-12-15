@@ -12,7 +12,7 @@ export class DialogoarticuloComponent implements OnInit {
   isLoaded;
   constructor(
     public dialogRef: MatDialogRef<DialogoarticuloComponent>,
-    @ Inject(MAT_DIALOG_DATA) public data: Producto,
+    @Inject(MAT_DIALOG_DATA) public data: Producto,
     private api:ApiService) {}
 
     getCate(): void {

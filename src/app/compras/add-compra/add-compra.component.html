@@ -33,8 +33,56 @@
 
       </div>
   </div>
+  <h4>Detalle de compra</h4>
+  <button class="btn btn-success" (click)="abrirDialog(dialogTemplate2)">Agregar Producto</button>
+  <ng-template #dialogTemplate2>
+    <h5>Agregar</h5>
+    
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+   </ng-template>
+
+     <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort>
+        <!--  Columna ID-->
+        <ng-container matColumnDef="item">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.comprobante}} </mat-cell>
+        </ng-container>
+       <!-- Columna Apellido -->
+        <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.descripcion}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="cantidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+    </ng-container>
+    
+          <!-- Columna Nacionalidad -->
+        <ng-container matColumnDef="total">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
+              <mat-cell *matCellDef="let row">S/. {{row.total}} </mat-cell>
+        </ng-container>
+    
+          
+    <ng-container matColumnDef="borrar">
+          <th mat-header-cell *matHeaderCellDef> Opciones </th>
+          <td mat-cell *matCellDef="let row ">
+                <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
+            <ng-template #dialogTemplate>
+             <h5>Eliminar el producto: {{row.nombre}} ?</h5>
+             <button mat-button (click)="cancelar()">Cancelar</button>
+             <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+            </ng-template>
+          </td>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <!--<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]></mat-paginator>-->
+    </div>
   <div mat-dialog-actions>
-      <button mat-button (click)="cancelar()">Cancelar</button>
-      <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+      <button mat-raised-button (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Registrar</button>
   </div>
   </div>

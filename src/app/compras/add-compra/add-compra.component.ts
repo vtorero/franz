@@ -1,11 +1,12 @@
 
 import { Component, Inject, NgModule, OnInit} from '@angular/core';
-import { MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, DateTimeAdapter, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { Compra } from 'src/app/modelos/compra';
 import "ng-pick-datetime/assets/style/picker.min.css";
 import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -35,9 +36,13 @@ export const MY_MOMENT_FORMATS = {
 export class AddCompraComponent implements OnInit {
   dataProveedor:any;
   dataArray;
+  cancela:boolean=false;
+  displayedColumns=['item','descripcion','cantidad','total','borrar'];
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   public selectedMoment = new Date();
   constructor(
+    private toastr: ToastrService,
+    public dialogo:MatDialog,
     public dialogRef: MatDialogRef<AddCompraComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Compra,
   dateTimeAdapter: DateTimeAdapter<any>,private api:ApiService) {
@@ -68,8 +73,17 @@ selectSearch(value:string){
   
 }
 
-  cancelar() {
-    this.dialogRef.close();
-  }
+abrirDialog(templateRef2) {
+  let dialogRef = this.dialogo.open(templateRef2, {
+ width: '500px' });
+}
+
+cancelar(){
+  this.dialogRef.close();
+  this.dialogo.closeAll();
+  this.cancela=true;
+}
+
+  
 
 }

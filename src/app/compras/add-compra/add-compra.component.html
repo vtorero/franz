@@ -42,11 +42,11 @@
    </ng-template>
 
      <div class="example-container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort>
+    <mat-table [dataSource]="dataDetalle" matSort>
         <!--  Columna ID-->
         <ng-container matColumnDef="item">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.comprobante}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.item}} </mat-cell>
         </ng-container>
        <!-- Columna Apellido -->
         <ng-container matColumnDef="descripcion">

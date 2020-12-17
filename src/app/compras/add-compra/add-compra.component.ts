@@ -38,6 +38,7 @@ export class AddCompraComponent implements OnInit {
   dataArray;
   cancela:boolean=false;
   displayedColumns=['item','descripcion','cantidad','total','borrar'];
+  dataDetalle=[{item:1,descripcion:'cerdo',cantidad:89,total:102.1}];
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   public selectedMoment = new Date();
   constructor(

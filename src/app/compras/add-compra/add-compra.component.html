@@ -37,8 +37,8 @@
   <button class="btn btn-success" (click)="abrirDialog(dialogTemplate2)">Agregar Producto</button>
   <ng-template #dialogTemplate2>
     <h5>Agregar</h5>
-    
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+    <button mat-button (click)="cancelar()">Cancelar</button>
+    <button mat-button>Confirmar</button>
    </ng-template>
 
      <div class="example-container mat-elevation-z8">
@@ -62,17 +62,15 @@
         <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
               <mat-cell *matCellDef="let row">S/. {{row.total}} </mat-cell>
-        </ng-container>
-    
-          
+        </ng-container>       
     <ng-container matColumnDef="borrar">
           <th mat-header-cell *matHeaderCellDef> Opciones </th>
           <td mat-cell *matCellDef="let row ">
                 <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
             <ng-template #dialogTemplate>
              <h5>Eliminar el producto: {{row.nombre}} ?</h5>
-             <button mat-button (click)="cancelar()">Cancelar</button>
-             <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+             <button mat-button (click)="cancel()">Cancelar</button>
+             <button mat-button>Confirmar</button>
             </ng-template>
           </td>
         </ng-container>

@@ -84,7 +84,11 @@ cancelar(){
   this.dialogo.closeAll();
   this.cancela=true;
 }
-
+cancel(c){
+  close;
+  this.cancela=true
+  
+}
   
 
 }

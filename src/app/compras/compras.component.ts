@@ -21,7 +21,7 @@ import { AddCompraComponent } from './add-compra/add-compra.component';
 })
 export class ComprasComponent implements OnInit {
   dataSource:any;
-  dataComprobantes=[ 'Factura', 'Boleta'];
+  dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   startDate:Date = new Date()
   cancela:boolean=false;
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];

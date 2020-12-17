@@ -5,8 +5,8 @@
         <mat-form-field>
           <mat-label>Comprobante</mat-label>
           <mat-select [(ngModel)]="data.comprobante">
-            <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.index">
-              {{cat}}
+            <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">
+              {{cat.tipo}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -17,15 +17,16 @@
           <mat-form-field>
             <input matInput [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
-       
-          <input class="form-control" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha">
+        <mat-form-field>
+          <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha">
           <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
-   
+        </mat-form-field>
           <mat-form-field>
-            <mat-label>Categoria</mat-label>
-            <mat-select [(ngModel)]="data.id_categoria">
-              <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
-                {{cat.nombre}}
+            <mat-label>Proveedor</mat-label>
+            <mat-select [(ngModel)]="data.id_proveedor">
+              <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
+              <mat-option  *ngFor="let cat of dataProveedor" [value]="cat.id">
+                {{cat.razon_social}}
               </mat-option>
             </mat-select>
           </mat-form-field>

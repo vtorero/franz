@@ -158,6 +158,20 @@ $app->get("/proveedores",function() use($db,$app){
                 echo  $respuesta;
                 
 });
+
+$app->get("/proveedores/:criterio",function($criterio) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` where razon_social like '%".$criterio."%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
      
 $app->post("/proveedor",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

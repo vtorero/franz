@@ -1,12 +1,15 @@
 
 import { Component, Inject, NgModule, OnInit} from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatPaginatorModule, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, DateTimeAdapter, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { Compra } from 'src/app/modelos/compra';
 import "ng-pick-datetime/assets/style/picker.min.css";
 import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
 import { ToastrService } from 'ngx-toastr';
+import { HelloComponent } from './hello.component';
+import { Producto } from 'src/app/modelos/producto';
+import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 
 
@@ -34,17 +37,20 @@ export const MY_MOMENT_FORMATS = {
 
 
 export class AddCompraComponent implements OnInit {
+  
   dataProveedor:any;
   dataArray;
+  exampleArray = [];  
+  dataSource:any;
   cancela:boolean=false;
-  displayedColumns=['item','descripcion','cantidad','total','borrar'];
-  dataDetalle=[{item:1,descripcion:'cerdo',cantidad:89,total:102.1}];
-  dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
+  displayedColumns=['nombre','cantidad','precio','borrar'];
+   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   public selectedMoment = new Date();
   constructor(
     private toastr: ToastrService,
     public dialogo:MatDialog,
     public dialogRef: MatDialogRef<AddCompraComponent>,
+    public dialog:MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Compra,
   dateTimeAdapter: DateTimeAdapter<any>,private api:ApiService) {
     dateTimeAdapter.setLocale('es-PE');
@@ -74,20 +80,29 @@ selectSearch(value:string){
   
 }
 
-abrirDialog(templateRef2) {
-  let dialogRef = this.dialogo.open(templateRef2, {
- width: '500px' });
+abrirDialog() {
+  const dialogo1 = this.dialog.open(HelloComponent, {
+    data: new DetalleCompra('',0,0) 
+  });
+  dialogo1.afterClosed().subscribe(art => {
+    if (art!= undefined)
+    this.exampleArray.push(art)
+    this.dataSource = new MatTableDataSource();
+    this.dataSource.data = this.exampleArray; 
+   console.log(this.exampleArray);
+     //this.agregar(art);
+   });
 }
 
 cancelar(){
   this.dialogRef.close();
-  this.dialogo.closeAll();
+  //this.dialogo.closeAll();
   this.cancela=true;
 }
-cancel(c){
-  close;
-  this.cancela=true
-  
+
+  close() {
+     this.dialog.closeAll();
+
 }
   
 

@@ -27,7 +27,10 @@ export class ComprasComponent implements OnInit {
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {
+  constructor(private api:ApiService,
+    public dialog:MatDialog,
+    public dialogo:MatDialog,
+    private toastr: ToastrService) {
  
 
    }
@@ -42,7 +45,6 @@ export class ComprasComponent implements OnInit {
     const dialogo1 = this.dialog.open(AddCompraComponent, {
       data: new Compra('', '', '',this.startDate,'','','')
     });
-
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
        console.log("art");

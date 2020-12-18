@@ -39,6 +39,7 @@ import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor.component';
 import { ComprasComponent } from './compras/compras.component';
 import { AddCompraComponent } from './compras/add-compra/add-compra.component';
+import { HelloComponent } from './compras/add-compra/hello.component';
 
 
 
@@ -75,7 +76,8 @@ import { AddCompraComponent } from './compras/add-compra/add-compra.component';
     ProductosComponent,
     EditarProductoComponent,
     AddProveedorComponent,
-    AddCompraComponent],
+    AddCompraComponent,
+    HelloComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -90,6 +92,7 @@ import { AddCompraComponent } from './compras/add-compra/add-compra.component';
     AddProveedorComponent,
     ComprasComponent,
     AddCompraComponent,
+    HelloComponent
     ],
   bootstrap: [AppComponent]
 })

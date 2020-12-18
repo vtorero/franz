@@ -47,7 +47,7 @@ export class ComprasComponent implements OnInit {
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
-       console.log("art");
+       console.log(art);
    //  this.agregar(art);
       });
   }

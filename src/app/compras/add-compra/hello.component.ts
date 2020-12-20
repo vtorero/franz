@@ -3,7 +3,9 @@ import {  MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { MY_MOMENT_FORMATS } from 'src/app/home/home.component';
+import { Compra } from 'src/app/modelos/compra';
 import { DetalleCompra } from 'src/app/modelos/detalleCompra';
+
 
 
 
@@ -37,5 +39,5 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
   })
 export class HelloComponent  {
     constructor(  @Inject(MAT_DIALOG_DATA) public data: DetalleCompra){}
-  @Input() name: string;
+
 }

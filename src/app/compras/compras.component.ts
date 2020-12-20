@@ -8,6 +8,7 @@ import { Compra } from '../modelos/compra';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AddCompraComponent } from './add-compra/add-compra.component';
+import { DetalleCompra } from '../modelos/detalleCompra';
 
 @Component({
   selector: 'app-compras',
@@ -23,6 +24,7 @@ export class ComprasComponent implements OnInit {
   dataSource:any;
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   startDate:Date = new Date()
+  detallecompra:DetalleCompra=new DetalleCompra('',0,0)
   cancela:boolean=false;
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];
   @ViewChild(MatSort) sort: MatSort;
@@ -43,14 +45,27 @@ export class ComprasComponent implements OnInit {
   abrirDialogo() {
     
     const dialogo1 = this.dialog.open(AddCompraComponent, {
-      data: new Compra('', '', '',this.startDate,'','','')
+      data: new Compra('', '', '',this.startDate,'','','',[])
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
        console.log(art);
-   //  this.agregar(art);
+     this.agregar(art);
       });
   }
+
+  agregar(art:Compra) {
+    if(art){
+    this.api.GuardarCompra(art).subscribe(
+      data=>{
+        this.toastr.success( data['messaje']);
+        },
+      erro=>{console.log(erro)}
+        );
+      this.renderDataTable();
+  }
+}
+
 
   renderDataTable() {  
     this.api.getApi('compras').subscribe(x => {  

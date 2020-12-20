@@ -8,7 +8,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { HelloComponent } from './hello.component';
-import { Producto } from 'src/app/modelos/producto';
 import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 
@@ -34,13 +33,12 @@ export const MY_MOMENT_FORMATS = {
   imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
   providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
-
+ 
 
 export class AddCompraComponent implements OnInit {
-  
+  exampleArray:any[] = [];
   dataProveedor:any;
   dataArray;
-  exampleArray = [];  
   dataSource:any;
   cancela:boolean=false;
   displayedColumns=['nombre','cantidad','precio','borrar'];
@@ -86,10 +84,12 @@ abrirDialog() {
   });
   dialogo1.afterClosed().subscribe(art => {
     if (art!= undefined)
+    console.log(art)
     this.exampleArray.push(art)
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = this.exampleArray; 
-   console.log(this.exampleArray);
+    this.data.detalleCompra=this.exampleArray;
+    console.log(this.data)
      //this.agregar(art);
    });
 }

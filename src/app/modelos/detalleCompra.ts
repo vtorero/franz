@@ -1,9 +1,8 @@
 export class DetalleCompra {
-    constructor(
-        
+    constructor( 
         public nombre:string,
         public cantidad: number,
-        public precio:number,
+        public precio:number
 
     ){}
 }

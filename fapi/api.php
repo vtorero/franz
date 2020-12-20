@@ -204,6 +204,18 @@ $app->post("/proveedor",function() use($db,$app){
 
 /**Compras */
 
+$app->post("/compra",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+    var_dump($data);
+        //$respuesta=json_encode($prods);
+        //echo  $respuesta;    
+});
+
+
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id");  
@@ -214,7 +226,6 @@ $app->get("/compras",function() use($db,$app){
         $respuesta=json_encode($prods);
         echo  $respuesta;    
 });
-
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

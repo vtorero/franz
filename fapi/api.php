@@ -210,7 +210,12 @@ $app->post("/compra",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-    var_dump($data);
+   
+        $id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor;
+        //$detalleCompra=(is_array($data->detalleCompra))? array_shift($data->detalleCompra): $data->detalleCompra;
+            var_dump($data->detalleCompra);
+            var_dump($data->id_proveedor);
+        
         //$respuesta=json_encode($prods);
         //echo  $respuesta;    
 });

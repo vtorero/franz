@@ -215,7 +215,9 @@ $app->post("/compra",function() use($db,$app){
         //$detalleCompra=(is_array($data->detalleCompra))? array_shift($data->detalleCompra): $data->detalleCompra;
             var_dump($data->detalleCompra);
             var_dump($data->id_proveedor);
-        
+
+ $db->query("call p_compra(3,4222,'desc','2020-12-20',1)");
+       
         //$respuesta=json_encode($prods);
         //echo  $respuesta;    
 });

@@ -11,24 +11,24 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 @Component({
   selector: 'hello',
-  template: `<div>
+  template: `<form #formItem="ngForm"><div>
   <h1 mat-dialog-title>Agregar Producto</h1>
   <div mat-dialog-content>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 400px; padding: 1rem;">
           <mat-form-field>
-              <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre"required>
+              <input matInput name="nombre" #nombre="ngModel" [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre"required>
           </mat-form-field>
           <mat-form-field>
-              <input matInput [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
+              <input matInput  name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput [(ngModel)]="data.precio" type="number" placeholder=" S/.Precio" required>
+            <input matInput name="precio" #precio="ngModel" [(ngModel)]="data.precio" type="number" placeholder=" S/.Precio" required>
             </mat-form-field>
            </div>
   </div>
   <div mat-dialog-actions>
     <button  mat-button [mat-dialog-close]="true">Cancelar</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!formItem.form.valid" cdkFocusInitial>Confirmar</button>
   </div>
   </div>`
 })

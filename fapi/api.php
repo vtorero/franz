@@ -210,27 +210,24 @@ $app->post("/compra",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       //var_dump($data->comprobante);
-       //die;
+        $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',{$data->id_proveedor})";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        //mysqli_close($stmt);
 
-  
-       //$id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor; 
-       $id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor;
-        //$detalleCompra=(is_array($data->detalleCompra))? array_shift($data->detalleCompra): $data->detalleCompra;
-       
-$sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',".$id_proveedor.")";
-//var_dump($sql);
-$stmt = mysqli_prepare($db,$sql);
-//$stmt = $db->prepare("SELECT * FROM compras");
-//printf("%d Fila insertada.\n", $stmt->affected_rows);
-//mysqli_stmt_bind_param($stmt,'11','22','FRD','2020-11-22','2');
-$response=mysqli_stmt_execute($stmt);
-//$result=mysqli_query($db,$sql);
-//var_dump($stmt);
-//print_r($sql);
-       
- $respuesta=json_encode($response);
-echo  $respuesta;    
+        $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
+        $ultimo_id=array();
+        while ($d = $datos->fetch_object()) {
+         $ultimo_id=$d;
+         }
+           foreach($data->detalleCompra as $valor){
+            $proc="call p_compra_detalle({$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id})";
+            $stmt = mysqli_prepare($db,$proc);
+            mysqli_stmt_execute($stmt);
+            $proc="";
+        }
+            $respuesta=json_encode($response);
+            echo  $respuesta;    
 });
 
 

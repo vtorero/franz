@@ -10,6 +10,7 @@ if($method == "OPTIONS") {
 require_once 'vendor/autoload.php';
 $app = new Slim\Slim();
 $db = new mysqli("localhost","marife","libido16","frdash");
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //mysqli_set_charset($db, 'utf8');
 if (mysqli_connect_errno()) {
@@ -209,23 +210,33 @@ $app->post("/compra",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
+       //var_dump($data->comprobante);
+       //die;
 
-   
-        $id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor;
+  
+       //$id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor; 
+       $id_proveedor=(is_array($data->id_proveedor))? array_shift($data->id_proveedor): $data->id_proveedor;
         //$detalleCompra=(is_array($data->detalleCompra))? array_shift($data->detalleCompra): $data->detalleCompra;
-            var_dump($data->detalleCompra);
-            var_dump($data->id_proveedor);
-
- $db->query("call p_compra(3,4222,'desc','2020-12-20',1)");
        
-        //$respuesta=json_encode($prods);
-        //echo  $respuesta;    
+$sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',".$id_proveedor.")";
+//var_dump($sql);
+$stmt = mysqli_prepare($db,$sql);
+//$stmt = $db->prepare("SELECT * FROM compras");
+//printf("%d Fila insertada.\n", $stmt->affected_rows);
+//mysqli_stmt_bind_param($stmt,'11','22','FRD','2020-11-22','2');
+$response=mysqli_stmt_execute($stmt);
+//$result=mysqli_query($db,$sql);
+//var_dump($stmt);
+//print_r($sql);
+       
+ $respuesta=json_encode($response);
+echo  $respuesta;    
 });
 
 
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id");  
+    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -742,6 +753,23 @@ $db=new mysqli("localhost","marife","libido16","adops");
          $data[]=$row;
      }
         return $data;
+}
+
+function ordena_fecha($inicio,$fin){
+    $arraymeses=array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+    $arraynros=array('01','02','03','04','05','06','07','08','09','10','11','12');
+    $mes1=substr($inicio, 0,3);
+    $mes2=substr($fin, 0,3);
+    $dia1=substr($inicio, 3,2);
+    $dia2=substr($fin, 3,2);
+    $ano1=substr($inicio, 5,4);
+    $ano2=substr($fin, 5,4);
+    $fmes1=str_replace($arraymeses,$arraynros,$mes1);
+    $fmes2=str_replace($arraymeses,$arraynros,$mes2);
+    $ini=$ano1.'-'.$fmes1.'-'.$dia1;
+    $fin=$ano2.'-'.$fmes2.'-'.$dia2;
+    return array("inicio"=>$ini,"final"=>$fin);
+
 }
 
 $app->run();

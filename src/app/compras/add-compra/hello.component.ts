@@ -19,7 +19,7 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
               <input matInput [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre"required>
           </mat-form-field>
           <mat-form-field>
-              <input matInput [(ngModel)]="data.cantidad" type="text" placeholder="Ingrese cantidad" required>
+              <input matInput [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
           </mat-form-field>
           <mat-form-field>
             <input matInput [(ngModel)]="data.precio" type="number" placeholder=" S/.Precio" required>
@@ -28,7 +28,7 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
   </div>
   <div mat-dialog-actions>
     <button  mat-button [mat-dialog-close]="true">Cancelar</button>
-      <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
   </div>
   </div>`
 })

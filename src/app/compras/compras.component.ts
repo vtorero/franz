@@ -51,6 +51,8 @@ export class ComprasComponent implements OnInit {
        if (art!= undefined)
        console.log(art);
      this.agregar(art);
+     this.toastr.success( 'Compra registrada');
+     this.renderDataTable();
       });
   }
 

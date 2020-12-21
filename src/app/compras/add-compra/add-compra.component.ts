@@ -94,6 +94,8 @@ abrirDialog() {
    });
 }
 
+
+
 cancelar(){
   this.dialogRef.close();
   //this.dialogo.closeAll();

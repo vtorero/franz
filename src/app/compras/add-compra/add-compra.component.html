@@ -1,10 +1,11 @@
 <div style="height: 500px;overflow-y: auto;overflow-x: hidden;">
+  <form #formGeneral="ngForm">
   <div mat-dialog-content>
     <h3>Agregar Compra</h3>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 750px; padding: 1rem;">
         <mat-form-field>
           <mat-label>Comprobante</mat-label>
-          <mat-select [(ngModel)]="data.comprobante">
+          <mat-select  name="comprobante" #comprobante="ngModel" [(ngModel)]="data.comprobante" required>
             <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">
               {{cat.tipo}}
             </mat-option>
@@ -12,18 +13,18 @@
         </mat-form-field>
 
           <mat-form-field>
-              <input matInput [(ngModel)]="data.num_comprobante" type="text" placeholder="Ingrese Numero" required>
+              <input matInput name="num_comprobante" #num_comprobante="ngModel" [(ngModel)]="data.num_comprobante" type="text" placeholder="Ingrese Numero" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
+            <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
         <mat-form-field>
-          <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha">
+          <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha" required>
           <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
         </mat-form-field>
           <mat-form-field>
             <mat-label>Proveedor</mat-label>
-            <mat-select [(ngModel)]="data.id_proveedor">
+            <mat-select name="id_proveedor" #id_proveedor="ngModel" [(ngModel)]="data.id_proveedor" required>
               <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
               <mat-option  *ngFor="let cat of dataProveedor" [value]="cat.id">
                 {{cat.razon_social}}
@@ -33,6 +34,7 @@
 
       </div>
   </div>
+</form>
   <h4>Detalle de compra</h4>
   <button class="btn btn-success" (click)="abrirDialog()">Agregar Producto</button>
     <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height: auto;">
@@ -70,6 +72,6 @@
     </div>
   <div mat-dialog-actions>
       <button mat-raised-button (click)="cancelar()">Cancelar</button>
-      <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Registrar</button>
+      <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Registrar</button>
   </div>
   </div>

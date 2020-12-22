@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AddCompraComponent } from './add-compra/add-compra.component';
 import { DetalleCompra } from '../modelos/detalleCompra';
+import { EditCompraComponent } from './edit-compra/edit-compra.component';
 
 @Component({
   selector: 'app-compras',
@@ -31,6 +32,7 @@ export class ComprasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api:ApiService,
     public dialog:MatDialog,
+    public dialog2:MatDialog,
     public dialogo:MatDialog,
     private toastr: ToastrService) {
  
@@ -81,4 +83,9 @@ export class ComprasComponent implements OnInit {
   });  
   } 
 
+  abrirEditar(cod) {
+    const dialogo2 = this.dialog2.open(EditCompraComponent, {
+      data: cod
+    });
+}
 }

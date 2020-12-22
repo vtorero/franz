@@ -221,8 +221,8 @@ $app->post("/compra",function() use($db,$app){
          $ultimo_id=$d;
          }
            foreach($data->detalleCompra as $valor){
-            $proc="call p_compra_detalle({$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id})";
-            $stmt = mysqli_prepare($db,$proc);
+            $proc="call p_compra_detalle({$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id},'{$valor->nombre}')";
+           $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
             $proc="";
         }
@@ -230,6 +230,17 @@ $app->post("/compra",function() use($db,$app){
             echo  $respuesta;    
 });
 
+
+$app->get("/compra/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id and c.id={$id} order by c.id");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

@@ -78,6 +78,14 @@ selectSearch(value:string){
   
 }
 
+deleteTicket(rowid: number){
+
+  if (rowid > -1) {
+    this.data.detalleCompra.splice(rowid, 1);
+    this.dataSource = new MatTableDataSource(this.data.detalleCompra);
+}
+}
+
 abrirDialog() {
   const dialogo1 = this.dialog.open(HelloComponent, {
     data: new DetalleCompra('',0,0) 
@@ -89,8 +97,6 @@ abrirDialog() {
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = this.exampleArray; 
     this.data.detalleCompra=this.exampleArray;
-    console.log(this.data)
-     //this.agregar(art);
    });
 }
 

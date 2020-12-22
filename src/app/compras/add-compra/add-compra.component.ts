@@ -79,7 +79,6 @@ selectSearch(value:string){
 }
 
 deleteTicket(rowid: number){
-
   if (rowid > -1) {
     this.data.detalleCompra.splice(rowid, 1);
     this.dataSource = new MatTableDataSource(this.data.detalleCompra);

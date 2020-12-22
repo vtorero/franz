@@ -84,6 +84,7 @@ export class ComprasComponent implements OnInit {
   } 
 
   abrirEditar(cod) {
+    console.log(cod);
     const dialogo2 = this.dialog2.open(EditCompraComponent, {
       data: cod
     });

@@ -4,11 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { DialogoarticuloComponent } from './AddProducto/AddProducto.component';
+import { EditarProductoComponent } from './editar-producto/editar-producto.component';
 import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
-import { EditarProductoComponent } from './editar-producto/editar-producto.component';
+
 
 @Component({
   selector: 'app-productos',

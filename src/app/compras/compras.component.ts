@@ -49,7 +49,7 @@ export class ComprasComponent implements OnInit {
   abrirDialogo() {
     
     const dialogo1 = this.dialog.open(AddCompraComponent, {
-      data: new Compra('', '', '',this.startDate,'','','',[])
+      data: new Compra(0,'', '', '',this.startDate,'','','',[])
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
@@ -86,19 +86,18 @@ export class ComprasComponent implements OnInit {
   } 
 
   abrirEditar(cod) {
-    console.log(cod);
-    this.api.GetDetalleCompra(cod.id).subscribe(x => {  
-      this.dataDetalle = new MatTableDataSource();
-      this.dataDetalle.data = x; 
-      this.dataDetalle.sort = this.sort;
-      this.dataDetalle.paginator = this.paginator;  
-      console.log(this.dataDetalle.data)
-    
-    const dialogo2 = this.dialog2.open(EditCompraComponent,{
-      data:{data:cod,prueba:this.datosprueba,detalle:this.dataDetalle.data}
-      
+    console.log("codmanda",cod);
+     const dialogo2 = this.dialog2.open(EditCompraComponent,{
+      data:cod
     });
+    dialogo2.afterClosed().subscribe(art => {
+      if (art!= undefined)
+      console.log(art);
+    //this.agregar(art);
+    //this.toastr.success( 'Compra actualizada');
+    this.renderDataTable();
+     });
    
-    });
+   
 }
 }

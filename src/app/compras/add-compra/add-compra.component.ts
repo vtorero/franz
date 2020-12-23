@@ -91,7 +91,6 @@ abrirDialog() {
   });
   dialogo1.afterClosed().subscribe(art => {
     if (art!= undefined)
-    console.log(art)
     this.exampleArray.push(art)
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = this.exampleArray; 

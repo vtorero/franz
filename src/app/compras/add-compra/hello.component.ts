@@ -16,7 +16,7 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
   <div mat-dialog-content>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 400px; padding: 1rem;">
           <mat-form-field>
-              <input matInput name="nombre" #nombre="ngModel" [(ngModel)]="data.nombre" type="text" placeholder="Ingrese nombre"required>
+              <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Ingrese nombre"required>
           </mat-form-field>
           <mat-form-field>
               <input matInput  name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>

@@ -23,6 +23,8 @@ import { EditCompraComponent } from './edit-compra/edit-compra.component';
 })
 export class ComprasComponent implements OnInit {
   dataSource:any;
+  dataDetalle:any;
+  datosprueba:string="prueba";
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   startDate:Date = new Date()
   detallecompra:DetalleCompra=new DetalleCompra('',0,0)
@@ -85,8 +87,18 @@ export class ComprasComponent implements OnInit {
 
   abrirEditar(cod) {
     console.log(cod);
-    const dialogo2 = this.dialog2.open(EditCompraComponent, {
-      data: cod
+    this.api.GetDetalleCompra(cod.id).subscribe(x => {  
+      this.dataDetalle = new MatTableDataSource();
+      this.dataDetalle.data = x; 
+      this.dataDetalle.sort = this.sort;
+      this.dataDetalle.paginator = this.paginator;  
+      console.log(this.dataDetalle.data)
+    
+    const dialogo2 = this.dialog2.open(EditCompraComponent,{
+      data:{data:cod,prueba:this.datosprueba,detalle:this.dataDetalle.data}
+      
+    });
+   
     });
 }
 }

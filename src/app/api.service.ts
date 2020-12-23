@@ -121,6 +121,12 @@ public GuardarProveedor(datos:Proveedor):Observable<any> {
       {json:json},{ headers: headers });
     }
 
+    GetDetalleCompra(id:any){
+      return this._http.get(Global.BASE_API_URL+'api.php/compra/'+id,
+      { headers: this.headers }
+      ).pipe(map(result => result));
+    }
+
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';
   return this._http.post(url,{

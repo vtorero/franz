@@ -233,7 +233,7 @@ $app->post("/compra",function() use($db,$app){
 
 $app->get("/compra/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id and c.id={$id} order by c.id");  
+    $resultado = $db->query("SELECT `id`, `descripcion`, `cantidad`, `precio`, `id_articulo`, `id_compra` FROM `detalle_compras` where id_compra={$id}");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;

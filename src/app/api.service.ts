@@ -121,6 +121,13 @@ public GuardarProveedor(datos:Proveedor):Observable<any> {
       {json:json},{ headers: headers });
     }
 
+    public EditarCompra(datos:Compra):Observable<any> {
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      let json = JSON.stringify(datos);
+       return this._http.post(Global.BASE_API_URL+'api.php/compraedit',
+        {json:json},{ headers: headers });
+      }
+
     GetDetalleCompra(id:any){
       return this._http.get(Global.BASE_API_URL+'api.php/compra/'+id,
       { headers: this.headers }

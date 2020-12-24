@@ -27,7 +27,7 @@ export class ComprasComponent implements OnInit {
   datosprueba:string="prueba";
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   startDate:Date = new Date()
-  detallecompra:DetalleCompra=new DetalleCompra('',0,0)
+  detallecompra:DetalleCompra=new DetalleCompra(0,'',0,0)
   cancela:boolean=false;
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];
   @ViewChild(MatSort) sort: MatSort;
@@ -93,11 +93,23 @@ export class ComprasComponent implements OnInit {
     dialogo2.afterClosed().subscribe(art => {
       if (art!= undefined)
       console.log(art);
-    //this.agregar(art);
+    this.editar(art);
     //this.toastr.success( 'Compra actualizada');
     this.renderDataTable();
-     });
-   
-   
+     });  
 }
+
+editar(art:Compra) {
+  if(art){
+  this.api.EditarCompra(art).subscribe(
+    data=>{
+      this.toastr.success( data['messaje']);
+      },
+    erro=>{console.log(erro)}
+      );
+    this.renderDataTable();
+}
+}
+
+
 }

@@ -64,7 +64,7 @@ export class EditCompraComponent implements OnInit {
 
       abrirDialog() {
         const dialogo1 = this.dialog.open(HelloComponent, {
-          data: new DetalleCompra('',0,0) 
+          data: new DetalleCompra(0,'',0,0) 
         });
         dialogo1.afterClosed().subscribe(art => {
           if (art!= undefined)

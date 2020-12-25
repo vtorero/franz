@@ -12,6 +12,7 @@ import { Databanco } from './modelos/databanco';
 import { Producto } from './modelos/producto';
 import { Categoria } from './modelos/categoria';
 import { Proveedor } from './modelos/proveedor';
+import { Compra } from './modelos/compra';
 
 
 @Injectable({
@@ -73,6 +74,14 @@ public GuardarProducto(datos:Producto):Observable<any> {
       return this._http.get<Categoria[]>(Global.BASE_API_URL+'api.php/categorias', { headers: this.headers });
     }
 
+    getProveedorSelect(value=''):Observable<Proveedor[]>{
+      if(value==''){
+      return this._http.get<Proveedor[]>(Global.BASE_API_URL+'api.php/proveedores', { headers: this.headers });
+    }else{
+      return this._http.get<Proveedor[]>(Global.BASE_API_URL+'api.php/proveedores/'+value, { headers: this.headers });
+    }
+    }
+
     public GuardarCategoria(datos:Categoria):Observable<any> {
       let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
       let json = JSON.stringify(datos);
@@ -103,6 +112,28 @@ public GuardarProveedor(datos:Proveedor):Observable<any> {
     {json:json},{ headers: headers });
   }
   
+  /**Compras  api*/
+
+  GuardarCompra(datos:Compra):Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+     return this._http.post(Global.BASE_API_URL+'api.php/compra',
+      {json:json},{ headers: headers });
+    }
+
+EditarCompra(datos:Compra):Observable<any> {
+      let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+      let json = JSON.stringify(datos);
+       return this._http.post(Global.BASE_API_URL+'api.php/compraedit',
+        {json:json},{ headers: headers });
+}
+
+    GetDetalleCompra(id:any){
+      return this._http.get(Global.BASE_API_URL+'api.php/compra/'+id,
+      { headers: this.headers }
+      ).pipe(map(result => result));
+    }
+
 getReportes(inicio: string, final: string,empresa:string) {
   const url = Global.BASE_API_URL + 'api.php/reporte';
   return this._http.post(url,{

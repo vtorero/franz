@@ -10,6 +10,7 @@ if($method == "OPTIONS") {
 require_once 'vendor/autoload.php';
 $app = new Slim\Slim();
 $db = new mysqli("localhost","marife","libido16","frdash");
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //mysqli_set_charset($db, 'utf8');
 if (mysqli_connect_errno()) {
@@ -158,6 +159,20 @@ $app->get("/proveedores",function() use($db,$app){
                 echo  $respuesta;
                 
 });
+
+$app->get("/proveedores/:criterio",function($criterio) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` where razon_social like '%".$criterio."%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
      
 $app->post("/proveedor",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -190,9 +205,74 @@ $app->post("/proveedor",function() use($db,$app){
 
 /**Compras */
 
-$app->get("/compras",function() use($db,$app){
+$app->post("/compra",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id");  
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+              try { 
+        $fecha=substr($data->fecha,0,10);
+        $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
+        $ultimo_id=array();
+        while ($d = $datos->fetch_object()) {
+         $ultimo_id=$d;
+         }
+
+         foreach($data->detalleCompra as $valor){
+            $proc="call p_compra_detalle(0,{$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id},'{$valor->descripcion}')";
+           $stmt = mysqli_prepare($db,$proc);
+            mysqli_stmt_execute($stmt);
+            $proc="";
+        }
+        $result = array("STATUS"=>true,"messaje"=>"Compra registrada correctamente","string"=>$fecha);
+        
+        }
+         catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+             echo  json_encode($result);   
+});
+
+
+
+$app->post("/compraedit",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+       print_r($data);
+       /* $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',{$data->id_proveedor})";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        //mysqli_close($stmt);
+
+        $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
+        $ultimo_id=array();
+        while ($d = $datos->fetch_object()) {
+         $ultimo_id=$d;
+         }
+           foreach($data->detalleCompra as $valor){
+            $proc="call p_compra_detalle({$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id},'{$valor->nombre}')";
+           $stmt = mysqli_prepare($db,$proc);
+            mysqli_stmt_execute($stmt);
+            $proc="";
+        }
+            $respuesta=json_encode($response);
+            echo  $respuesta;    */
+
+
+});
+
+$app->get("/compra/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `descripcion`, `cantidad`, `precio`, `id_articulo`, `id_compra` FROM `detalle_compras` where id_compra={$id}");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -201,6 +281,16 @@ $app->get("/compras",function() use($db,$app){
         echo  $respuesta;    
 });
 
+$app->get("/compras",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");
@@ -710,6 +800,23 @@ $db=new mysqli("localhost","marife","libido16","adops");
          $data[]=$row;
      }
         return $data;
+}
+
+function ordena_fecha($inicio,$fin){
+    $arraymeses=array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+    $arraynros=array('01','02','03','04','05','06','07','08','09','10','11','12');
+    $mes1=substr($inicio, 0,3);
+    $mes2=substr($fin, 0,3);
+    $dia1=substr($inicio, 3,2);
+    $dia2=substr($fin, 3,2);
+    $ano1=substr($inicio, 5,4);
+    $ano2=substr($fin, 5,4);
+    $fmes1=str_replace($arraymeses,$arraynros,$mes1);
+    $fmes2=str_replace($arraymeses,$arraynros,$mes2);
+    $ini=$ano1.'-'.$fmes1.'-'.$dia1;
+    $fin=$ano2.'-'.$fmes2.'-'.$dia2;
+    return array("inicio"=>$ini,"final"=>$fin);
+
 }
 
 $app->run();

@@ -8,6 +8,8 @@ import { Compra } from '../modelos/compra';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AddCompraComponent } from './add-compra/add-compra.component';
+import { DetalleCompra } from '../modelos/detalleCompra';
+import { EditCompraComponent } from './edit-compra/edit-compra.component';
 
 @Component({
   selector: 'app-compras',
@@ -21,34 +23,57 @@ import { AddCompraComponent } from './add-compra/add-compra.component';
 })
 export class ComprasComponent implements OnInit {
   dataSource:any;
-  dataComprobantes=[ 'Factura', 'Boleta'];
-  startDate:Date = new Date()
+  dataDetalle:any;
+  datosprueba:string="prueba";
+  dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
+  startDate:Date = new Date();
+  detallecompra:DetalleCompra=new DetalleCompra(0,'',0,0)
   cancela:boolean=false;
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {
+  constructor(private api:ApiService,
+    public dialog:MatDialog,
+    public dialog2:MatDialog,
+    public dialogo:MatDialog,
+    private toastr: ToastrService) {
  
 
    }
    
-
+   applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
   ngOnInit() {
     this.renderDataTable()
   }
 
   abrirDialogo() {
-    
-    const dialogo1 = this.dialog.open(AddCompraComponent, {
-      data: new Compra('', '', '',this.startDate,'','','')
+      const dialogo1 = this.dialog.open(AddCompraComponent, {
+      data: new Compra(0,'', '', '',this.startDate,'','','',[])
     });
-
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
-       console.log("art");
-   //  this.agregar(art);
+       console.log(art);
+     this.agregar(art);
+          this.renderDataTable();
       });
   }
+
+  agregar(art:Compra) {
+    if(art){
+    this.api.GuardarCompra(art).subscribe(
+      data=>{
+        this.toastr.success(data['messaje']);
+        },
+      erro=>{console.log(erro)}
+        );
+      this.renderDataTable();
+  }
+}
+
 
   renderDataTable() {  
     this.api.getApi('compras').subscribe(x => {  
@@ -61,5 +86,32 @@ export class ComprasComponent implements OnInit {
     console.log('Error de conexion de datatable!' + error);  
   });  
   } 
+
+  abrirEditar(cod:Compra) {
+    console.log("codmanda",cod);
+     const dialogo2 = this.dialog2.open(EditCompraComponent,{
+      data:cod
+    });
+    dialogo2.afterClosed().subscribe(art => {
+      if (art!= undefined)
+      console.log(art);
+    this.editar(art);
+    //this.toastr.success( 'Compra actualizada');
+    this.renderDataTable();
+     });  
+}
+
+editar(art:Compra) {
+  if(art){
+  this.api.EditarCompra(art).subscribe(
+    data=>{
+      this.toastr.success( data['messaje']);
+      },
+    erro=>{console.log(erro)}
+      );
+    this.renderDataTable();
+}
+}
+
 
 }

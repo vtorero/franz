@@ -36,8 +36,9 @@
   
   <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
-        <td mat-cell *matCellDef="let row ">
-              <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
+        <td mat-cell *matCellDef="let row">
+            <button class="btn btn-outline-secondary" (click)="abrirEditar(row)">Editar</button>&nbsp; 
+            <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
           
           <ng-template #dialogTemplate>
            <h5>Eliminar el producto: {{row.nombre}} ?</h5>

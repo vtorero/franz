@@ -22,7 +22,7 @@ export const MY_MOMENT_FORMATS = {
 @Component({
   selector: 'app-edit-compra',
   templateUrl: './edit-compra.component.html',
-  styles: []
+  styles: ['./edit-compra.component.css']
 })
 
 @NgModule({
@@ -42,8 +42,7 @@ export class EditCompraComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:Compra,
     dateTimeAdapter: DateTimeAdapter<any>
       ) {
-        dateTimeAdapter.setLocale('es-PE');
-       }
+      }
        getProveedores(): void {
         this.api.getProveedorSelect().subscribe(data => {
           if(data) {

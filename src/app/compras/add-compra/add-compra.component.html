@@ -19,7 +19,7 @@
             <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
         <mat-form-field>
-          <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="data.fecha" required>
+    <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="selectedMoment"  placeholder="Fecha" required>
           <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
         </mat-form-field>
           <mat-form-field>
@@ -42,7 +42,7 @@
         <!--  Columna ID-->
         <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
         </ng-container>
        <!-- Columna Apellido -->
         <ng-container matColumnDef="cantidad">

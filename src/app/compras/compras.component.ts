@@ -26,7 +26,7 @@ export class ComprasComponent implements OnInit {
   dataDetalle:any;
   datosprueba:string="prueba";
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
-  startDate:Date = new Date()
+  startDate:Date = new Date();
   detallecompra:DetalleCompra=new DetalleCompra(0,'',0,0)
   cancela:boolean=false;
   displayedColumns = ['comprobante','num_comprobante','descripcion','fecha','razon_social','borrar'];
@@ -41,22 +41,24 @@ export class ComprasComponent implements OnInit {
 
    }
    
-
+   applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
   ngOnInit() {
     this.renderDataTable()
   }
 
   abrirDialogo() {
-    
-    const dialogo1 = this.dialog.open(AddCompraComponent, {
+      const dialogo1 = this.dialog.open(AddCompraComponent, {
       data: new Compra(0,'', '', '',this.startDate,'','','',[])
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
        console.log(art);
      this.agregar(art);
-     this.toastr.success( 'Compra registrada');
-     this.renderDataTable();
+          this.renderDataTable();
       });
   }
 
@@ -64,7 +66,7 @@ export class ComprasComponent implements OnInit {
     if(art){
     this.api.GuardarCompra(art).subscribe(
       data=>{
-        this.toastr.success( data['messaje']);
+        this.toastr.success(data['messaje']);
         },
       erro=>{console.log(erro)}
         );
@@ -85,7 +87,7 @@ export class ComprasComponent implements OnInit {
   });  
   } 
 
-  abrirEditar(cod) {
+  abrirEditar(cod:Compra) {
     console.log("codmanda",cod);
      const dialogo2 = this.dialog2.open(EditCompraComponent,{
       data:cod

@@ -64,6 +64,7 @@ import { EditCompraComponent } from './compras/edit-compra/edit-compra.component
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    MatDatepickerModule,
     MkAlertModule,AlertModule,
     CommonModule,
     BrowserAnimationsModule, // required animations module

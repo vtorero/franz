@@ -283,7 +283,7 @@ $app->get("/compra/:id",function($id) use($db,$app){
 
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`, `fecha`, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
+    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`,DATE_FORMAT(fecha, '%Y-%m-%d') fecha, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;

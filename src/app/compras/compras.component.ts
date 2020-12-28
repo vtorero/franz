@@ -5,26 +5,44 @@ import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/pag
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Compra } from '../modelos/compra';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MAT_DATE_LOCALE } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AddCompraComponent } from './add-compra/add-compra.component';
 import { DetalleCompra } from '../modelos/detalleCompra';
 import { EditCompraComponent } from './edit-compra/edit-compra.component';
-
+import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
+export const MY_CUSTOM_FORMATS = {
+  fullPickerInput: 'YYYY-MM-DD',
+  parseInput: 'YYYY-MM-DD',
+  datePickerInput: 'YYYY-MM-DD',
+  timePickerInput: 'LT',
+  monthYearLabel: 'MMM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MMMM YYYY'
+  };
+ 
 @Component({
   selector: 'app-compras',
   templateUrl: './compras.component.html',
-  styles: []
+  styles: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
+  ],
 })
+
+
 
 @NgModule({
-  imports: [BrowserModule,MatPaginatorModule,MatDialog],
+  imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_CUSTOM_FORMATS},]
 
 })
+
+
+
 export class ComprasComponent implements OnInit {
   dataSource:any;
   dataDetalle:any;
-  datosprueba:string="prueba";
   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
   startDate:Date = new Date();
   detallecompra:DetalleCompra=new DetalleCompra(0,'',0,0)
@@ -36,11 +54,11 @@ export class ComprasComponent implements OnInit {
     public dialog:MatDialog,
     public dialog2:MatDialog,
     public dialogo:MatDialog,
-    private toastr: ToastrService) {
- 
-
+    private toastr: ToastrService,
+    dateTimeAdapter: DateTimeAdapter<any>) {
+       dateTimeAdapter.setLocale('es-PE');
    }
-   
+
    applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); 
     filterValue = filterValue.toLowerCase(); 
@@ -52,7 +70,7 @@ export class ComprasComponent implements OnInit {
 
   abrirDialogo() {
       const dialogo1 = this.dialog.open(AddCompraComponent, {
-      data: new Compra(0,'', '', '',this.startDate,'','','',[])
+      data: new Compra(0,'', '', '','','','','',[])
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
@@ -87,30 +105,15 @@ export class ComprasComponent implements OnInit {
   });  
   } 
 
-  abrirEditar(cod:Compra) {
-    console.log("codmanda",cod);
+  abrirEditar(cod:any) {
      const dialogo2 = this.dialog2.open(EditCompraComponent,{
       data:cod
     });
     dialogo2.afterClosed().subscribe(art => {
       if (art!= undefined)
-      console.log(art);
-    this.editar(art);
-    //this.toastr.success( 'Compra actualizada');
+      //this.toastr.success( 'Compra actualizada');
     this.renderDataTable();
      });  
-}
-
-editar(art:Compra) {
-  if(art){
-  this.api.EditarCompra(art).subscribe(
-    data=>{
-      this.toastr.success( data['messaje']);
-      },
-    erro=>{console.log(erro)}
-      );
-    this.renderDataTable();
-}
 }
 
 

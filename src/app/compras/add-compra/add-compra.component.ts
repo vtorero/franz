@@ -41,10 +41,10 @@ export class AddCompraComponent implements OnInit {
   dataArray;
   dataSource:any;
   cancela:boolean=false;
+  public selectedMoment = new Date();
   displayedColumns=['nombre','cantidad','precio','borrar'];
    dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
-  public selectedMoment = new Date();
-  constructor(
+   constructor(
     private toastr: ToastrService,
     public dialogo:MatDialog,
     public dialogRef: MatDialogRef<AddCompraComponent>,

@@ -1,4 +1,4 @@
-<div style="height: 600px;overflow-y: auto;overflow-x:hidden;padding: 15px;">
+<div style="height: 500px;overflow-y: auto;overflow-x:hidden;padding: 15px;">
   <form #formGeneral="ngForm">
   <div mat-dialog-content>
     <h3>Editar Compra</h3>
@@ -18,7 +18,7 @@
             <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>{{data.fecha}}</mat-label>
+          <mat-label>Fecha</mat-label>
           <input  matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha">
           <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
           <mat-datepicker #myPicker></mat-datepicker>

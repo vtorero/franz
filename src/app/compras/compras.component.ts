@@ -106,7 +106,10 @@ export class ComprasComponent implements OnInit {
   } 
 
   abrirEditar(cod:any) {
+    let fechaDate = new Date(cod.fecha + ' 0:00:00');
+    cod.fecha=fechaDate
      const dialogo2 = this.dialog2.open(EditCompraComponent,{
+      
       data:cod
     });
     dialogo2.afterClosed().subscribe(art => {

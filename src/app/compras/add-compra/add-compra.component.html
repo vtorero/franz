@@ -13,15 +13,19 @@
         </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Numero comprobante</mat-label>
               <input matInput name="num_comprobante" #num_comprobante="ngModel" [(ngModel)]="data.num_comprobante" type="text" placeholder="Ingrese Numero" required>
           </mat-form-field>
           <mat-form-field>
+            <mat-label>Descripción</mat-label>
             <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
         <mat-form-field>
-    <input matInput  [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [(ngModel)]="selectedMoment"  placeholder="Fecha" required>
-          <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
-        </mat-form-field>
+          <mat-label>Fecha</mat-label>
+          <input  matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha">
+          <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
+          <mat-datepicker #myPicker></mat-datepicker>
+      </mat-form-field>
           <mat-form-field>
             <mat-label>Proveedor</mat-label>
             <mat-select name="id_proveedor" #id_proveedor="ngModel" [(ngModel)]="data.id_proveedor" required>

@@ -210,7 +210,7 @@ $app->post("/compra",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-              try { 
+       try { 
         $fecha=substr($data->fecha,0,10);
         $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
         $stmt = mysqli_prepare($db,$sql);
@@ -247,7 +247,9 @@ $app->post("/compraedit",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-       print_r($data);
+       $sql = "UPDATE compras SET comprobante='".$data->comprobante."',num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
+       
+       var_dump($sql);
        /* $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',{$data->id_proveedor})";
         $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);

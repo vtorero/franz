@@ -210,7 +210,7 @@ $app->post("/compra",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-              try { 
+       try { 
         $fecha=substr($data->fecha,0,10);
         $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
         $stmt = mysqli_prepare($db,$sql);
@@ -247,27 +247,26 @@ $app->post("/compraedit",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-       print_r($data);
-       /* $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',{$data->id_proveedor})";
-        $stmt = mysqli_prepare($db,$sql);
-        mysqli_stmt_execute($stmt);
-        //mysqli_close($stmt);
-
-        $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
-        $ultimo_id=array();
-        while ($d = $datos->fetch_object()) {
-         $ultimo_id=$d;
-         }
-           foreach($data->detalleCompra as $valor){
-            $proc="call p_compra_detalle({$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id},'{$valor->nombre}')";
+       $sql = "UPDATE compras SET comprobante='".$data->comprobante."',id_proveedor=".$data->id_proveedor.",num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
+       try { 
+        $db->query($sql);
+        $borra="DELETE FROM detalle_compras where id_compra={$data->id}";
+        $db->query($borra);
+        foreach($data->detalleCompra as $valor){
+          $proc="call p_compra_detalle(0,{$valor->cantidad},{$valor->precio},{$data->id},'{$valor->descripcion}')";
            $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
             $proc="";
         }
-            $respuesta=json_encode($response);
-            echo  $respuesta;    */
 
-
+        $result = array("STATUS"=>true,"messaje"=>"Compra actualizada correctamente");
+        }
+         catch(PDOException $e) {
+        $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
+         }
+        echo  json_encode($result);
+     
+      
 });
 
 $app->get("/compra/:id",function($id) use($db,$app){
@@ -281,9 +280,10 @@ $app->get("/compra/:id",function($id) use($db,$app){
         echo  $respuesta;    
 });
 
+
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, `comprobante`, `num_comprobante`, `descripcion`,DATE_FORMAT(fecha, '%Y-%m-%d') fecha, c.`id_proveedor`,p.razon_social, `id_usuario` FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
+    $resultado = $db->query("SELECT c.`id`, comprobante,`num_comprobante`, `descripcion`,DATE_FORMAT(fecha, '%Y-%m-%d') fecha, c.`id_proveedor`,p.razon_social, `id_usuario`,(select sum(precio) from detalle_compras where id_compra=c.id) total  FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;

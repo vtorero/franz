@@ -1,4 +1,4 @@
-<div style="height: 600px;overflow-y: auto;overflow-x:hidden;padding: 15px;">
+<div style="height: 500px;overflow-y: auto;overflow-x:hidden;padding: 15px;">
   <form #formGeneral="ngForm">
   <div mat-dialog-content>
     <h3>Editar Compra</h3>
@@ -6,6 +6,7 @@
        <mat-form-field>
           <mat-label>Comprobante</mat-label>
           <mat-select  name="comprobante" #comprobante="ngModel" [(ngModel)]="data.comprobante" required>
+            <mat-option [value]="">Seleccionar</mat-option>
             <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">
               {{cat.tipo}}
             </mat-option>
@@ -18,7 +19,7 @@
             <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>{{data.fecha}}</mat-label>
+          <mat-label>Fecha</mat-label>
           <input  matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha">
           <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
           <mat-datepicker #myPicker></mat-datepicker>
@@ -52,7 +53,7 @@
         </ng-container>
         <ng-container matColumnDef="precio">
           <mat-header-cell *matHeaderCellDef mat-sort-header>precio</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.precio}} </mat-cell>
+          <mat-cell *matCellDef="let row">S/. {{row.precio}} </mat-cell>
     </ng-container>     
     
     <ng-container matColumnDef="borrar">
@@ -68,6 +69,6 @@
     </div>
   <div mat-dialog-actions>
       <button mat-raised-button (click)="cancelar()">Cancelar</button>
-      <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" (click)="enviaData(data)" cdkFocusInitial>Actualizar</button>
+      <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Actualizar</button>
   </div>
   </div>

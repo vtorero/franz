@@ -247,7 +247,7 @@ $app->post("/compraedit",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-       $sql = "UPDATE compras SET comprobante='".$data->comprobante."',num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
+       $sql = "UPDATE compras SET comprobante='".$data->comprobante."',id_proveedor=".$data->id_proveedor.",num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
        
        var_dump($sql);
        /* $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','2020-11-23',{$data->id_proveedor})";

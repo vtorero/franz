@@ -26,7 +26,7 @@ export const MY_CUSTOM_FORMATS = {
   templateUrl: './compras.component.html',
   styles: [],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es-PE'},
+    {provide: OWL_DATE_TIME_FORMATS, useValue: 'es-PE'},
   ],
 })
 
@@ -105,19 +105,30 @@ export class ComprasComponent implements OnInit {
   });  
   } 
 
-  abrirEditar(cod:any) {
-    let fechaDate = new Date(cod.fecha + ' 0:00:00');
-    cod.fecha=fechaDate
+  abrirEditar(cod:Compra) {
+    //let fechaDate = new Date(cod.fecha + ' 00:00:00');
+    //cod.fecha=fechaDate
      const dialogo2 = this.dialog2.open(EditCompraComponent,{
-      
       data:cod
     });
     dialogo2.afterClosed().subscribe(art => {
+      console.log(art);
       if (art!= undefined)
+      this.editar(art);
       //this.toastr.success( 'Compra actualizada');
     this.renderDataTable();
      });  
 }
 
+editar(art:any) {
+  if(art){
+  this.api.EditarCompra(art).subscribe(
+    data=>{
+      this.toastr.success( data['messaje']);
+      },
+    erro=>{console.log(erro)}
+      );
+}
+}
 
 }

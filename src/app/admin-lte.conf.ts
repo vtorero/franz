@@ -10,8 +10,8 @@ export const adminLteConf = {
   // layout: 'normal',
   sidebarLeftMenu: [
     {label: 'MENU', separator: true},
-    {label: 'Inventarios',iconClasses: 'fa fa-tasks',children:[
-      {label: 'Mantenimiento', route: 'general/inventario'},  
+    {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
+      {label: 'Mantenimiento',iconClasses: 'fa fa-table',route: 'general/inventario'},  
     ]},
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
       {label: 'Mantenimiento', route: 'general/productos'},  

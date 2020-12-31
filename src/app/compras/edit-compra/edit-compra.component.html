@@ -6,6 +6,7 @@
        <mat-form-field>
           <mat-label>Comprobante</mat-label>
           <mat-select  name="comprobante" #comprobante="ngModel" [(ngModel)]="data.comprobante" required>
+            <mat-option [value]="">Seleccionar</mat-option>
             <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">
               {{cat.tipo}}
             </mat-option>
@@ -52,7 +53,7 @@
         </ng-container>
         <ng-container matColumnDef="precio">
           <mat-header-cell *matHeaderCellDef mat-sort-header>precio</mat-header-cell>
-          <mat-cell *matCellDef="let row">{{row.precio}} </mat-cell>
+          <mat-cell *matCellDef="let row">S/. {{row.precio}} </mat-cell>
     </ng-container>     
     
     <ng-container matColumnDef="borrar">

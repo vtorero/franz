@@ -22,7 +22,7 @@ export const MY_MOMENT_FORMATS = {
 @Component({
   selector: 'app-edit-compra',
   templateUrl: './edit-compra.component.html',
-  styles: ['./edit-compra.component.css'],
+  styleUrls: ['./edit-compra.component.css'],
 })
 
 @NgModule({
@@ -36,7 +36,7 @@ export class EditCompraComponent implements OnInit {
   dataProveedor:any;
   dataDetalle:any;
   displayedColumns=['nombre','cantidad','precio','borrar'];
-  dataComprobantes=[ {id:"1",tipo:'Factura'}, {id:"2",tipo:'Boleta'}];
+  dataComprobantes=[ {id:'Factura',tipo:'Factura'}, {id:'Boleta',tipo:'Boleta'}];
   fec1= this.selectedMoment.toDateString().split(" ",4); 
    fecha1:string=this.fec1[2]+'-'+this.fec1[1]+'-'+this.fec1[3];
 

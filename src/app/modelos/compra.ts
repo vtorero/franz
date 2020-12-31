@@ -11,5 +11,6 @@ export class Compra {
         public razon_social :string,
         public id_usuario:string,
         public detalleCompra:Array<DetalleCompra>,
+        public total:number
         ){}
 }

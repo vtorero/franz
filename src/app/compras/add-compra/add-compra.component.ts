@@ -43,7 +43,7 @@ export class AddCompraComponent implements OnInit {
   cancela:boolean=false;
   public selectedMoment = new Date();
   displayedColumns=['nombre','cantidad','precio','borrar'];
-   dataComprobantes=[ {id:1,tipo:'Factura'}, {id:2,tipo:'Boleta'}];
+   dataComprobantes=[ {id:'Factura',tipo:'Factura'}, {id:'Boleta',tipo:'Boleta'}];
    constructor(
     private toastr: ToastrService,
     public dialogo:MatDialog,

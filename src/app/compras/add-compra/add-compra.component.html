@@ -6,9 +6,8 @@
         <mat-form-field>
           <mat-label>Comprobante</mat-label>
           <mat-select  name="comprobante" #comprobante="ngModel" [(ngModel)]="data.comprobante" required>
-            <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">
-              {{cat.tipo}}
-            </mat-option>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
           </mat-select>
         </mat-form-field>
 

@@ -22,7 +22,7 @@ $data=array();
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -94,6 +94,22 @@ $app->get("/categorias",function() use($db,$app){
             echo  json_encode($result);
         });
 
+    $app->get("/productos/:criterio",function($criterio) use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+            try{
+            $resultado = $db->query("SELECT `id`, `codigo`, `nombre` FROM `productos` where nombre like '%".$criterio."%'");  
+            $prods=array();
+            while ($fila = $resultado->fetch_array()) {
+                
+                $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+        }catch (PDOException $e){
+            $respuesta=json_encode(array("status"=>$e->message));
+        }
+                     echo  $respuesta;
+                
+        });
 
     $app->post("/producto",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
@@ -291,6 +307,22 @@ $app->get("/compras",function() use($db,$app){
         $respuesta=json_encode($prods);
         echo  $respuesta;    
 });
+
+
+/*Inventarios*/
+
+$app->get("/inventarios",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT p.id,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, `fecha_produccion`, `estado`, `ciclo`, `id_usuario`FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+    });
+
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

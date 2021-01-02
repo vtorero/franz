@@ -42,6 +42,7 @@ import { AddCompraComponent } from './compras/add-compra/add-compra.component';
 import { HelloComponent } from './compras/add-compra/hello.component';
 import { EditCompraComponent } from './compras/edit-compra/edit-compra.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { AddInventarioComponent } from './inventario/add-inventario/add-inventario.component';
 
 
 
@@ -81,7 +82,8 @@ import { InventarioComponent } from './inventario/inventario.component';
     AddProveedorComponent,
     AddCompraComponent,
     EditCompraComponent,
-    HelloComponent],
+    HelloComponent,
+  AddInventarioComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -98,7 +100,8 @@ import { InventarioComponent } from './inventario/inventario.component';
     AddCompraComponent,
     HelloComponent,
     EditCompraComponent,
-    InventarioComponent
+    InventarioComponent,
+    AddInventarioComponent
     ],
   bootstrap: [AppComponent]
 })

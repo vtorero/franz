@@ -78,13 +78,13 @@ export class ComprasComponent implements OnInit {
     });
   }
 
-  agregar(art: Compra) {
+  agregar(art:Compra) {
     if (art) {
       this.api.GuardarCompra(art).subscribe(
         data => {
           this.toastr.success(data['messaje']);
         },
-        erro => { console.log(erro) }
+        error => { console.log(error) }
       );
       this.renderDataTable();
     }

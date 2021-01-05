@@ -1,7 +1,7 @@
 <div style="height:auto;">
   <form  #formGeneral="ngForm">
   <div mat-dialog-content>
-    <h3>Agregar Inventario</h3>
+    <h3>Editar Inventario</h3>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 750px; padding: 1rem;">
         <mat-form-field>
           <mat-label>Producto</mat-label>
@@ -15,7 +15,7 @@
             <mat-form-field>
               <mat-select  name="presentacion" #presentacion="ngModel" [(ngModel)]="data.presentacion" required>
                 <mat-option  value="">Seleccionar</mat-option>
-                <mat-option  value="bolsa">Bolsa</mat-option>
+                <mat-option  value="Bolsa">Bolsa</mat-option>
                 <mat-option  value="Sellado">Sellado</mat-option>
               </mat-select>
             </mat-form-field>
@@ -24,9 +24,9 @@
             <mat-form-field>
             <mat-select  name="unidad" #unidad="ngModel" [(ngModel)]="data.unidad" required>
               <mat-option value="">Seleccionar</mat-option>
-              <mat-option value="bolsa">Kilo</mat-option>
-              <mat-option value="cellado">Docena</mat-option>
-              <mat-option value="unidad">Unidad</mat-option>
+              <mat-option value="Kilo">Kilo</mat-option>
+              <mat-option value="Docena">Docena</mat-option>
+              <mat-option value="Unidad">Unidad</mat-option>
             </mat-select>
           </mat-form-field>
              </div>

@@ -13,6 +13,7 @@ import { Producto } from './modelos/producto';
 import { Categoria } from './modelos/categoria';
 import { Proveedor } from './modelos/proveedor';
 import { Compra } from './modelos/compra';
+import { Inventario } from './modelos/inventario';
 
 
 @Injectable({
@@ -128,6 +129,15 @@ public GuardarProveedor(datos:Proveedor):Observable<any> {
      return this._http.post(Global.BASE_API_URL+'api.php/compra',
       {json:json},{ headers: headers });
     }
+ /*inventario*/
+
+ GuardarInventario(datos:Inventario):Observable<any> {
+  let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');
+  let json = JSON.stringify(datos);
+   return this._http.post(Global.BASE_API_URL+'api.php/inventario',
+    {json:json},{ headers: headers });
+  }
+
 
 EditarCompra(datos:Compra):Observable<any> {
       let headers = new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded');

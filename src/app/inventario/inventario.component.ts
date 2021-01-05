@@ -5,15 +5,16 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
 import { Inventario } from '../modelos/inventario';
 import { AddInventarioComponent } from './add-inventario/add-inventario.component';
+import { EditInventarioComponent } from './edit-inventario/edit-inventario.component';
 
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
-  styles: []
+  styleUrls: ['./inventario.component.css']
 })
 export class InventarioComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['producto', 'cantidad', 'fecha_produccion', 'estado','ciclo', 'operaciones'];
+  displayedColumns = ['producto','presentacion','unidad', 'cantidad', 'fecha_produccion','dias','ciclo', 'operaciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -38,7 +39,30 @@ export class InventarioComponent implements OnInit {
       dialogo1.afterClosed().subscribe(art => {
         if (art != undefined)
           console.log(art);
-        //this.agregar(art);
+        this.agregar(art);
+        this.renderDataTable();
+      });
+    }
+
+    agregar(art:Inventario) {
+      if (art) {
+        this.api.GuardarInventario(art).subscribe(
+          data => {
+            this.toastr.success(data['messaje']);
+          },
+          error => { console.log(error) }
+        );
+        this.renderDataTable();
+      }
+    }
+    abrirEditar(cod:Inventario) {
+         const dialogo2 = this.dialog2.open(EditInventarioComponent, {
+        data: cod
+      });
+      dialogo2.afterClosed().subscribe(art => {
+        console.log(art);
+        if (art != undefined)
+          //this.editar(art);
         this.renderDataTable();
       });
     }

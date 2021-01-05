@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { Inventario } from 'src/app/modelos/inventario';
 
@@ -12,12 +13,12 @@ export class AddInventarioComponent implements OnInit {
 dataProducto:any;
 dataArray;
   constructor(private api: ApiService,
-    @Inject(MAT_DIALOG_DATA) public data: Inventario) { }
+    @Inject(MAT_DIALOG_DATA) public data: Inventario,
+    dateTimeAdapter: DateTimeAdapter<any>) { 
+      dateTimeAdapter.setLocale('es-PE');
+    }
 
-
-  
-
-  ngOnInit() {
+    ngOnInit() {
     this.getProductos();
   }
 

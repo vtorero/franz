@@ -313,7 +313,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT p.id,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, fecha_produccion,datediff(fecha_produccion,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(fecha_produccion,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -344,6 +344,30 @@ $app->get("/inventarios",function() use($db,$app){
                 echo  $respuesta;
 
         });
+
+
+
+        $app->put("/inventario",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+               try { 
+                $fecha=substr($data->fecha_produccion,0,10);
+                $sql="call p_inventario_upd({$data->id},'{$fecha}','{$data->presentacion}','{$data->unidad}',{$data->cantidad})";
+                $stmt = mysqli_prepare($db,$sql);
+                mysqli_stmt_execute($stmt);
+                $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente","string"=>$fecha);
+               }
+                catch(PDOException $e) {
+                    $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
+                     }
+                
+                     $respuesta=json_encode($result);
+                    echo  $respuesta;
+    
+        });
+
 
 
 $app->post("/bancosget",function() use($db,$app) {

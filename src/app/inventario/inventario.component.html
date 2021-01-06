@@ -8,6 +8,10 @@
   <div class="example-container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort>
       <!--  Columna ID-->
+      <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>codigo</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="producto">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
@@ -32,7 +36,7 @@
       </ng-container>
       <ng-container matColumnDef="dias">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Dias en Stock</mat-header-cell>
-            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias >= 0 ? 'green' : 'red' }">{{row.dias}}</div></mat-cell>
+            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias >= 1 ? 'green' : 'red' }">{{row.dias}}</div></mat-cell>
       </ng-container>
       <ng-container matColumnDef="ciclo">
             <mat-header-cell *matHeaderCellDef mat-sort-header>ciclo</mat-header-cell>

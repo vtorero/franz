@@ -14,7 +14,7 @@ import { EditInventarioComponent } from './edit-inventario/edit-inventario.compo
 })
 export class InventarioComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['producto','presentacion','unidad', 'cantidad', 'fecha_produccion','dias','ciclo', 'operaciones'];
+  displayedColumns = ['id','producto','presentacion','unidad', 'cantidad', 'fecha_produccion','dias','ciclo', 'operaciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -62,9 +62,20 @@ export class InventarioComponent implements OnInit {
       dialogo2.afterClosed().subscribe(art => {
         console.log(art);
         if (art != undefined)
-          //this.editar(art);
+          this.editar(art);
         this.renderDataTable();
       });
+    }
+
+    editar(art: any) {
+      if (art) {
+        this.api.EditarInventario(art).subscribe(
+          data => {
+            this.toastr.success(data['messaje']);
+          },
+          erro => { console.log(erro) }
+        );
+      }
     }
 
   ngOnInit() {

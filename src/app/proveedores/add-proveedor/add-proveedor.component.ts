@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Proveedor } from 'src/app/modelos/proveedor';
 
@@ -11,6 +12,7 @@ import { Proveedor } from 'src/app/modelos/proveedor';
 export class AddProveedorComponent implements OnInit {
 
   constructor(
+    private toastr: ToastrService,
     public dialogRef: MatDialogRef<AddProveedorComponent>,
     @ Inject(MAT_DIALOG_DATA) public data: Proveedor,
     private api:ApiService
@@ -27,7 +29,11 @@ export class AddProveedorComponent implements OnInit {
         this.data.departamento=data['departamento']
         this.data.provincia=data['provincia']
         this.data.distrito=data['distrito']
-      }
+      } 
+    },
+    error=>{
+      console.log(error)
+      this.toastr.error(error['message']);
     } );
  }
 

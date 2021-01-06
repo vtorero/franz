@@ -55,12 +55,18 @@ export class ProveedoresComponent implements OnInit {
             data => {
               this.toastr.success( data['messaje']);
             },
-            erro => { console.log(erro) }
+            erro => { 
+              this.toastr.error( erro['messaje']);
+             }
           );
           this.renderDataTable();
         }
 
       }
+
+    },
+    error=>{
+      this.toastr.error( error['messaje']);
 
     });
   }

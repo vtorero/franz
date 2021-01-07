@@ -1,0 +1,6 @@
+.mat-cell,.mat-header-cell {
+   justify-content: center !important;
+}
+td.mat-cell,th.mat-header-cell{
+    border-bottom-style: unset !important;
+}

@@ -21,6 +21,7 @@ import { Inventario } from './modelos/inventario';
 })
 export class ApiService {
   public url: string;
+  status;
   constructor(public _http: HttpClient,) {
     this.url = "http://slim.com/api.php/productos";
 
@@ -119,6 +120,11 @@ export class ApiService {
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/proveedor',
       { json: json }, { headers: headers });
+  }
+
+  public EliminarProveedor(id:number): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/proveedor/'+id,{headers:headers});
   }
 
   /**Compras  api*/

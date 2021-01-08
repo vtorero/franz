@@ -8,6 +8,8 @@ import { CategoriaComponent } from './productos/categoria/categoria.component';
 import {ProveedoresComponent} from './proveedores/proveedores.component';
 import { ComprasComponent } from './compras/compras.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.component';
+import { AvisosComponent } from './avisos/avisos.component';
 
 
 const routes: Routes = [
@@ -26,6 +28,10 @@ const routes: Routes = [
       {
         path:'inventario',
         component:InventarioComponent
+      },
+      {
+        path:'alertas',
+        component:AvisosComponent
       },
       {
         path:'compras',

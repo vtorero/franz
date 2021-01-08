@@ -14,6 +14,7 @@ import { Categoria } from './modelos/categoria';
 import { Proveedor } from './modelos/proveedor';
 import { Compra } from './modelos/compra';
 import { Inventario } from './modelos/inventario';
+import { Avisos } from './modelos/avisos';
 
 
 @Injectable({
@@ -90,6 +91,11 @@ export class ApiService {
     } else {
       return this._http.get<Producto[]>(Global.BASE_API_URL + 'api.php/productos/' + value, { headers: this.headers });
     }
+  }
+
+  getAvisosInventarios(): Observable<Avisos[]> {
+    return this._http.get<Avisos[]>(Global.BASE_API_URL + 'api.php/alertaintentario', { headers: this.headers });
+    
   }
 
   public GuardarCategoria(datos: Categoria): Observable<any> {

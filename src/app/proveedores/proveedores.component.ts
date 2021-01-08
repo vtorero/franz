@@ -51,12 +51,13 @@ export class ProveedoresComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!this.cancela) {
         if (cod) {
-          this.api.EliminarProducto(cod).subscribe(
+          this.api.EliminarProveedor(cod).subscribe(
             data => {
               this.toastr.success( data['messaje']);
             },
-            erro => { 
-              this.toastr.error( erro['messaje']);
+            error => { 
+              console.log(error)
+              this.toastr.error("Error al eliminar el proveedor");
              }
           );
           this.renderDataTable();

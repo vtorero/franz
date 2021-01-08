@@ -14,6 +14,7 @@ import { Categoria } from './modelos/categoria';
 import { Proveedor } from './modelos/proveedor';
 import { Compra } from './modelos/compra';
 import { Inventario } from './modelos/inventario';
+import { Avisos } from './modelos/avisos';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ import { Inventario } from './modelos/inventario';
 })
 export class ApiService {
   public url: string;
+  status;
   constructor(public _http: HttpClient,) {
     this.url = "http://slim.com/api.php/productos";
 
@@ -91,6 +93,11 @@ export class ApiService {
     }
   }
 
+  getAvisosInventarios(): Observable<Avisos[]> {
+    return this._http.get<Avisos[]>(Global.BASE_API_URL + 'api.php/alertaintentario', { headers: this.headers });
+    
+  }
+
   public GuardarCategoria(datos: Categoria): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
@@ -119,6 +126,11 @@ export class ApiService {
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/proveedor',
       { json: json }, { headers: headers });
+  }
+
+  public EliminarProveedor(id:number): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/proveedor/'+id,{headers:headers});
   }
 
   /**Compras  api*/

@@ -94,6 +94,10 @@ $app->get("/categorias",function() use($db,$app){
             echo  json_encode($result);
         });
 
+
+
+
+
     $app->get("/productos/:criterio",function($criterio) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
             try{
@@ -219,6 +223,22 @@ $app->post("/proveedor",function() use($db,$app){
         echo  json_encode($result);
     });
 
+    $app->delete("/proveedor/:ruc",function($ruc) use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+                      $query ="DELETE FROM proveedores WHERE num_documento='{$ruc}'";
+                      if($db->query($query)){
+           $result = array("STATUS"=>true,"messaje"=>"Proveedor eliminado correctamente");
+           }
+           else{
+            $result = array("STATUS"=>false,"messaje"=>"Error al eliminar el proveedor");
+           }
+           
+            echo  json_encode($result);
+        });
+
 /**Compras */
 
 $app->post("/compra",function() use($db,$app){
@@ -323,6 +343,23 @@ $app->get("/inventarios",function() use($db,$app){
         echo  $respuesta;
     });
 
+    $app->get("/alertaintentario",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $prods=array();
+        $resultado = $db->query("SELECT i.id,id_producto,fecha_produccion,p.nombre,datediff(fecha_produccion,now()) dias FROM `inventario` i ,`productos` p where i.id_producto=p.id and datediff(fecha_produccion,now())<=10 order by fecha_produccion");  
+        
+        if($resultado->num_rows>0){
+               while ($fila = $resultado->fetch_array()) {
+
+                $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+        }else{
+            $respuesta=json_encode($prods);
+        }
+            echo  $respuesta;
+        });
+
 
     $app->post("/inventario",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
@@ -357,14 +394,13 @@ $app->get("/inventarios",function() use($db,$app){
                 $sql="call p_inventario_upd({$data->id},'{$fecha}','{$data->presentacion}','{$data->unidad}',{$data->cantidad})";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
-                $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente","string"=>$fecha);
+                $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente");
                }
                 catch(PDOException $e) {
                     $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
                      }
-                
-                     $respuesta=json_encode($result);
-                    echo  $respuesta;
+                $respuesta=json_encode($result);
+                echo  $respuesta;
     
         });
 

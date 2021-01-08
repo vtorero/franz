@@ -44,6 +44,7 @@ import { EditCompraComponent } from './compras/edit-compra/edit-compra.component
 import { InventarioComponent } from './inventario/inventario.component';
 import { AddInventarioComponent } from './inventario/add-inventario/add-inventario.component';
 import { EditInventarioComponent } from './inventario/edit-inventario/edit-inventario.component';
+import { AvisosComponent } from './avisos/avisos.component';
 
 
 
@@ -104,7 +105,8 @@ import { EditInventarioComponent } from './inventario/edit-inventario/edit-inven
     EditCompraComponent,
     InventarioComponent,
     AddInventarioComponent,
-    EditInventarioComponent
+    EditInventarioComponent,
+    AvisosComponent
     ],
   bootstrap: [AppComponent]
 })

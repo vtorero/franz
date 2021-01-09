@@ -36,7 +36,7 @@
       </ng-container>
       <ng-container matColumnDef="dias">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Dias en Stock</mat-header-cell>
-            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias >= 1 ? 'green' : 'red' }">{{row.dias}}</div></mat-cell>
+            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias>=7 ? 'red':'green'}">{{row.dias}}</div></mat-cell>
       </ng-container>
       <ng-container matColumnDef="ciclo">
             <mat-header-cell *matHeaderCellDef mat-sort-header>ciclo</mat-header-cell>

@@ -9,12 +9,12 @@
         </a>
       </mk-dropdown-toggle>
       <mk-dropdown-menu>
-        <li class="header">Tienes notificaciones</li>
+        <li class="header" [ngStyle]="{'display':notificaciones==0 ? 'none':'block'}">Tienes notificaciones</li>
         <li>
           <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
             <li *ngFor="let dat of exampleArray">
               <a href="#/general/inventario">
-                <i class="fa fa-users text-red" [ngClass]="{'text-red': dat.dias<=0,'text-yellow': dat.dias>=4,'text-green': dat.dias>=5}"></i>({{dat.dias}}) {{dat.nombre}}
+                <i class="fa fa-users text-red" [ngClass]="{'text-green': dat.dias<=0,'text-yellow': dat.dias<=4 && dat.dias>=1,'text-red': dat.dias>=5}"></i>({{dat.dias}}) {{dat.nombre}}
               </a>
             </li>
              </ul><div class="slimScrollBar" style="width: 3px; position: absolute; top: 0; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div>

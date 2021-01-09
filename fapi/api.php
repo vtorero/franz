@@ -346,7 +346,7 @@ $app->get("/inventarios",function() use($db,$app){
     $app->get("/alertaintentario",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $prods=array();
-        $resultado = $db->query("SELECT i.id,id_producto,fecha_produccion,p.nombre,datediff(fecha_produccion,now()) dias FROM `inventario` i ,`productos` p where i.id_producto=p.id and datediff(fecha_produccion,now())<=10 order by fecha_produccion");  
+        $resultado = $db->query("SELECT i.id,id_producto,fecha_produccion,p.nombre,datediff(now(),fecha_produccion) dias FROM `inventario` i ,`productos` p where i.id_producto=p.id and datediff(now(),fecha_produccion)>=7 order by fecha_produccion");  
         
         if($resultado->num_rows>0){
                while ($fila = $resultado->fetch_array()) {

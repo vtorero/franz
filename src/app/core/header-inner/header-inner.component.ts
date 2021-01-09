@@ -19,7 +19,9 @@ public imagen:string
   getAvisos(): void {
     this.api.getAvisosInventarios().subscribe(data => {
         this.exampleArray = data;
+        
         this.notificaciones=data.length;
+        
         });
     console.log("avisos",this.exampleArray);
   }

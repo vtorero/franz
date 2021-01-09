@@ -333,7 +333,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(fecha_produccion,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

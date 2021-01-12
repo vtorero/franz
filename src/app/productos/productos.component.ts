@@ -9,6 +9,8 @@ import { MatSort } from '@angular/material/sort';
 import { Producto } from '../modelos/producto';
 import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
+import { LoginService } from '../services/login.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -25,10 +27,11 @@ import { ToastrService } from 'ngx-toastr';
 export class ProductosComponent implements OnInit {
   dataSource:any;
   cancela:boolean=false;
-  displayedColumns = ['codigo','nombre','nombrecategoria','costo','IGV','precio_sugerido','borrar'];
+  usuario:string;
+  displayedColumns = ['codigo','nombre','nombrecategoria','costo','IGV','precio_sugerido','usuario','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
+  constructor(private _login:LoginService,private router:Router,private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
 
   renderDataTable() {  
     this.api.getProductos().subscribe(x => {  
@@ -50,7 +53,12 @@ export class ProductosComponent implements OnInit {
 
 
   ngOnInit() {
-    this.renderDataTable();  
+    this.renderDataTable(); 
+    if(this._login.getCurrentUser==false){
+      this.router.navigate(['']);
+      }else{
+        this.usuario= localStorage.getItem("currentNombre");
+      } 
 
   }
 
@@ -58,7 +66,7 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto('', '', '',0,0,0,0,0)
+      data: new Producto('', '', '',0,0,0,0,0,this.usuario)
     });
 
      dialogo1.afterClosed().subscribe(art => {
@@ -68,6 +76,7 @@ export class ProductosComponent implements OnInit {
   }
 
   abrirDialogoEdit(cod) {
+    cod.usuario=this.usuario;
     const dialogo2 = this.dialog2.open(EditarProductoComponent, {
       data: cod
     });

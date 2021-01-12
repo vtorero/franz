@@ -7,7 +7,7 @@ export class Producto {
         public igv : number,
         public precio:number,
         public precio_sugerido:number,
-        public id_categoria:number
-        
+        public id_categoria:number,
+        public usuario:string
     ){}
 }

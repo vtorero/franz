@@ -22,7 +22,7 @@ export class LoginService {
 
   get getCurrentUser(){
     let user = localStorage.getItem("currentUser");
-    if(isNullOrUndefined(user)){
+    if(!user){
       return false;
        }else{
          return true;

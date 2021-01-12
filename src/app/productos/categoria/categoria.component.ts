@@ -21,6 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class CategoriaComponent implements OnInit {
   dataSource:any;
+  data:any;
   cancela:boolean=false;
   displayedColumns = ['codigo','nombre','borrar'];
   @ViewChild(MatSort) sort: MatSort;

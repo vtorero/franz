@@ -27,7 +27,7 @@
            <mat-form-field>
             <mat-label>Proveedor</mat-label>
             <mat-select name="id_proveedor" #id_proveedor="ngModel" [(ngModel)]="data.id_proveedor" required>
-              <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
+              <input placeholder="Buscar..">
               <mat-option  *ngFor="let cat of dataProveedor" [value]="cat.id">
                 {{cat.razon_social}}
               </mat-option>

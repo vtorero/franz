@@ -22,7 +22,7 @@ $data=array();
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria,usuario FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -126,14 +126,16 @@ $app->get("/categorias",function() use($db,$app){
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
+            $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
     
         
-            $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria) VALUES ("
+           $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria,usuario) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
           ."{$costo},"
           ."{$precio},"
-          ."{$categoria}".")";
+          ."{$categoria},"
+          ."'{$usuario}'".")";
        
           $insert=$db->query($query);
                    
@@ -152,8 +154,9 @@ $app->get("/categorias",function() use($db,$app){
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
+            $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
 
-            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria." WHERE codigo=".$codigo;
+            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",usuario='".$usuario."' WHERE codigo=".$codigo;
             try { 
             $db->query($sql);
              $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
@@ -333,7 +336,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(fecha_produccion,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

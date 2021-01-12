@@ -36,7 +36,7 @@ constructor(private router:Router,private login:LoginService) {
               localStorage.removeItem("currentAvatar");
               localStorage.removeItem("currentEmpresa"); 
               sessionStorage.removeItem("hashsession"); 
-              localStorage.setItem("currentUser",data['data'][0]['usuario']);
+              localStorage.setItem("currentUser",data['data'][0]['nombre']);
               localStorage.setItem("currentNombre",data['data'][0]['nombre']);
               localStorage.setItem("currentAvatar",data['data'][0]['avatar']);
               localStorage.setItem("currentEmpresa",data['data'][0]['nombre']);

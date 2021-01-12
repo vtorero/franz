@@ -11,7 +11,8 @@ export const adminLteConf = {
   sidebarLeftMenu: [
     {label: 'MENU', separator: true},
     {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
-      {label: 'Mantenimiento',iconClasses: 'fa fa-table',route: 'general/inventario'},  
+      {label:'Stock',iconClasses: 'fa fa-table',route: 'general/inventario'},  
+      {label:'Vencimientos',iconClasses: 'fa fa-table',route: 'general/inventario'},  
     ]},
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
     {label: 'Mantenimiento', route: 'general/productos'},  

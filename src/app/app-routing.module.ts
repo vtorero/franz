@@ -10,6 +10,7 @@ import { ComprasComponent } from './compras/compras.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.component';
 import { AvisosComponent } from './avisos/avisos.component';
+import { AlmacenComponent } from './inventario/almacen/almacen.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path:'inventario',
         component:InventarioComponent
+      },
+      {
+        path:'almacen',
+        component:AlmacenComponent
       },
       {
         path:'alertas',

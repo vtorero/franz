@@ -11,7 +11,7 @@ export const adminLteConf = {
   sidebarLeftMenu: [
     {label: 'MENU', separator: true},
     {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
-      {label:'Stock',iconClasses: 'fa fa-table',route: 'general/inventario'},  
+      {label:'Almacen',iconClasses: 'fa fa-table',route: 'general/almacen'},  
       {label:'Vencimientos',iconClasses: 'fa fa-table',route: 'general/inventario'},  
     ]},
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
@@ -26,7 +26,6 @@ export const adminLteConf = {
     ]},  
      {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/proveedores'},  
-      {label: 'Agregar', route: 'general/productos'}  
     ]},  
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
    /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},*/

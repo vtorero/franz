@@ -334,6 +334,19 @@ $app->get("/compras",function() use($db,$app){
 
 /*Inventarios*/
 
+$app->get("/almacen",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre, id_producto,sum(cantidad) cantidad, sum(peso) peso FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+
+});
+
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
@@ -371,7 +384,7 @@ $app->get("/inventarios",function() use($db,$app){
            $data = json_decode($j['json']);
            try { 
             $fecha=substr($data->fecha_produccion,0,10);
-            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->cantidad},'{$fecha}','{$data->observacion}')";
+            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->cantidad},{$data->peso},'{$fecha}','{$data->observacion}')";
             $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $result = array("STATUS"=>true,"messaje"=>"Inventario registrado correctamente","string"=>$fecha);

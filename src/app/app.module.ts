@@ -45,6 +45,7 @@ import { InventarioComponent } from './inventario/inventario.component';
 import { AddInventarioComponent } from './inventario/add-inventario/add-inventario.component';
 import { EditInventarioComponent } from './inventario/edit-inventario/edit-inventario.component';
 import { AvisosComponent } from './avisos/avisos.component';
+import { AlmacenComponent } from './inventario/almacen/almacen.component';
 
 
 
@@ -106,7 +107,8 @@ import { AvisosComponent } from './avisos/avisos.component';
     InventarioComponent,
     AddInventarioComponent,
     EditInventarioComponent,
-    AvisosComponent
+    AvisosComponent,
+    AlmacenComponent
     ],
   bootstrap: [AppComponent]
 })

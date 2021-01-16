@@ -8,6 +8,7 @@ import {Producto} from '../../modelos/producto';
 })
 export class DialogoarticuloComponent implements OnInit {
   dataSource;
+  dataSubcategoria;
   isLoaded;
   constructor(
     public dialogRef: MatDialogRef<DialogoarticuloComponent>,
@@ -23,10 +24,24 @@ export class DialogoarticuloComponent implements OnInit {
       } );
     }
 
+    getSubCate(id): void {
+      this.api.getApi('subcategoria/'+id).subscribe(data => {
+        if(data) {
+          this.dataSubcategoria=data;
+        }
+      } );
+    }
+
   ngOnInit() {
     this.getCate();
   
 }
+
+handleCagetoria(data){
+  this.getSubCate(data);
+  console.log(this.dataSubcategoria)
+}
+
   cancelar() {
     this.dialogRef.close();
   }

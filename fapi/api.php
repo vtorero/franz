@@ -22,7 +22,7 @@ $data=array();
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria,usuario FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria,id_subcategoria,usuario FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -35,7 +35,7 @@ $app->get("/productos",function() use($db,$app){
 
 $app->get("/categorias",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,nombre  FROM  categorias order by id");  
+        $resultado = $db->query("SELECT id, nombre  FROM  categorias order by id");  
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
                 
@@ -45,6 +45,19 @@ $app->get("/categorias",function() use($db,$app){
             echo  $respuesta;
             
         });
+
+        $app->get("/subcategorias",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id order by s.id");  
+            $prods=array();
+                while ($fila = $resultado->fetch_array()) {
+                    
+                    $prods[]=$fila;
+                }
+                $respuesta=json_encode($prods);
+                echo  $respuesta;
+                
+            });
 
 
     $app->post("/categoria",function() use($db,$app){
@@ -64,6 +77,36 @@ $app->get("/categorias",function() use($db,$app){
             }
             echo  json_encode($result);
         });
+
+        $app->post("/subcategoria",function() use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+            
+               $query ="INSERT INTO sub_categorias (id_categoria,nombre) VALUES ({$data->id_categoria},'{$data->nombre}')";
+                $proceso=$db->query($query);
+                if($proceso){
+               $result = array("STATUS"=>true,"messaje"=>"Subcategoria creada correctamente");
+                }else{
+                $result = array("STATUS"=>false,"messaje"=>"Ocurrio un error en la creación");
+                }
+                echo  json_encode($result);
+        });
+
+        $app->get("/subcategoria/:criterio",function($criterio) use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id and c.id={$criterio} order by s.id");  
+            $prods=array();
+                while ($fila = $resultado->fetch_array()) {
+                    
+                    $prods[]=$fila;
+                }
+                $respuesta=json_encode($prods);
+                echo  $respuesta;
+                
+        });
+
 
         $app->post("/categoriadel",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
@@ -126,15 +169,17 @@ $app->get("/categorias",function() use($db,$app){
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
+            $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
     
         
-           $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria,usuario) VALUES ("
+           $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria,id_subcategoria,usuario) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
           ."{$costo},"
           ."{$precio},"
           ."{$categoria},"
+          ."{$sub_categoria},"
           ."'{$usuario}'".")";
        
           $insert=$db->query($query);
@@ -154,9 +199,10 @@ $app->get("/categorias",function() use($db,$app){
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
+            $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
 
-            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",usuario='".$usuario."' WHERE codigo=".$codigo;
+            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
             try { 
             $db->query($sql);
              $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
@@ -334,9 +380,22 @@ $app->get("/compras",function() use($db,$app){
 
 /*Inventarios*/
 
+$app->get("/almacen",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre, id_producto,sum(cantidad) cantidad, sum(peso) peso FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+
+});
+
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`unidad`,`cantidad`,peso, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -371,7 +430,7 @@ $app->get("/inventarios",function() use($db,$app){
            $data = json_decode($j['json']);
            try { 
             $fecha=substr($data->fecha_produccion,0,10);
-            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->cantidad},'{$fecha}','{$data->observacion}')";
+            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->cantidad},{$data->peso},'{$fecha}','{$data->observacion}')";
             $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $result = array("STATUS"=>true,"messaje"=>"Inventario registrado correctamente","string"=>$fecha);

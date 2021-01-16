@@ -10,6 +10,7 @@ import {Producto} from '../../modelos/producto';
 })
 export class EditarProductoComponent implements OnInit {
   dataSource;
+  dataSubcategoria;
   isLoaded;
   constructor( public dialogRef2: MatDialogRef<EditarProductoComponent>,
     @ Inject(MAT_DIALOG_DATA) public data: Producto,
@@ -18,12 +19,20 @@ export class EditarProductoComponent implements OnInit {
       this.api.getCategoriaSelect().subscribe(data => {
         if(data) {
           this.dataSource = data;
-          this.isLoaded = true;
+              }
+      } );
+    }
+    getSubCate(): void {
+      this.api.getApi('subcategorias').subscribe(data => {
+        if(data) {
+          this.dataSubcategoria = data;
+  
         }
       } );
     }
   ngOnInit() {
     this.getCate()
+    this.getSubCate()
   }
 
   cancelar() {

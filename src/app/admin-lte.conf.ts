@@ -11,11 +11,13 @@ export const adminLteConf = {
   sidebarLeftMenu: [
     {label: 'MENU', separator: true},
     {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
-      {label: 'Mantenimiento',iconClasses: 'fa fa-table',route: 'general/inventario'},  
+      {label:'Almacen',iconClasses: 'fa fa-table',route: 'general/almacen'},  
+      {label:'Vencimientos',iconClasses: 'fa fa-table',route: 'general/inventario'},  
     ]},
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
     {label: 'Mantenimiento', route: 'general/productos'},  
-    {label: 'Categorias', route: 'categorias'}
+    {label: 'Categorias', route: 'categorias'},
+    {label: 'Subcategorias', route: 'subcategorias'},
       
     ]}, 
     {label: 'Compras',iconClasses: 'fa fa-tasks',children:[
@@ -25,15 +27,14 @@ export const adminLteConf = {
     ]},  
      {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/proveedores'},  
-      {label: 'Agregar', route: 'general/productos'}  
     ]},  
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
-   /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},*/
+   /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
     {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
       {label: 'General', route: 'general/formulario'},  
       {label: 'Datos Bancarios', route: 'pagos/formulario'},
         
-      ]},
+      ]}*/
     /*{label: 'COMPONENTS', separator: true},
      pullRights: [{text: 'New', classes: 'label pull-right bg-green'}
     {label: 'Accordion', route: 'accordion', iconClasses: 'fa fa-tasks'},

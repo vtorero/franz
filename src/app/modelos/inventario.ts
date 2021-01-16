@@ -5,6 +5,7 @@ export class Inventario {
         public presentacion:string,
         public unidad:string,
         public cantidad:number,
+        public peso:number,
         public observacion:string,
         public fecha_produccion:string,
         public estado:number,

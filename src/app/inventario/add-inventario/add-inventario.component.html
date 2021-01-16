@@ -11,28 +11,24 @@
           </mat-select>
         </mat-form-field>
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <mat-form-field>
-              <mat-select  name="presentacion" #presentacion="ngModel" [(ngModel)]="data.presentacion" required>
+              <mat-select  name="presentacion" #presentacion="ngModel" [(ngModel)]="data.presentacion" placeholder="Presentación" required>
                 <mat-option  value="">Seleccionar</mat-option>
                 <mat-option  value="bolsa">Bolsa</mat-option>
                 <mat-option  value="Sellado">Sellado</mat-option>
               </mat-select>
             </mat-form-field>
              </div>
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <mat-form-field>
-            <mat-select  name="unidad" #unidad="ngModel" [(ngModel)]="data.unidad" required>
-              <mat-option value="">Seleccionar</mat-option>
-              <mat-option value="bolsa">Kilo</mat-option>
-              <mat-option value="cellado">Docena</mat-option>
-              <mat-option value="unidad">Unidad</mat-option>
-            </mat-select>
-          </mat-form-field>
-             </div>
-          <div class="col-lg-4">
+                <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
+            </mat-form-field>
+                </div>
+         
+          <div class="col-lg-3">
             <mat-form-field>
-                <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
+                <input matInput name="peso" #cantidad="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Ingrese peso" required>
             </mat-form-field>
                 </div>
           </div>
@@ -50,7 +46,7 @@
   </div>
 </form>
   <div mat-dialog-actions>
-      <button mat-raised-button>Cancelar</button>
+      <button mat-raised-button (click)="cancelar()"> Cancelar</button>
       <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Registrar</button>
   </div>
   </div>

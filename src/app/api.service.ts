@@ -15,6 +15,7 @@ import { Proveedor } from './modelos/proveedor';
 import { Compra } from './modelos/compra';
 import { Inventario } from './modelos/inventario';
 import { Avisos } from './modelos/avisos';
+import { Subcategoria } from './modelos/subcategoria';
 
 
 @Injectable({
@@ -104,6 +105,14 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/categoria',
       { json: json }, { headers: headers });
   }
+
+  public GuardarSubCategoria(datos: Subcategoria): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/subcategoria',
+      { json: json }, { headers: headers });
+  }
+  
 
   public EliminarCategoria(datos: Categoria): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

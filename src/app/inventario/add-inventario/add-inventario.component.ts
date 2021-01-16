@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { Inventario } from 'src/app/modelos/inventario';
@@ -14,6 +14,7 @@ dataProducto:any;
 dataArray;
   constructor(private api: ApiService,
     @Inject(MAT_DIALOG_DATA) public data: Inventario,
+    public dialogRef: MatDialogRef<AddInventarioComponent>,
     dateTimeAdapter: DateTimeAdapter<any>) { 
       dateTimeAdapter.setLocale('es-PE');
     }
@@ -35,6 +36,9 @@ selectSearch(value:string){
   
 }
 
+cancelar(){
+  this.dialogRef.close();
+}
 
   getProductos(): void {
     this.api.getProductosSelect().subscribe(data => {

@@ -13,6 +13,7 @@ import { AddInventarioComponent } from '../add-inventario/add-inventario.compone
 })
 export class AlmacenComponent implements OnInit {
 dataSource:any;
+cancela: boolean = false;
 displayedColumns = ['id_producto','codigo', 'nombre', 'cantidad', 'peso', 'opciones'];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -14,7 +14,7 @@ import { EditInventarioComponent } from './edit-inventario/edit-inventario.compo
 })
 export class InventarioComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['id','producto','presentacion','unidad', 'cantidad', 'fecha_produccion','dias','ciclo', 'operaciones'];
+  displayedColumns = ['id','codigo','producto','presentacion','cantidad', 'peso', 'fecha_produccion','dias','ciclo', 'operaciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -91,6 +91,12 @@ export class InventarioComponent implements OnInit {
       error => {
         console.log('Error de conexion de datatable!' + error);
       });
+  }
+
+  cancelar(){
+  
+    this.dialog.closeAll();
+    
   }
 
 }

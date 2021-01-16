@@ -43,7 +43,7 @@ export class ComprasComponent implements OnInit {
   dataDetalle: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' }];
   startDate: Date = new Date();
-  detallecompra: DetalleCompra = new DetalleCompra(0, '', 0, 0)
+  detallecompra: DetalleCompra = new DetalleCompra(0, '', 0, 0);
   cancela: boolean = false;
   displayedColumns = ['comprobante', 'num_comprobante', 'fecha', 'razon_social','total', 'borrar'];
   @ViewChild(MatSort) sort: MatSort;
@@ -72,8 +72,7 @@ export class ComprasComponent implements OnInit {
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
-        console.log(art);
-      this.agregar(art);
+        this.agregar(art);
       this.renderDataTable();
     });
   }

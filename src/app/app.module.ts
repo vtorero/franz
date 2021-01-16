@@ -46,6 +46,7 @@ import { AddInventarioComponent } from './inventario/add-inventario/add-inventar
 import { EditInventarioComponent } from './inventario/edit-inventario/edit-inventario.component';
 import { AvisosComponent } from './avisos/avisos.component';
 import { AlmacenComponent } from './inventario/almacen/almacen.component';
+import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 
 
 
@@ -108,7 +109,8 @@ import { AlmacenComponent } from './inventario/almacen/almacen.component';
     AddInventarioComponent,
     EditInventarioComponent,
     AvisosComponent,
-    AlmacenComponent
+    AlmacenComponent,
+    SubcategoriaComponent
     ],
   bootstrap: [AppComponent]
 })

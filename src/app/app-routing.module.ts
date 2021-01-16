@@ -11,6 +11,7 @@ import { InventarioComponent } from './inventario/inventario.component';
 import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.component';
 import { AvisosComponent } from './avisos/avisos.component';
 import { AlmacenComponent } from './inventario/almacen/almacen.component';
+import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 
 
 const routes: Routes = [
@@ -59,7 +60,8 @@ const routes: Routes = [
     
   ]
   },
-  {path:'categorias',component:CategoriaComponent}
+  {path:'categorias',component:CategoriaComponent},
+  {path:'subcategorias',component:SubcategoriaComponent}
   ,
   {
   path: 'dash',

@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-categoria',
   templateUrl: './categoria.component.html',
-  styleUrls: []
+  styleUrls: ['./categoria.component.css']
 })
 @NgModule({
   imports: [BrowserModule,MatPaginatorModule,MatDialog,

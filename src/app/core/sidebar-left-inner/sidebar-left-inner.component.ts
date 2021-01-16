@@ -10,6 +10,6 @@ export class SidebarLeftInnerComponent {
 
   ngAfterViewInit() {
     this.imagen=localStorage.getItem("currentAvatar")
-    this.empresa=localStorage.getItem("currentEmpresa")
+    this.empresa=localStorage.getItem("currentNombre")
   }
 }

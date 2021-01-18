@@ -24,6 +24,9 @@ export const adminLteConf = {
       {label: 'Registrar', route: 'general/compras'},  
       {label: 'Reportes', route: 'general/dash'}
       
+    ]},
+    {label: 'Vendedores',iconClasses: 'fa fa-tasks',children:[
+      {label: 'Listado', route: 'general/vendedores'}
     ]},  
      {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/proveedores'},  

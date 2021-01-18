@@ -16,6 +16,7 @@ import { Compra } from './modelos/compra';
 import { Inventario } from './modelos/inventario';
 import { Avisos } from './modelos/avisos';
 import { Subcategoria } from './modelos/subcategoria';
+import { Vendedor } from './modelos/vendedor';
 
 
 @Injectable({
@@ -103,6 +104,13 @@ export class ApiService {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/categoria',
+      { json: json }, { headers: headers });
+  }
+
+  public GuardarVendedor(datos: Vendedor): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/vendedores',
       { json: json }, { headers: headers });
   }
 

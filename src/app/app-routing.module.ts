@@ -12,6 +12,7 @@ import { AlertComponent } from 'library/angular-admin-lte/src/lib/alert/alert.co
 import { AvisosComponent } from './avisos/avisos.component';
 import { AlmacenComponent } from './inventario/almacen/almacen.component';
 import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
+import { VendedoresComponent } from './vendedores/vendedores.component';
 
 
 const routes: Routes = [
@@ -55,6 +56,11 @@ const routes: Routes = [
     {
       path: 'proveedores',
       component:  ProveedoresComponent
+    
+    },
+    {
+      path: 'vendedores',
+      component:  VendedoresComponent
     
     },
     

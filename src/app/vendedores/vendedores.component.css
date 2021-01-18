@@ -5,9 +5,3 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
-
-@media (max-width: 767px) {
-    .mat-cell,.mat-header-cell{
-        font-size: 10px;
-    }
-}

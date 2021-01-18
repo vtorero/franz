@@ -138,8 +138,7 @@ $app->get("/categorias",function() use($db,$app){
         });
 
 
-
-
+/*productos*/
 
     $app->get("/productos/:criterio",function($criterio) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
@@ -466,7 +465,36 @@ $app->get("/inventarios",function() use($db,$app){
     
         });
 
+/*vendedores*/
 
+
+$app->post("/vendedores",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+    
+       $query ="INSERT INTO vendedor (nombre,apellidos,dni,razon_social,ruc) VALUES ('{$data->nombre}','{$data->apellidos}','{$data->dni}','{$data->razon_social}','{$data->ruc}')";
+        $proceso=$db->query($query);
+        if($proceso){
+       $result = array("STATUS"=>true,"messaje"=>"Vendedor creado correctamente");
+        }else{
+        $result = array("STATUS"=>false,"messaje"=>"Ocurrio un error en la creación");
+        }
+        echo  json_encode($result);
+});
+
+$app->get("/vendedores",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc`, `fecha` FROM `vendedor` order by id desc");  
+    $vendedores=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $vendedores[]=$fila;
+        }
+        $respuesta=json_encode($vendedores);
+        echo  $respuesta;
+    });
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

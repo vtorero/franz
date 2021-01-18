@@ -1,0 +1,85 @@
+<mk-box header="Mantenimiento Vendedores" [isCollapsable]="false" [isRemovable]="false">
+  <div class="example-header mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+    </mat-form-field>
+  </div>
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort>
+      <!--  Columna ID-->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Código</span></mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="nombre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Nombres</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.nombre}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="apellidos">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Apellidos</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.apellidos}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="dni">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">DNI</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.apellidos}} </mat-cell>
+  </ng-container>
+      <ng-container matColumnDef="razon_social">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Empresa</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.razon_social}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="ruc">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">RUC</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.ruc}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="opciones">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let row ">
+          <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
+          <ng-template #dialogTemplate>
+            <h5>Eliminar el producto: {{row.nombre}} ?</h5>
+            <button mat-button (click)="cancelar()">Cancelar</button>
+            <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+          </ng-template>
+        </td>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+  </div>
+  <ng-container>
+
+  </ng-container>
+</mk-box>
+<button mat-raised-button (click)="abrirDialog(dialog,data)">Agregar Vendedor</button>
+<ng-template #dialog>
+    <h1 mat-dialog-title>Agregar Vendedor</h1>
+  
+      <div style="display:flex;flex-direction:column;">
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput name="nombre" [(ngModel)]="datos.nombre" type="text" placeholder="Ingrese nombre" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Apellidos</mat-label>
+        <input matInput name="apellidos" [(ngModel)]="datos.apellidos" type="text" placeholder="Ingrese Apellidos" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>DNI</mat-label>
+        <input matInput name="dni" [(ngModel)]="datos.dni" type="number" placeholder="Ingrese DNI" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Razón Social </mat-label>
+        <input matInput name="razon_social" [(ngModel)]="datos.razon_social" type="text" placeholder="Ingrese Razón social" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Ruc</mat-label>
+        <input matInput name="ruc" [(ngModel)]="datos.ruc" type="number" placeholder="Ingrese RUC" required>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button  mat-button (click)="cancelar()">Cancelar</button>
+      <button mat-raised-button  mat-button (click)="agregar(datos)">Confirmar</button>
+    </div>
+
+</ng-template>

@@ -55,14 +55,14 @@ export class VendedoresComponent implements OnInit {
   }
 
   abrirDialog(templateRef, cod) {
-    console.log("dataaa", cod)
+    console.log("data", cod)
     let dialogRef = this.dialog.open(templateRef, {
       width: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!this.cancela) {
         if (cod) {
-          this.api.EliminarCategoria(cod).subscribe(
+          this.api.EliminarVendedor(cod).subscribe(
             data => {
               console.log(data);
               if (data['STATUS'] == true) {

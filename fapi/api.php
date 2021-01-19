@@ -496,6 +496,18 @@ $app->get("/vendedores",function() use($db,$app){
         echo  $respuesta;
     });
 
+    $app->delete("/vendedores/:id",function($id) use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $resultado = $db->query("DELETE FROM `vendedor` where  id={$id}");  
+        if($resultado){
+            $result = array("STATUS"=>true,"messaje"=>"Vendedor eliminado correctamente");
+             }else{
+             $result = array("STATUS"=>false,"messaje"=>"Ocurrio un error en la creación");
+             }
+             echo  json_encode($result);
+        });
+    
+
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");
     $json = $app->request->getBody();

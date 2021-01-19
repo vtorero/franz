@@ -1,11 +1,11 @@
 import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatPaginatorModule, PageEvent, MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule,  MatPaginator } from '@angular/material/paginator';
+import {  MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Compra } from '../modelos/compra';
-import { MatDialog, MAT_DATE_LOCALE } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { AddCompraComponent } from './add-compra/add-compra.component';
 import { DetalleCompra } from '../modelos/detalleCompra';
@@ -35,8 +35,6 @@ export const MY_CUSTOM_FORMATS = {
   providers: [{ provide: OWL_DATE_TIME_FORMATS, useValue: MY_CUSTOM_FORMATS },]
 
 })
-
-
 
 export class ComprasComponent implements OnInit {
   dataSource: any;

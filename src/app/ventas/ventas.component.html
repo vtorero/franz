@@ -1,0 +1,64 @@
+<mk-box header="Registro de Ventas" [isCollapsable]="false" [isRemovable]="false">
+  <div class="example-header mat-elevation-z8">
+      <mat-form-field>
+         <input matInput (keyup)="applyFilter($event.target.value)" 
+        placeholder="Escriba algo para filtrar">
+      </mat-form-field>
+    </div>
+  <div class="example-container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="id_usuario">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.id_usuario}} </mat-cell>
+      </ng-container>
+        <!-- Columna Nacionalidad -->
+      <ng-container matColumnDef="vendedor">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Vendedor</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.id_vendedor}} </mat-cell>
+      </ng-container>
+  
+       <!-- Columna Edad -->
+       <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Estado</span></mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.estado}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="comprobante">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Comprobante</span></mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.comprobante}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.fecha}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="valor_total">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Total</span></mat-header-cell>
+    <mat-cell *matCellDef="let row">{{row.valor_total}} </mat-cell>
+</ng-container>
+  <ng-container matColumnDef="opciones">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let row">
+            <button class="btn btn-outline-secondary" (click)="abrirEditar(row)">Editar</button>&nbsp; 
+            <!--<button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>-->
+          
+          <ng-template #dialogTemplate>
+           <h5>Eliminar el producto: {{row.nombre}} ?</h5>
+           <button mat-button (click)="cancelar()">Cancelar</button>
+           <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+          </ng-template>
+        </td>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+  </div>
+  <ng-container>
+  
+  </ng-container>
+  </mk-box>
+  <button mat-raised-button (click)="abrirDialogo()">Agregar Venta</button>
+  

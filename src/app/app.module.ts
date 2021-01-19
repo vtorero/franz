@@ -48,6 +48,7 @@ import { AvisosComponent } from './avisos/avisos.component';
 import { AlmacenComponent } from './inventario/almacen/almacen.component';
 import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 import { VendedoresComponent } from './vendedores/vendedores.component';
+import { VentasComponent } from './ventas/ventas.component';
 
 
 
@@ -112,7 +113,8 @@ import { VendedoresComponent } from './vendedores/vendedores.component';
     AvisosComponent,
     AlmacenComponent,
     SubcategoriaComponent,
-    VendedoresComponent
+    VendedoresComponent,
+    VentasComponent
     ],
   bootstrap: [AppComponent]
 })

@@ -507,6 +507,18 @@ $app->get("/vendedores",function() use($db,$app){
              echo  json_encode($result);
         });
     
+/*ventas*/
+
+$app->get("/ventas",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT  `id`, `id_usuario`,`id_vendedor`, `valor_total`, `estado`, `comprobante`, `fecha` FROM `ventas` order by id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

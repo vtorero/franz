@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
+import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 
 @Component({
   selector: 'app-ventas',
@@ -14,7 +15,7 @@ import { Venta } from '../modelos/ventas';
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
-  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' }];
+  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta(0,0,'',0,0);
   cancela: boolean = false;
@@ -42,6 +43,17 @@ export class VentasComponent implements OnInit {
   }
   ngOnInit() {
     this.renderDataTable();
+  }
+
+  agregarVenta(){
+    const dialogo1 = this.dialog.open(AgregarventaComponent, {
+      data: new Venta(0,'',0,0,'','',0,[])
+    });
+    dialogo1.afterClosed().subscribe(art => {
+      if (art != undefined)
+        //this.agregar(art);
+      this.renderDataTable();
+    });
   }
 
 }

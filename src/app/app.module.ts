@@ -49,6 +49,7 @@ import { AlmacenComponent } from './inventario/almacen/almacen.component';
 import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
+import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
 
 
 
@@ -90,7 +91,8 @@ import { VentasComponent } from './ventas/ventas.component';
     EditCompraComponent,
     HelloComponent,
     EditInventarioComponent,
-  AddInventarioComponent],
+    AddInventarioComponent,
+    AgregarventaComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -114,7 +116,8 @@ import { VentasComponent } from './ventas/ventas.component';
     AlmacenComponent,
     SubcategoriaComponent,
     VendedoresComponent,
-    VentasComponent
+    VentasComponent,
+    AgregarventaComponent
     ],
   bootstrap: [AppComponent]
 })

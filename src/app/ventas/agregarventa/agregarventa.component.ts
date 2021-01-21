@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ApiService } from 'src/app/api.service';
+import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { Venta } from 'src/app/modelos/ventas';
+import { AddProductoComponent } from './add-producto/add-producto.component';
 
 @Component({
   selector: 'app-agregarventa',
@@ -11,8 +13,14 @@ import { Venta } from 'src/app/modelos/ventas';
 export class AgregarventaComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores:any;
+  dataProductos:any;
+  exampleArray:any[] = [];
+  dataProveedor:any;
+  dataArray;
+  dataSource:any;
   constructor(
     private api:ApiService,
+    public dialog:MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
 
   ) { }
@@ -24,7 +32,18 @@ export class AgregarventaComponent implements OnInit {
       }
     } );
   }
-
+  abrirDialog() {
+    const dialogo1 = this.dialog.open(AddProductoComponent, {
+      data: new DetalleVenta(0,0,'',0,0)
+    });
+    dialogo1.afterClosed().subscribe(art => {
+      if (art!= undefined)
+      this.exampleArray.push(art)
+      this.dataSource = new MatTableDataSource();
+      this.dataSource.data = this.exampleArray; 
+      this.data.detalleVenta=this.exampleArray;
+     });
+  }
   ngOnInit() {
     this.getVendedores();
   }

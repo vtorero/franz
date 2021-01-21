@@ -39,7 +39,7 @@ import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor.component';
 import { ComprasComponent } from './compras/compras.component';
 import { AddCompraComponent } from './compras/add-compra/add-compra.component';
-import { HelloComponent } from './compras/add-compra/hello.component';
+import { AddDetalleComponent } from './compras/add-compra/addDetalle.component';
 import { EditCompraComponent } from './compras/edit-compra/edit-compra.component';
 import { InventarioComponent } from './inventario/inventario.component';
 import { AddInventarioComponent } from './inventario/add-inventario/add-inventario.component';
@@ -50,6 +50,7 @@ import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.com
 import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
+import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-producto.component';
 
 
 
@@ -89,10 +90,11 @@ import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.compon
     AddProveedorComponent,
     AddCompraComponent,
     EditCompraComponent,
-    HelloComponent,
+    AddDetalleComponent,
     EditInventarioComponent,
     AddInventarioComponent,
-    AgregarventaComponent],
+    AgregarventaComponent,
+    AddProductoComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -107,7 +109,7 @@ import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.compon
     AddProveedorComponent,
     ComprasComponent,
     AddCompraComponent,
-    HelloComponent,
+    AddDetalleComponent,
     EditCompraComponent,
     InventarioComponent,
     AddInventarioComponent,
@@ -117,7 +119,8 @@ import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.compon
     SubcategoriaComponent,
     VendedoresComponent,
     VentasComponent,
-    AgregarventaComponent
+    AgregarventaComponent,
+    AddProductoComponent
     ],
   bootstrap: [AppComponent]
 })

@@ -7,7 +7,7 @@ import "ng-pick-datetime/assets/style/picker.min.css";
 import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
 import { ToastrService } from 'ngx-toastr';
-import { HelloComponent } from './hello.component';
+import { AddDetalleComponent } from './addDetalle.component';
 import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 
@@ -86,7 +86,7 @@ deleteTicket(rowid: number){
 }
 
 abrirDialog() {
-  const dialogo1 = this.dialog.open(HelloComponent, {
+  const dialogo1 = this.dialog.open(AddDetalleComponent, {
     data: new DetalleCompra(0,'',0,0) 
   });
   dialogo1.afterClosed().subscribe(art => {

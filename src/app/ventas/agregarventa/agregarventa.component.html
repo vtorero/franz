@@ -14,7 +14,7 @@
           <mat-label>Vendedor</mat-label>
           <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor"  [(ngModel)]="data.id_vendedor" required>
             <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option  *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.id}} {{ven.nombre}}</mat-option>
+            <mat-option  *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
@@ -22,7 +22,7 @@
           <mat-select name="id_cliente" [(ngModel)]="data.id_cliente"  [(ngModel)]="data.id_cliente" required>
             <mat-option [value]="">Seleccionar</mat-option>
             <mat-option  *ngFor="let cli of dataClientes" [value]="cli.id">
-              {{cli.id}} {{cli.nombre}} {{cli.apellido}}
+            {{cli.nombre}} {{cli.apellido}}
             </mat-option>
           </mat-select>
         </mat-form-field>

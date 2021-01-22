@@ -1,7 +1,7 @@
 <form #formItem="ngForm"><div>
   <h1 mat-dialog-title>Agregar Producto</h1>
   <div mat-dialog-content>
-      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 400px; padding: 1rem;">
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
         <mat-form-field>
           <mat-label>Producto</mat-label>
           <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" required>
@@ -9,10 +9,7 @@
             <mat-option  *ngFor="let pro of dataProducto" [value]="pro.id">{{pro.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
-          <mat-form-field>
-              <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Ingrese nombre"required>
-          </mat-form-field>
-          <mat-form-field>
+        <mat-form-field>
               <input matInput  name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
           </mat-form-field>
           <mat-form-field>

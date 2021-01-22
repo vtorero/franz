@@ -17,7 +17,7 @@ export class VentasComponent implements OnInit {
   dataDetalle: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
-  detalleVenta: DetalleVenta = new DetalleVenta(0,0,'',0,0);
+  detalleVenta: DetalleVenta = new DetalleVenta(0,0,0,'',0,0);
   cancela: boolean = false;
   displayedColumns = ['id', 'id_usuario','vendedor', 'estado','comprobante','fecha','valor_total','opciones'];
   @ViewChild(MatSort) sort: MatSort;

@@ -4,11 +4,19 @@
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
         <mat-form-field>
           <mat-label>Producto</mat-label>
-          <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" required>
+          <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" (ngModelChange)="handleProducto(data.id_producto)" required >
             <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
             <mat-option  *ngFor="let pro of dataProducto" [value]="pro.id">{{pro.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field>
+          <mat-label>Stock</mat-label>
+          <mat-select  name="id_productob" #id_productob="ngModel" [(ngModel)]="data.id_productob" multiple>
+            <mat-option  *ngFor="let prob of dataExistencias" (onSelectionChange)="change($event)" [value]="prob.id">Producido:{{prob.fecha_produccion}} - uni:{{prob.cantidad}} - kl:{{prob.peso}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+               <input *ngFor="let sel of seleccionados"  type="number" placeholder="Ingrese cantidad {{sel}}">
+       
         <mat-form-field>
               <input matInput  name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese cantidad" required>
           </mat-form-field>

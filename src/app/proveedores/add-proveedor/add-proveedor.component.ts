@@ -19,7 +19,9 @@ export class AddProveedorComponent implements OnInit {
 
   ) { }
 
-  onLoadDatos(event:any){
+    onLoadDatos(event:any){
+      
+    if(event.target.value!=""){
     this.api.getProveedor(event.target.value).subscribe(data => {
       if(data) {
         console.log(data);
@@ -35,6 +37,7 @@ export class AddProveedorComponent implements OnInit {
       console.log(error)
       this.toastr.error(error['message']);
     } );
+  }
  }
 
   ngOnInit() {

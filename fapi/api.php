@@ -249,14 +249,14 @@ $app->post("/proveedor",function() use($db,$app){
        $data = json_decode($j['json']);
 
         $ruc=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
-        $razon_social=(is_array($data->razon_social))? array_shift($data->razon_social): $data->razon_social;
+        $razon_social=(is_array($data->razon_social)) ? array_shift(str_replace("'","\'",$data->razon_social)):str_replace("'","\'",$data->razon_social);
         $direccion=(is_array($data->direccion))? array_shift($data->direccion): $data->direccion;
         $departamento=(is_array($data->departamento))? array_shift($data->departamento): $data->departamento;
         $provincia=(is_array($data->provincia))? array_shift($data->provincia): $data->provincia;
         $distrito=(is_array($data->distrito))? array_shift($data->distrito): $data->distrito;
         $num_documento=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
 
-        
+
         $query ="INSERT INTO proveedores (razon_social, direccion, num_documento, departamento,provincia,distrito) VALUES ("
       ."'{$razon_social}',"
       ."'{$direccion}',"
@@ -264,8 +264,8 @@ $app->post("/proveedor",function() use($db,$app){
       ."'{$departamento}',"
       ."'{$provincia}',"
       ."'{$distrito}'".")";
-   
-      $insert=$db->query($query);
+        $db->query($query);
+        
                
        $result = array("STATUS"=>true,"messaje"=>"Proveedor registrado correctamente","string"=>$query);
         echo  json_encode($result);
@@ -519,6 +519,23 @@ $app->get("/ventas",function() use($db,$app){
         $respuesta=json_encode($prods);
         echo  $respuesta;    
 });
+
+/*clientes*/
+
+
+$app->get("/clientes",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT id, nombre, apellido, direccion,telefono,num_documento FROM clientes order by id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");

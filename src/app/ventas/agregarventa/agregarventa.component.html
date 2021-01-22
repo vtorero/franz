@@ -10,37 +10,29 @@
             <mat-option  *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
           </mat-select>
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>Vendedor</mat-label>
           <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor"  [(ngModel)]="data.id_vendedor" required>
             <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option  *ngFor="let ven of dataVendedores" [value]="ven.id">
-              {{ven.nombre}}
+            <mat-option  *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.id}} {{ven.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cliente</mat-label>
+          <mat-select name="id_cliente" [(ngModel)]="data.id_cliente"  [(ngModel)]="data.id_cliente" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option  *ngFor="let cli of dataClientes" [value]="cli.id">
+              {{cli.id}} {{cli.nombre}} {{cli.apellido}}
             </mat-option>
           </mat-select>
         </mat-form-field>
           <mat-form-field>
-            <mat-label>Descripción</mat-label>
-            <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Descripción" required>
-        </mat-form-field>
-        <mat-form-field>
           <mat-label>Fecha</mat-label>
           <input  matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha">
           <mat-datepicker-toggle  matSuffix [for]="myPicker"></mat-datepicker-toggle>
           <mat-datepicker #myPicker></mat-datepicker>
       </mat-form-field>
-          <mat-form-field>
-            <mat-label>Proveedor</mat-label>
-            <mat-select name="id_proveedor" #id_proveedor="ngModel" [(ngModel)]="data.id_proveedor" required>
-              <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
-              <mat-option  *ngFor="let cat of dataProveedor" [value]="cat.id">
-                {{cat.razon_social}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-      </div>
+       </div>
   </div>
 </form>
   <h4>Detalle de compra</h4>

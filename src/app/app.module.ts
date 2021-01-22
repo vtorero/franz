@@ -51,6 +51,7 @@ import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
 import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-producto.component';
+import { ClientesComponent } from './clientes/clientes.component';
 
 
 
@@ -120,7 +121,8 @@ import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-pro
     VendedoresComponent,
     VentasComponent,
     AgregarventaComponent,
-    AddProductoComponent
+    AddProductoComponent,
+    ClientesComponent
     ],
   bootstrap: [AppComponent]
 })

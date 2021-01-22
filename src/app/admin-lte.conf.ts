@@ -31,6 +31,9 @@ export const adminLteConf = {
      {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/proveedores'},  
     ]},  
+    {label: 'Clientes',iconClasses: 'fa fa-files-o',children:[
+      {label: 'Listado', route: 'general/clientes'}
+    ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}
     ]},

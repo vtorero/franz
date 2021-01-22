@@ -13,6 +13,7 @@ import { AddProductoComponent } from './add-producto/add-producto.component';
 export class AgregarventaComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores:any;
+  dataClientes:any;
   dataProductos:any;
   exampleArray:any[] = [];
   dataProveedor:any;
@@ -32,9 +33,17 @@ export class AgregarventaComponent implements OnInit {
       }
     } );
   }
+  getclientes(): void {
+    this.api.getApi('clientes').subscribe(data => {
+      if(data) {
+        this.dataClientes = data;
+      }
+    } );
+  }
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
       data: new DetalleVenta(0,0,'',0,0)
+
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art!= undefined)
@@ -46,6 +55,7 @@ export class AgregarventaComponent implements OnInit {
   }
   ngOnInit() {
     this.getVendedores();
+    this.getclientes();
   }
 
 }

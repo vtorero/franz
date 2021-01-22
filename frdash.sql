@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 18-01-2021 a las 22:03:16
+-- Tiempo de generación: 22-01-2021 a las 15:55:12
 -- Versión del servidor: 5.7.32-0ubuntu0.18.04.1
 -- Versión de PHP: 7.2.24-0ubuntu0.18.04.7
 
@@ -193,12 +193,20 @@ INSERT INTO `categorias` (`id`, `nombre`) VALUES
 --
 
 CREATE TABLE `clientes` (
-  `id` varchar(15) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
   `direccion` varchar(100) DEFAULT NULL,
   `telefono` varchar(10) DEFAULT NULL,
-  `ruc` varchar(10) DEFAULT NULL
+  `num_documento` varchar(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `direccion`, `telefono`, `num_documento`) VALUES
+(1, 'Victor', 'Jimenez Torero', 'La molina', '992997872', '25750816');
 
 -- --------------------------------------------------------
 
@@ -335,7 +343,8 @@ INSERT INTO `inventario` (`id`, `id_producto`, `presentacion`, `unidad`, `cantid
 (6, 5, 'bolsa', 'cellado', '22.00', '0.00', 'sss', '2020-12-21 00:00:00', '1', 2, 1),
 (7, 3, 'Sellado', 'unidad', '20.00', '0.00', 'prueba', '2021-01-09 00:00:00', '1', 2, 1),
 (8, 3, 'bolsa', '', '6.00', '6.60', '6 bolsas', '2021-01-14 00:00:00', '1', 2, 1),
-(9, 2, 'bolsa', '', '4.00', '12.00', 'ssss', '2021-01-15 00:00:00', '1', 2, 1);
+(9, 2, 'bolsa', '', '4.00', '12.00', 'ssss', '2021-01-15 00:00:00', '1', 2, 1),
+(10, 77, 'bolsa', '', '11.00', '5.00', '', '2021-01-21 00:00:00', '1', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -480,7 +489,7 @@ CREATE TABLE `pma__recent` (
 --
 
 INSERT INTO `pma__recent` (`username`, `tables`) VALUES
-('marife', '[{\"db\":\"dashboard2\",\"table\":\"usuario\"},{\"db\":\"frdash\",\"table\":\"usuarios\"},{\"db\":\"frdash\",\"table\":\"vendedor\"},{\"db\":\"frdash\",\"table\":\"detalle_ventas\"},{\"db\":\"frdash\",\"table\":\"ventas\"},{\"db\":\"frdash\",\"table\":\"inventario\"},{\"db\":\"frdash\",\"table\":\"ventas_cliente\"},{\"db\":\"frdash\",\"table\":\"abonos\"},{\"db\":\"frdash\",\"table\":\"productos\"},{\"db\":\"frdash\",\"table\":\"sub_categorias\"}]');
+('marife', '[{\"db\":\"frdash\",\"table\":\"inventario\"},{\"db\":\"frdash\",\"table\":\"productos\"},{\"db\":\"frdash\",\"table\":\"clientes\"},{\"db\":\"frdash\",\"table\":\"ventas_cliente\"},{\"db\":\"frdash\",\"table\":\"ventas\"},{\"db\":\"frdash\",\"table\":\"detalle_compras\"},{\"db\":\"frdash\",\"table\":\"proveedores\"},{\"db\":\"frdash\",\"table\":\"detalle_ventas\"},{\"db\":\"dashboard2\",\"table\":\"usuario\"},{\"db\":\"frdash\",\"table\":\"usuarios\"}]');
 
 -- --------------------------------------------------------
 
@@ -748,7 +757,8 @@ INSERT INTO `proveedores` (`id`, `razon_social`, `direccion`, `num_documento`, `
 (6, 'AUROCO PUBLICIDAD S A', 'JR. TRINIDAD MORAN NRO. 362 (ALT. EDIFICIO EL DORADO)', '20111409391', NULL, 'LIMA', 'LIMA', 'LINCE'),
 (8, 'COMPAÃ‘IA PERUANA DE RADIODIFUSION S.A.', 'JR. MONTERO ROSAS NRO. 1099 URB.  SANTA BEATRIZ', '20100049008', NULL, 'LIMA', 'LIMA', 'LIMA'),
 (10, 'LA MILLA VERDE S.A.C.', 'CAL.MAXIMILIANO CARRANZA NRO. 577 COO.  ZONA D  (PISO 3)', '20562863495', NULL, 'LIMA', 'LIMA', 'SAN JUAN DE MIRAFLORES'),
-(11, 'VIVIAN FOODS S.A.C.', 'AV. PARDO Y ALIAGA NRO. 699 INT. 802', '20605174095', NULL, 'LIMA', 'LIMA', 'SAN ISIDRO');
+(11, 'VIVIAN FOODS S.A.C.', 'AV. PARDO Y ALIAGA NRO. 699 INT. 802', '20605174095', NULL, 'LIMA', 'LIMA', 'SAN ISIDRO'),
+(14, 'D\'TODO MARKET S.A.C.', 'AV. ANGAMOS OESTE NRO. 863 DPTO. 2 URB.  CHACARILLA SANTA CRUZ EL ROSARIO  (MIRAFLORES)', '20606147806', NULL, 'LIMA', 'LIMA', 'MIRAFLORES');
 
 -- --------------------------------------------------------
 
@@ -827,21 +837,19 @@ INSERT INTO `vendedor` (`id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc
 CREATE TABLE `ventas` (
   `id` int(11) NOT NULL,
   `id_usuario` varchar(10) DEFAULT NULL,
+  `id_vendedor` int(11) NOT NULL,
   `valor_total` decimal(10,2) DEFAULT NULL,
   `estado` varchar(30) DEFAULT NULL,
+  `comprobante` varchar(15) NOT NULL,
   `fecha` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `ventas_cliente`
+-- Volcado de datos para la tabla `ventas`
 --
 
-CREATE TABLE `ventas_cliente` (
-  `id_venta` int(11) NOT NULL,
-  `id_cliente` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `ventas` (`id`, `id_usuario`, `id_vendedor`, `valor_total`, `estado`, `comprobante`, `fecha`) VALUES
+(1, '1', 1, '100.00', '1', 'Factura', '2021-01-19 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -883,11 +891,6 @@ CREATE TABLE `vista_categorias` (
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_clientes` (
-`id` varchar(15)
-,`nombre` varchar(50)
-,`direccion` varchar(100)
-,`telefono` varchar(10)
-,`ruc` varchar(10)
 );
 
 -- --------------------------------------------------------
@@ -929,16 +932,6 @@ CREATE TABLE `vista_factura` (
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_factura_abonos` (
-`id_abono` int(11)
-,`id_venta` int(11)
-,`id_cliente` varchar(15)
-,`nombre_cliente` varchar(50)
-,`estado` varchar(30)
-,`direccion` varchar(100)
-,`telefono` varchar(10)
-,`valor_abono` decimal(10,2)
-,`fecha` date
-,`nombre_usuario` varchar(50)
 );
 
 -- --------------------------------------------------------
@@ -1018,13 +1011,6 @@ CREATE TABLE `vista_saldo_sin_cliente` (
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vista_saldo_ventas` (
-`id_venta` int(11)
-,`id_cliente` varchar(15)
-,`nombre` varchar(50)
-,`valor_total` decimal(10,2)
-,`abono` decimal(32,2)
-,`saldo` decimal(33,2)
-,`estado` varchar(30)
 );
 
 -- --------------------------------------------------------
@@ -1424,13 +1410,6 @@ ALTER TABLE `ventas`
   ADD KEY `id_usuario` (`id_usuario`);
 
 --
--- Indices de la tabla `ventas_cliente`
---
-ALTER TABLE `ventas_cliente`
-  ADD KEY `id_venta` (`id_venta`),
-  ADD KEY `id_cliente` (`id_cliente`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -1455,6 +1434,11 @@ ALTER TABLE `articulos`
 ALTER TABLE `categorias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT de la tabla `compras`
 --
 ALTER TABLE `compras`
@@ -1478,7 +1462,7 @@ ALTER TABLE `detalle_ventas`
 -- AUTO_INCREMENT de la tabla `inventario`
 --
 ALTER TABLE `inventario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT de la tabla `pma__bookmark`
 --
@@ -1518,7 +1502,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT de la tabla `sub_categorias`
 --
@@ -1533,7 +1517,7 @@ ALTER TABLE `vendedor`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Restricciones para tablas volcadas
 --
@@ -1596,13 +1580,6 @@ ALTER TABLE `sub_categorias`
 --
 ALTER TABLE `ventas`
   ADD CONSTRAINT `ventas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
-
---
--- Filtros para la tabla `ventas_cliente`
---
-ALTER TABLE `ventas_cliente`
-  ADD CONSTRAINT `ventas_cliente_ibfk_1` FOREIGN KEY (`id_venta`) REFERENCES `ventas` (`id`),
-  ADD CONSTRAINT `ventas_cliente_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

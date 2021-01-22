@@ -3,8 +3,9 @@ export class DetalleVenta {
         public id:number,
         public id_producto:number,
         public id_productob:number,
-        public descripcion:string,
+        public nombre:string,
         public cantidad: number,
+        public peso: number,
         public precio:number
 
     ){}

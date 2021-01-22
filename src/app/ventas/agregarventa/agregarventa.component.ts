@@ -11,6 +11,7 @@ import { AddProductoComponent } from './add-producto/add-producto.component';
   styleUrls: ['./agregarventa.component.css']
 })
 export class AgregarventaComponent implements OnInit {
+  displayedColumns=['id_producto','nombre','cantidad','peso','precio','borrar'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores:any;
   dataClientes:any;
@@ -42,10 +43,10 @@ export class AgregarventaComponent implements OnInit {
   }
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
-      data: new DetalleVenta(0,0,0,'',0,0)
-
+      data: new DetalleVenta(0,0,0,'',0,0,0)
     });
     dialogo1.afterClosed().subscribe(art => {
+      console.log("art",art)
       if (art!= undefined)
       this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
@@ -56,6 +57,12 @@ export class AgregarventaComponent implements OnInit {
   ngOnInit() {
     this.getVendedores();
     this.getclientes();
+  }
+  deleteTicket(rowid: number){
+    if (rowid > -1) {
+      this.data.detalleVenta.splice(rowid, 1);
+      this.dataSource = new MatTableDataSource(this.data.detalleVenta);
+  }
   }
 
 }

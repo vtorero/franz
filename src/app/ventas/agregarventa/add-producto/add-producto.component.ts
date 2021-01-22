@@ -33,8 +33,8 @@ constructor(private api:ApiService,
     });
   }
   onKey(value) { 
-    this.dataArray= []; 
-    this.selectSearch(value);       
+  this.dataArray= []; 
+  this.selectSearch(value);       
 }
 selectSearch(value:string){
   this.api.getProductosSelect(value).subscribe(data => {
@@ -46,20 +46,19 @@ selectSearch(value:string){
 }
   change(event)
   {
-    if(event.isUserInput) {
-      if(event.source.selected){
-      this.seleccionados.push(event.source.value)
+    console.log(event);
+    if(event.source.selected){
+      this.seleccionados.push(event.source.value);
       }else{
-      this.seleccionados.splice(event.isUserInput,1);
+        //console.log("deseleccionado")
+      this.seleccionados.splice(event.source.index,1);
       }
-      console.log(event.source.value,event.source.selected);
-      
+      //console.log(event.source.value,event.source.selected);
+      //console.log(this.seleccionados)
     }
-  }
-
+  
   handleProducto(id){
     this.getProdExiste(id);
-    console.log(id);
   }
 
   ngOnInit() {

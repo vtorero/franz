@@ -18,6 +18,13 @@ export class ClientesComponent implements OnInit {
   constructor(
     private api: ApiService, public dialog: MatDialog, public dialog2: MatDialog, public dialogo: MatDialog, private toastr: ToastrService
     ) { }
+
+    applyFilter(filterValue: string) {
+      filterValue = filterValue.trim(); 
+      filterValue = filterValue.toLowerCase(); 
+      this.dataSource.filter = filterValue;
+  }
+  
   renderDataTable() {
     this.api.getApi('clientes').subscribe(x => {
       this.dataSource = new MatTableDataSource();

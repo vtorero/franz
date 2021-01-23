@@ -19,8 +19,14 @@ export class VendedoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   datos: Vendedor = new Vendedor(0, '', '', '', '', '', '');
   constructor(private api: ApiService, public dialog: MatDialog, private toastr: ToastrService) { }
-  renderDataTable() {
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
+
+  renderDataTable() {
     this.api.getApi('vendedores').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;

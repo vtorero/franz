@@ -19,8 +19,14 @@ export class SubcategoriaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   datos: Subcategoria = new Subcategoria(0,0,'','');
   constructor(private api:ApiService,public dialog: MatDialog,private toastr: ToastrService) { }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
+
   renderDataTable() {  
-   
     this.api.getApi('subcategorias').subscribe(x => {  
     this.dataSource = new MatTableDataSource();
     this.dataSource.data = x; 

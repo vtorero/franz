@@ -22,6 +22,12 @@ displayedColumns = ['id_producto','codigo', 'nombre', 'cantidad', 'peso', 'opcio
     private toastr: ToastrService,
     dateTimeAdapter: DateTimeAdapter<any>) { }
 
+    applyFilter(filterValue: string) {
+      filterValue = filterValue.trim(); 
+      filterValue = filterValue.toLowerCase(); 
+      this.dataSource.filter = filterValue;
+  }
+
   renderDataTable() {
     this.api.getApi('almacen').subscribe(x => {
       this.dataSource = new MatTableDataSource();

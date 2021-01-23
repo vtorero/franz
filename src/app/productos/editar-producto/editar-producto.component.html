@@ -17,7 +17,7 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Categoria</mat-label>
-            <mat-select [(ngModel)]="data.id_categoria" (ngModelChange)="handleCagetoria(data.id_categoria)">
+            <mat-select [(ngModel)]="data.id_categoria">
               <mat-option  *ngFor="let cat of dataSource" [value]="cat.id">
                 {{cat.nombre}}
               </mat-option>

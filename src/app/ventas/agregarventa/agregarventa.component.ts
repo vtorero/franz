@@ -1,14 +1,21 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, NgModule, OnInit } from '@angular/core';
+import { MatDialog, MatPaginatorModule, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-agregarventa',
   templateUrl: './agregarventa.component.html',
   styleUrls: ['./agregarventa.component.css']
+})
+
+@NgModule({
+  imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: { useUtc: true }},]
 })
 export class AgregarventaComponent implements OnInit {
   displayedColumns=['id_producto','nombre','cantidad','peso','precio','borrar'];
@@ -24,8 +31,8 @@ export class AgregarventaComponent implements OnInit {
     private api:ApiService,
     public dialog:MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
-
-  ) { }
+    dateTimeAdapter: DateTimeAdapter<any>
+  ) { dateTimeAdapter.setLocale('es-PE');}
 
   getVendedores(): void {
     this.api.getApi('vendedores').subscribe(data => {

@@ -34,7 +34,7 @@ import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 @NgModule({
     imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
-    providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
+    providers:[{provide: OWL_DATE_TIME_FORMATS,useValue: { useUtc: true }},]
   })
 export class AddDetalleComponent  {
     constructor(  @Inject(MAT_DIALOG_DATA) public data: DetalleCompra){}

@@ -9,7 +9,7 @@ export class Venta {
         public id_cliente:number,
         public	estado:number,
         public comprobante:string,
-        public fecha:Date,
+        public fecha:string,
         public valor_total:number,
         public detalleVenta:Array<DetalleVenta>,
         ){}

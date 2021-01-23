@@ -47,7 +47,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta(){
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0,localStorage.getItem("currentId"),0,0,0,'',this.startDate,0,[])
+      data: new Venta(0,localStorage.getItem("currentId"),0,0,0,'','',0,[])
     });
     dialogo1.afterClosed().subscribe(art => {
       console.log(art);

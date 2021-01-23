@@ -59,7 +59,6 @@ selectSearch(value:string){
   {
     console.log(event.source.value);
     this.data.precio=event.source.value.precio;
-    
     if(event.source.selected){
       this.seleccionados.push(event.source.value);
       }else{
@@ -71,11 +70,13 @@ selectSearch(value:string){
 
     verifica(cantidad){
       this.stock=this.seleccionados;
-      console.log(this.stock[0].cantidad)
-      console.log(cantidad);
-      if(cantidad>this.stock[0].cantidad){
-        this.toastr.error("Inventario insuficiente");
+      this.data.precio=this.stock[0].dias;
+      console.log("cantidadx",this.stock[0].cantidad);
+      if(Number(cantidad) > Number(this.stock[0].cantidad)){
+        this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
+        this.data.cantidad=null;
       }
+      cantidad;
     }
   
   handleProducto(id){

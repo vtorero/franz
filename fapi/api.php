@@ -523,7 +523,7 @@ $app->get("/ventas",function() use($db,$app){
 
 $app->get("/inventarios/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,`presentacion`,`unidad`,`cantidad`,peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} order by fecha_produccion asc");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,p.precio_sugerido precio,`presentacion`,`unidad`,`cantidad`,peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} order by fecha_produccion asc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -543,8 +543,6 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            foreach($data->detalleVenta as $value){
                 $valor_total+=$value->cantidad*$value->precio;
            }
-           
-           
            try { 
             $fecha=substr($data->fecha,0,10);
             $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$valor_total})";
@@ -556,10 +554,18 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
              $ultimo_id=$d;
              }
             foreach($data->detalleVenta as $valor){
+            /*inserta detalla*/
             $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->id_producto},{$valor->cantidad},{$valor->peso},{$valor->precio})";
             $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
+
              $proc="";
+            
+             /*actualiza inventario*/   
+            $actualiza="call p_actualiza_inventario({$valor->id_productob->id},{$valor->cantidad},{$valor->peso})";    
+            $stmtb = mysqli_prepare($db,$actualiza);
+            mysqli_stmt_execute($stmtb);
+
             }
            
             $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id);
@@ -571,7 +577,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             
         }
         
-                 echo  json_encode($result);   
+            echo  json_encode($result);   
     });
 
 /*clientes*/

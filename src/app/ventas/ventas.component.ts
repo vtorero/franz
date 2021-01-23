@@ -30,6 +30,13 @@ export class VentasComponent implements OnInit {
     dateTimeAdapter: DateTimeAdapter<any>) {
     dateTimeAdapter.setLocale('es-PE');
   }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
+
   renderDataTable() {
     this.api.getApi('ventas').subscribe(x => {
       this.dataSource = new MatTableDataSource();

@@ -538,26 +538,25 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-           var_dump($data);
-           die();
+           
            try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_compra({$data->comprobante},{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
-            $stmt = mysqli_prepare($db,$sql);
+            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$data->valor_total})";
+           $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
-            $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
+            $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");
             $ultimo_id=array();
             while ($d = $datos->fetch_object()) {
              $ultimo_id=$d;
              }
-    
-             foreach($data->detalleCompra as $valor){
-                $proc="call p_compra_detalle(0,{$valor->cantidad},{$valor->precio},{$ultimo_id->ultimo_id},'{$valor->descripcion}')";
-               $stmt = mysqli_prepare($db,$proc);
-                mysqli_stmt_execute($stmt);
-                $proc="";
+            foreach($data->detalleVenta as $valor){
+            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->id_producto},{$valor->cantidad},{$valor->peso},{$valor->precio})";
+            $stmt = mysqli_prepare($db,$proc);
+            mysqli_stmt_execute($stmt);
+             $proc="";
             }
-            $result = array("STATUS"=>true,"messaje"=>"Compra registrada correctamente","string"=>$fecha);
+           
+            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id);
             
             }
              catch(PDOException $e) {

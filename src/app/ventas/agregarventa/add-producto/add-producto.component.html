@@ -1,5 +1,6 @@
-<form #formItem="ngForm"><div>
+<div>
   <h1 mat-dialog-title>Agregar Producto</h1>
+  <form #formItem2="ngForm">
   <div mat-dialog-content>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
         <mat-form-field>
@@ -16,7 +17,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <input matInput (keyup)="verifica($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
           </mat-form-field>
           <mat-form-field>
             <input matInput name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Peso" required>
@@ -24,10 +25,13 @@
           <mat-form-field>
             <input matInput name="precio" #precio="ngModel" [(ngModel)]="data.precio" type="number" placeholder=" S/.Precio" required>
             </mat-form-field>
-           </div>
+            </div>
   </div>
+</form>
   <div mat-dialog-actions>
     <button  mat-button [mat-dialog-close]="true">Cancelar</button>
-    <button mat-button [mat-dialog-close]="data" [disabled]="!formItem.form.valid" cdkFocusInitial>Confirmar</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!formItem2.form.valid" cdkFocusInitial>Confirmar</button>
   </div>
-  </div>`
+  </div>
+  
+  

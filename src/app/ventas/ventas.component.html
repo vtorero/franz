@@ -11,13 +11,17 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="id_usuario">
+      <ng-container matColumnDef="usuario">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.id_usuario}} </mat-cell>
+            <mat-cell *matCellDef="let row">{{row.usuario}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="vendedor">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Vendedor</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.id_vendedor}} </mat-cell>
+            <mat-cell *matCellDef="let row">{{row.vendedor}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cliente">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.cliente}} </mat-cell>
       </ng-container>
       <!-- Columna Edad -->
        <ng-container matColumnDef="estado">

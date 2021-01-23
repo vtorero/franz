@@ -29,7 +29,7 @@
         <mat-form-field>
           <mat-label>Fecha</mat-label>
           <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha"
-            placeholder="Fecha">
+            placeholder="Fecha" required>
           <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
           <mat-datepicker #myPicker></mat-datepicker>
         </mat-form-field>
@@ -44,9 +44,9 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.id_producto}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="nombre">
+      <ng-container matColumnDef="nombre"> 
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.id_productob.nombre}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.id_productob.nombre}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
@@ -74,7 +74,6 @@
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button (click)="cancelar()">Cancelar</button>
-    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid"
-      cdkFocusInitial>Registrar</button>
+    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid"  cdkFocusInitial>Registrar</button>
   </div>
 </div>

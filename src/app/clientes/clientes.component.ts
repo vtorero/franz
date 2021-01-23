@@ -10,11 +10,14 @@ import { ApiService } from '../api.service';
 })
 export class ClientesComponent implements OnInit {
   dataSource:any;
+  datos:any;
   cancela:boolean;
-  displayedColumns = ['num_documento','nombre','apellido','direccion','telefono', 'opciones'];
+  displayedColumns = ['num_documento','nombre','apellido','direccion','telefono','opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  constructor(private api: ApiService, public dialog: MatDialog, public dialog2: MatDialog, public dialogo: MatDialog, private toastr: ToastrService) { }
+  constructor(
+    private api: ApiService, public dialog: MatDialog, public dialog2: MatDialog, public dialogo: MatDialog, private toastr: ToastrService
+    ) { }
   renderDataTable() {
     this.api.getApi('clientes').subscribe(x => {
       this.dataSource = new MatTableDataSource();

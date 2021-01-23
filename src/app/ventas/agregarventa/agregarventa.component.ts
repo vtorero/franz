@@ -71,5 +71,10 @@ export class AgregarventaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data.detalleVenta);
   }
   }
+  
+cancelar(){
+  this.dialog.closeAll();
+}
+
 
 }

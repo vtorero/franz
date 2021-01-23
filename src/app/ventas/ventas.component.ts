@@ -19,7 +19,7 @@ export class VentasComponent implements OnInit {
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta(0,0,0,'',0,0,0);
   cancela: boolean = false;
-  displayedColumns = ['id', 'id_usuario','vendedor', 'estado','comprobante','fecha','valor_total','opciones'];
+  displayedColumns = ['id', 'usuario','vendedor','cliente','estado','comprobante','fecha','valor_total','opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -68,5 +68,12 @@ export class VentasComponent implements OnInit {
       this.renderDataTable();
     }
   }
+
+
+cancelar(){
+   this.dialog.closeAll();
+  this.cancela=true;
+}
+
 
 }

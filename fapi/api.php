@@ -512,7 +512,7 @@ $app->get("/vendedores",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT  `id`, `id_usuario`,`id_vendedor`, `valor_total`, `estado`, `comprobante`, `fecha` FROM `ventas` order by id desc");  
+    $resultado = $db->query("SELECT  v.id, v.id_usuario,u.nombre usuario,concat(ve.nombre,' ',ve.apellidos) vendedor,concat(c.nombre,' ',c.apellido) cliente,valor_total, estado, comprobante, v.fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id order by id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -538,10 +538,16 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
+           $valor_total=0;
+           /*total de la venta*/
+           foreach($data->detalleVenta as $value){
+                $valor_total+=$value->cantidad*$value->precio;
+           }
+           
            
            try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$data->valor_total})";
+            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$valor_total})";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");

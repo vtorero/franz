@@ -32,13 +32,15 @@ export const adminLteConf = {
       {label: 'Listado', route: 'general/proveedores'},  
     ]},  
     {label: 'Clientes',iconClasses: 'fa fa-files-o',children:[
-      {label: 'Listado', route: 'general/clientes'}
+      {label: 'Personas (DNI)', route: 'general/clientes'},
+      {label: 'Empresas (RUC)', route: 'general/clientes'}
     ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}
     ]},
+     /*
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
-   /* {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
+   {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
     {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [
       {label: 'General', route: 'general/formulario'},  
       {label: 'Datos Bancarios', route: 'pagos/formulario'},

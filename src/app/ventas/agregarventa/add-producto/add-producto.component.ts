@@ -23,6 +23,7 @@ seleccionados:string[]=[];
 producto:any;
 dataArray;
 stock;
+stockPeso;
 dataExistencias:any;
 constructor(private api:ApiService,
   private toastr: ToastrService,
@@ -68,9 +69,9 @@ selectSearch(value:string){
       //console.log(this.seleccionados)
     }
 
-    verifica(cantidad){
+    verificaCantidad(cantidad){
       this.stock=this.seleccionados;
-      this.data.precio=this.stock[0].dias;
+      this.data.precio=this.stock[0].precio;
       console.log("cantidadx",this.stock[0].cantidad);
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
@@ -78,6 +79,17 @@ selectSearch(value:string){
       }
       cantidad;
     }
+
+    verificaPeso(cantidad){
+      this.stockPeso=this.seleccionados;
+      console.log("cantidadpesp",this.stockPeso[0].peso);
+      if(Number(cantidad) > Number(this.stock[0].peso)){
+        this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
+        this.data.peso=null;
+      }
+      cantidad;
+    }
+
   
   handleProducto(id){
     this.getProdExiste(id);

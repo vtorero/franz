@@ -197,6 +197,13 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
+/* Facturacion*/
+
+enviaFactura(id): Observable<any> {
+  return this._http.post(Global.BASE_API_SUNAT + 'api/compacto/',{headers: {Authorization:"Bearer "+ Global.TOKEN_API_PERU_BEARER}});
+}
+
+
   GetDetalleCompra(id: any) {
     return this._http.get(Global.BASE_API_URL + 'api.php/compra/' + id,
       { headers: this.headers }

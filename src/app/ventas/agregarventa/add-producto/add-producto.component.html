@@ -17,10 +17,10 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput (focusout)="verifica($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Peso" required>
+            <input matInput (focusout)="verificaPeso($event.target.value)"  name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Peso" required>
             </mat-form-field>
           <mat-form-field>
             <input matInput name="precio" #precio="ngModel" [(ngModel)]="data.precio" type="number" placeholder=" S/.Precio" required>

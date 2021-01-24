@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Compra } from 'src/app/modelos/compra';
 import { DetalleCompra } from 'src/app/modelos/detalleCompra';
-import { HelloComponent } from '../add-compra/hello.component';
+import { AddDetalleComponent } from '../add-compra/addDetalle.component';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -70,7 +70,7 @@ export class EditCompraComponent implements OnInit {
       }
 
       abrirDialog() {
-        const dialogo1 = this.dialog.open(HelloComponent, {
+        const dialogo1 = this.dialog.open(AddDetalleComponent, {
           data: new DetalleCompra(0,'',0,0) 
         });
         dialogo1.afterClosed().subscribe(art => {

@@ -19,8 +19,14 @@ export class VendedoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   datos: Vendedor = new Vendedor(0, '', '', '', '', '', '');
   constructor(private api: ApiService, public dialog: MatDialog, private toastr: ToastrService) { }
-  renderDataTable() {
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
+
+  renderDataTable() {
     this.api.getApi('vendedores').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
@@ -55,14 +61,14 @@ export class VendedoresComponent implements OnInit {
   }
 
   abrirDialog(templateRef, cod) {
-    console.log("dataaa", cod)
+    console.log("data", cod)
     let dialogRef = this.dialog.open(templateRef, {
       width: '500px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!this.cancela) {
         if (cod) {
-          this.api.EliminarCategoria(cod).subscribe(
+          this.api.EliminarVendedor(cod).subscribe(
             data => {
               console.log(data);
               if (data['STATUS'] == true) {

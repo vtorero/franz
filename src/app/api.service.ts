@@ -17,6 +17,7 @@ import { Inventario } from './modelos/inventario';
 import { Avisos } from './modelos/avisos';
 import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
+import { Venta } from './modelos/ventas';
 
 
 @Injectable({
@@ -106,6 +107,15 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/categoria',
       { json: json }, { headers: headers });
   }
+  public GuardarSubCategoria(datos: Subcategoria): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/subcategoria',
+      { json: json }, { headers: headers });
+  }
+/*vendedores*/
+
+
 
   public GuardarVendedor(datos: Vendedor): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -113,14 +123,10 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/vendedores',
       { json: json }, { headers: headers });
   }
-
-  public GuardarSubCategoria(datos: Subcategoria): Observable<any> {
+  public EliminarVendedor(id: any): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    let json = JSON.stringify(datos);
-    return this._http.post(Global.BASE_API_URL + 'api.php/subcategoria',
-      { json: json }, { headers: headers });
+    return this._http.delete(Global.BASE_API_URL + 'api.php/vendedores/'+id,{headers:headers});
   }
-  
 
   public EliminarCategoria(datos: Categoria): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -152,12 +158,23 @@ export class ApiService {
 
   /**Compras  api*/
 
+
   GuardarCompra(datos: Compra): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/compra',
       { json: json }, { headers: headers });
   }
+
+  /*ventas*/
+
+  GuardarVenta(datos:Venta): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/venta',
+      { json: json }, { headers: headers });
+  }
+
   /*inventario*/
 
   GuardarInventario(datos: Inventario): Observable<any> {
@@ -179,6 +196,13 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/compraedit',
       { json: json }, { headers: headers });
   }
+
+/* Facturacion*/
+
+enviaFactura(id): Observable<any> {
+  return this._http.post(Global.BASE_API_SUNAT + 'api/compacto/',{headers: {Authorization:"Bearer "+ Global.TOKEN_API_PERU_BEARER}});
+}
+
 
   GetDetalleCompra(id: any) {
     return this._http.get(Global.BASE_API_URL + 'api.php/compra/' + id,

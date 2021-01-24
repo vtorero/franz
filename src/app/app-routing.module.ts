@@ -13,6 +13,8 @@ import { AvisosComponent } from './avisos/avisos.component';
 import { AlmacenComponent } from './inventario/almacen/almacen.component';
 import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 import { VendedoresComponent } from './vendedores/vendedores.component';
+import { VentasComponent } from './ventas/ventas.component';
+import { ClientesComponent } from './clientes/clientes.component';
 
 
 const routes: Routes = [
@@ -57,10 +59,19 @@ const routes: Routes = [
       path: 'proveedores',
       component:  ProveedoresComponent
     
+    }, {
+      path: 'clientes',
+      component:  ClientesComponent
+    
     },
     {
       path: 'vendedores',
       component:  VendedoresComponent
+    
+    },
+    {
+      path: 'ventas',
+      component:  VentasComponent
     
     },
     

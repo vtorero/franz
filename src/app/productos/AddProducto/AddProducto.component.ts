@@ -10,6 +10,7 @@ export class DialogoarticuloComponent implements OnInit {
   dataSource;
   dataSubcategoria;
   isLoaded;
+  usuario;
   constructor(
     public dialogRef: MatDialogRef<DialogoarticuloComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,

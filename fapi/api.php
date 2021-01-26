@@ -625,7 +625,6 @@ $app->post("/cliente",function() use($db,$app){
     }
         echo  json_encode($result);   
 });
-
      
 $app->post("/empresa",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

@@ -18,6 +18,7 @@ import { Avisos } from './modelos/avisos';
 import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
+import { Clientes } from './modelos/clientes';
 
 
 @Injectable({
@@ -225,6 +226,26 @@ enviaFactura(id): Observable<any> {
     ).pipe(map(result => result));
   }
 
+
+  getCliente(dni: string) {
+    return this._http.get(Global.BASE_API_SUNAT + 'dni/' + dni + '?token=' + Global.TOKEN_API_PERU,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
+  GuardarCliente(datos: Clientes): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/cliente',
+      { json: json }, { headers: headers });
+  }
+
+  public GuardarEmpresa(datos: Proveedor): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/empresa',
+      { json: json }, { headers: headers });
+  }
 
   getDatos(empresa: string) {
     return this._http.post(Global.BASE_API_URL + 'api.php/inicio',

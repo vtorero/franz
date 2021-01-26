@@ -14,7 +14,8 @@ import { AlmacenComponent } from './inventario/almacen/almacen.component';
 import { SubcategoriaComponent } from './productos/subcategoria/subcategoria.component';
 import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
-import { ClientesComponent } from './clientes/clientes.component';
+import { ClientesComponent } from './clientes/personas/clientes.component';
+import { EmpresasComponent } from './clientes/empresas/empresas.component';
 
 
 const routes: Routes = [
@@ -62,6 +63,10 @@ const routes: Routes = [
     }, {
       path: 'clientes',
       component:  ClientesComponent
+    
+    },{
+    path: 'empresas',
+      component:  EmpresasComponent
     
     },
     {

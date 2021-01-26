@@ -33,7 +33,7 @@ export const adminLteConf = {
     ]},  
     {label: 'Clientes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Personas (DNI)', route: 'general/clientes'},
-      {label: 'Empresas (RUC)', route: 'general/clientes'}
+      {label: 'Empresas (RUC)', route: 'general/empresas'}
     ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}

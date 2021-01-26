@@ -217,7 +217,7 @@ $app->get("/categorias",function() use($db,$app){
 /*Proveedores*/
 $app->get("/proveedores",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
-            $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores`");  
+            $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` order by id desc");  
             $prods=array();
                 while ($fila = $resultado->fetch_array()) {
                     
@@ -227,6 +227,20 @@ $app->get("/proveedores",function() use($db,$app){
                 echo  $respuesta;
                 
 });
+
+$app->get("/empresas",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `empresas` order by id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 
 $app->get("/proveedores/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -595,6 +609,56 @@ $app->get("/clientes",function() use($db,$app){
         echo  $respuesta;
         
 });
+
+$app->post("/cliente",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       try { 
+        $query ="INSERT INTO clientes (nombre,apellido,direccion,telefono,num_documento) VALUES ('{$data->nombre}','{$data->apellido}','{$data->direccion}','{$data->telefono}','{$data->num_documento}')";
+        $db->query($query);
+        $result = array("STATUS"=>true,"messaje"=>"Ciente registrado correctamente");
+          }
+         catch(PDOException $e) {
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+    }
+        echo  json_encode($result);   
+});
+
+     
+$app->post("/empresa",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+        $ruc=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
+        $razon_social=(is_array($data->razon_social)) ? array_shift(str_replace("'","\'",$data->razon_social)):str_replace("'","\'",$data->razon_social);
+        $direccion=(is_array($data->direccion))? array_shift($data->direccion): $data->direccion;
+        $departamento=(is_array($data->departamento))? array_shift($data->departamento): $data->departamento;
+        $provincia=(is_array($data->provincia))? array_shift($data->provincia): $data->provincia;
+        $distrito=(is_array($data->distrito))? array_shift($data->distrito): $data->distrito;
+        $num_documento=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
+        $estado=(is_array($data->estado))? array_shift($data->estado): $data->estado;
+
+      $query ="INSERT INTO empresas (razon_social, direccion, num_documento, departamento,provincia,distrito,estado) VALUES ("
+      ."'{$razon_social}',"
+      ."'{$direccion}',"
+      ."'{$ruc}',"
+      ."'{$departamento}',"
+      ."'{$provincia}',"
+      ."'{$distrito}',"
+      ."'{$estado}'".")";
+        $estado=$db->query($query);
+        $db->close();
+if($estado){
+        $result = array("STATUS"=>true,"messaje"=>"Empresa registrada correctamente","string"=>$estado);
+    }else{
+        $result = array("STATUS"=>false,"messaje"=>$estado);
+    }
+       echo  json_encode($result);
+    });
 
 
 $app->post("/bancosget",function() use($db,$app) {

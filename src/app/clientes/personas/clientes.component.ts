@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
-import { ApiService } from '../api.service';
-import { Cliente } from '../modelos/cliente';
+import { ApiService } from '../../api.service';
+import { Clientes } from '../../modelos/clientes';
 
 @Component({
   selector: 'app-clientes',
@@ -11,10 +11,10 @@ import { Cliente } from '../modelos/cliente';
 })
 export class ClientesComponent implements OnInit {
   dataSource:any;
-  data:any;
+  //data:any;
   cancela:boolean;
   displayedColumns = ['num_documento','nombre','apellido','direccion','telefono','opciones'];
-  datos: Cliente = new Cliente(0,'','','','','');
+  data: Clientes = new Clientes(0,'','','','','');
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
@@ -47,15 +47,31 @@ export class ClientesComponent implements OnInit {
   cancelar(){
     this.dialog.closeAll();
     this.cancela=true;
-  
   }
 
-  abrirDialog(templateRef,cod) {
-    console.log("dataaa",cod)
-    let dialogRef = this.dialog.open(templateRef, {
-        width: '400px' });
-  
-    dialogRef.afterClosed().subscribe(result => {
+ addCliente(cli:Clientes) {
+    console.log(cli);
+    if(cli){
+    this.api.GuardarCliente(cli).subscribe(
+      data=>{
+        console.log(data);
+        this.toastr.success(data['messaje']);
+        },
+      erro=>{console.log(erro)}
+      );
+    this.dialog.closeAll();
+    this.renderDataTable();
+  }
+  }
+
+
+
+
+  abrirDialog(templateRef,cod:Clientes) {
+     let dialogRef = this.dialog.open(templateRef, {
+        width: '600px'});
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(this.cancela)
       if(!this.cancela){
         if(cod){
           this.api.EliminarCategoria(cod).subscribe(
@@ -71,10 +87,28 @@ export class ClientesComponent implements OnInit {
               );
           this.renderDataTable();
         }
-  
       }
-    
-  });
+    });
   }
+
+  onLoadDatos(event:any){
+    if(event.target.value!=""){
+    this.api.getCliente(event.target.value).subscribe(data => {
+      if(data) {
+        console.log(data);
+        this.data.nombre=data['nombres'];
+        this.data.apellido= data['apellidoPaterno']+' '+ data['apellidoMaterno'];
+        this.data.direccion= '';
+        this.data.telefono= '';
+      } 
+    },
+    error=>{
+      console.log(error)
+      this.toastr.error("Numero de DNI incorrecto");
+    } );
+  }else{
+    this.toastr.warning("Debe indicar el Numero de DNI");
+  }
+ }
 
 }

@@ -51,7 +51,9 @@ import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
 import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-producto.component';
-import { ClientesComponent } from './clientes/clientes.component';
+import { ClientesComponent } from './clientes/personas/clientes.component';
+import { EmpresasComponent } from './clientes/empresas/empresas.component';
+import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa.component';
 
 
 
@@ -96,6 +98,7 @@ import { ClientesComponent } from './clientes/clientes.component';
     AddInventarioComponent,
     AgregarventaComponent,
     AddProductoComponent,
+    AddEmpresaComponent,
     ClientesComponent],
   declarations: [
     AppComponent,
@@ -123,7 +126,9 @@ import { ClientesComponent } from './clientes/clientes.component';
     VentasComponent,
     AgregarventaComponent,
     AddProductoComponent,
-    ClientesComponent
+    ClientesComponent,
+    EmpresasComponent,
+    AddEmpresaComponent
     ],
   bootstrap: [AppComponent]
 })

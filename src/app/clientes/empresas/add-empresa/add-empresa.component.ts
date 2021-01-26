@@ -6,19 +6,19 @@ import { Proveedor } from 'src/app/modelos/proveedor';
 import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-add-proveedor',
-  templateUrl: './add-proveedor.component.html',
-  styleUrls: ['./add-proveedor.component.css']
+  selector: 'app-add-empresa',
+  templateUrl: './add-empresa.component.html',
+  styleUrls: ['./add-empresa.component.css']
 })
 
 @NgModule({
   imports: [BrowserModule],  
 })
-export class AddProveedorComponent implements OnInit {
+export class AddEmpresaComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    public dialogRef: MatDialogRef<AddProveedorComponent>,
+    public dialogRef: MatDialogRef<AddEmpresaComponent>,
     @ Inject(MAT_DIALOG_DATA) public data: Proveedor,
     private api:ApiService
 

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
+import { Cliente } from '../modelos/cliente';
 
 @Component({
   selector: 'app-clientes',
@@ -10,9 +11,10 @@ import { ApiService } from '../api.service';
 })
 export class ClientesComponent implements OnInit {
   dataSource:any;
-  datos:any;
+  data:any;
   cancela:boolean;
   displayedColumns = ['num_documento','nombre','apellido','direccion','telefono','opciones'];
+  datos: Cliente = new Cliente(0,'','','','','');
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
@@ -42,10 +44,16 @@ export class ClientesComponent implements OnInit {
     this.renderDataTable();
   }
 
+  cancelar(){
+    this.dialog.closeAll();
+    this.cancela=true;
+  
+  }
+
   abrirDialog(templateRef,cod) {
     console.log("dataaa",cod)
     let dialogRef = this.dialog.open(templateRef, {
-        width: '600px' });
+        width: '400px' });
   
     dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){

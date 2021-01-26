@@ -95,7 +95,8 @@ import { ClientesComponent } from './clientes/clientes.component';
     EditInventarioComponent,
     AddInventarioComponent,
     AgregarventaComponent,
-    AddProductoComponent],
+    AddProductoComponent,
+    ClientesComponent],
   declarations: [
     AppComponent,
     PagoComponent,

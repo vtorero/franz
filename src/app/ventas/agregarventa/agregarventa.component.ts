@@ -85,12 +85,13 @@ export class AgregarventaComponent implements OnInit {
   }
   SearchCliente(value: string) {
     let criterio;
-    if (value != "") {
-      criterio = '/' + value
+    if (value) {
+      criterio = "/" + value
     } else {
-      criterio = '';
+      criterio ='';
     }
-    this.api.getSelectApi('clientes', value).subscribe(data => {
+    console.log(value)
+    this.api.getSelectApi('clientes', criterio).subscribe(data => {
       if (data) {
         this.dataClientes = data;
       }
@@ -101,7 +102,14 @@ export class AgregarventaComponent implements OnInit {
     this.SearchRuc(value);
   }
   SearchRuc(value: string) {
-    this.api.getSelectApi('empresas', value).subscribe(data => {
+    let criterio;
+    if (value) {
+      criterio = "/" + value
+    } else {
+      criterio ='';
+    }
+    console.log(value)
+    this.api.getSelectApi('empresas', criterio).subscribe(data => {
       if (data) {
         this.dataEmpresas = data;
       }

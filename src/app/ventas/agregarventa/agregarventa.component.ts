@@ -102,6 +102,10 @@ SearchRuc(value:string){
   } );
 }
 
+clienteNuevo(value){
+  console.log("check",value.target.checked);
+
+}
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {

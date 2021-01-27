@@ -5,7 +5,7 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
-mat-radio-group{
+mat-radio-group,.custom-switch{
     margin-top: 10px;
     margin-bottom: 10px;
 }

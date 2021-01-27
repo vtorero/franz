@@ -23,8 +23,8 @@
           <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
         </mat-radio-group>
         <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-          <input type="checkbox" class="custom-control-input" id="customSwitch3">
-          <label class="custom-control-label" for="customSwitch3">Cliente Nuevo</label>
+          <input type="checkbox" (change)="clienteNuevo($event)"class="custom-control-input" id="customSwitch3">
+          <label class="custom-control-label" for="customSwitch3">&nbsp;Cliente Nuevo</label>
         </div>
         <mat-form-field *ngIf="filter==1">
           <mat-label>Cliente con DNI</mat-label>

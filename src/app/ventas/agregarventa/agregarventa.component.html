@@ -22,7 +22,10 @@
           <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
           <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
         </mat-radio-group>
-      
+        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+          <input type="checkbox" class="custom-control-input" id="customSwitch3">
+          <label class="custom-control-label" for="customSwitch3">Cliente Nuevo</label>
+        </div>
         <mat-form-field *ngIf="filter==1">
           <mat-label>Cliente con DNI</mat-label>
           <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
@@ -36,7 +39,6 @@
           <mat-label>Cliente CON RUC</mat-label>
           <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
-            <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let cli of dataEmpresas" [value]="cli.id">
               {{cli.razon_social}}
             </mat-option>

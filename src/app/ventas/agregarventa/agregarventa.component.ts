@@ -79,6 +79,29 @@ export class AgregarventaComponent implements OnInit {
 
   }
 
+  onKeyCliente(value) { 
+    this.dataArray= []; 
+    this.SearchCliente(value);       
+  }
+  SearchCliente(value:string){
+    this.api.getSelectApi('clientes',value).subscribe(data => {
+      if(data) {
+        this.dataClientes = data;
+      }
+    } );
+ }
+ onKeyRuc(value) { 
+  this.dataArray= []; 
+  this.SearchRuc(value);       
+}
+SearchRuc(value:string){
+  this.api.getSelectApi('empresas',value).subscribe(data => {
+    if(data) {
+      this.dataEmpresas = data;
+    }
+  } );
+}
+
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {

@@ -242,19 +242,6 @@ $app->get("/empresas",function() use($db,$app){
 });
 
 
-$app->get("/proveedores/:criterio",function($criterio) use($db,$app){
-    header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` where razon_social like '%".$criterio."%'");  
-    $prods=array();
-        while ($fila = $resultado->fetch_array()) {
-            
-            $prods[]=$fila;
-        }
-        $respuesta=json_encode($prods);
-        echo  $respuesta;
-        
-});
-
      
 $app->post("/proveedor",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -625,6 +612,33 @@ $app->post("/cliente",function() use($db,$app){
     }
         echo  json_encode($result);   
 });
+
+$app->get("/clientes/:criterio",function($criterio) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `nombre`,`apellido` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
+$app->get("/empresas/:criterio",function($criterio) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `razon_social` FROM `empresas` where razon_social like '%".$criterio."%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
      
 $app->post("/empresa",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

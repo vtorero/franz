@@ -98,7 +98,7 @@ export class ApiService {
   }
 
   getSelectApi(tabla: string,criterio:string) {
-    return this._http.get(Global.BASE_API_URL + 'api.php/' + tabla+'/'+criterio,
+    return this._http.get(Global.BASE_API_URL + 'api.php/' + tabla+criterio,
       { headers: this.headers }
     ).pipe(map(result => result));
   }

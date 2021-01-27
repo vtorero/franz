@@ -5,3 +5,28 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
+mat-radio-group{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+  font-weight:300;
+}
+mat-radio-button{
+color: #555;
+font-size: 13px;
+}
+
+.buscador{
+    margin: 10px;
+    width: 250px;
+    height: 33px;
+    border-radius: 0px;
+    border: solid 1px #ccc;
+}
+
+label{
+font-weight:300;
+}

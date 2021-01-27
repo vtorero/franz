@@ -863,7 +863,7 @@ if(count($contar)>0){
         echo  json_encode($result);
     });
 
-
+/*login*/
    $app->post("/login",function() use($db,$app){
          $json = $app->request->getBody();
         $data = json_decode($json, true);
@@ -880,6 +880,18 @@ if(count($contar)>0){
         }
         echo  json_encode($data);
     });
+
+    $app->get("/vendedor/:criterio",function($criterio) use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $resultado = $db->query("SELECT id, nombre,apellidos FROM `vendedor` where nombre like '%{$criterio}%'");  
+        $prods=array();
+            while ($fila = $resultado->fetch_array()) {
+                $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+            echo  $respuesta;
+        });
+
 
 /*dashboard adops*/
 

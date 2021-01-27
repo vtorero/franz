@@ -22,11 +22,14 @@ export class AgregarventaComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores:any;
   dataClientes:any;
+  dataEmpresas:any;
   dataProductos:any;
   exampleArray:any[] = [];
   dataProveedor:any;
   dataArray;
   dataSource:any;
+  selected: string;
+  filter: any;
   constructor(
     private api:ApiService,
     public dialog:MatDialog,
@@ -48,6 +51,35 @@ export class AgregarventaComponent implements OnInit {
       }
     } );
   }
+  
+  getEmpresas(): void {
+    this.api.getApi('empresas').subscribe(data => {
+      if(data) {
+        this.dataEmpresas = data;
+      }
+    } );
+  }
+
+  radioChange(selected) {
+    this.filter=selected.value;
+    console.log(this.filter);
+
+}
+
+  onKeyVendedor(value) { 
+    this.dataArray= []; 
+    this.selectSearch(value);       
+  }
+  selectSearch(value:string){
+    this.api.getSelectApi('vendedor',value).subscribe(data => {
+      if(data) {
+        this.dataVendedores = data;
+      }
+    } );
+
+  }
+
+
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
       data: new DetalleVenta(0,0,0,'',0,0,0)
@@ -64,6 +96,7 @@ export class AgregarventaComponent implements OnInit {
   ngOnInit() {
     this.getVendedores();
     this.getclientes();
+    this.getEmpresas();
   }
   deleteTicket(rowid: number){
     if (rowid > -1) {

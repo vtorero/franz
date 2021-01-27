@@ -97,6 +97,13 @@ export class ApiService {
     }
   }
 
+  getSelectApi(tabla: string,criterio:string) {
+    return this._http.get(Global.BASE_API_URL + 'api.php/' + tabla+'/'+criterio,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
+
   getAvisosInventarios(): Observable<Avisos[]> {
     return this._http.get<Avisos[]>(Global.BASE_API_URL + 'api.php/alertaintentario', { headers: this.headers });
     

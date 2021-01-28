@@ -40,7 +40,7 @@
           <ng-template #dialogTemplate>
             <h5>Eliminar el cliente: {{row.nombre}} {{row.apellido}} ?</h5>
             <button mat-button (click)="cancelar()">Cancelar</button>
-            <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+            <button mat-button [mat-dialog-close]="data" (click)="eliminarCliente(row)" cdkFocusInitial>Confirmar</button>
           </ng-template>
         </td>
       </ng-container>
@@ -53,7 +53,7 @@
 
   </ng-container>
 </mk-box>
-<button mat-raised-button (click)="abrirDialog(dialog,datos)"> Agregar Cliente</button>
+<button mat-raised-button (click)="abrirDialog(dialog,data)"> Agregar Cliente</button>
 <ng-template #dialog>
   <div>
     <h1 mat-dialog-title>Agregar Cliente</h1>

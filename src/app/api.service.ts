@@ -164,6 +164,11 @@ export class ApiService {
     return this._http.delete(Global.BASE_API_URL + 'api.php/proveedor/'+id,{headers:headers});
   }
 
+  public EliminarCliente(id:string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/cliente/'+id,{headers:headers});
+  }
+
   /**Compras  api*/
 
 

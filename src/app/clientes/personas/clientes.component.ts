@@ -12,7 +12,7 @@ import { Clientes } from '../../modelos/clientes';
 export class ClientesComponent implements OnInit {
   dataSource:any;
   //data:any;
-  cancela:boolean;
+  cancela:boolean=false;
   displayedColumns = ['num_documento','nombre','apellido','direccion','telefono','opciones'];
   data: Clientes = new Clientes(0,'','','','','');
   @ViewChild(MatSort) sort: MatSort;
@@ -45,8 +45,9 @@ export class ClientesComponent implements OnInit {
   }
 
   cancelar(){
-    this.dialog.closeAll();
     this.cancela=true;
+    this.dialog.closeAll();
+    
   }
 
  addCliente(cli:Clientes) {
@@ -56,43 +57,52 @@ export class ClientesComponent implements OnInit {
       data=>{
         console.log(data);
         this.toastr.success(data['messaje']);
+        cli.num_documento=''
+        cli.nombre=''
+        cli.apellido=''
+        cli.direccion=''
+        cli.telefono=''
         },
       erro=>{console.log(erro)}
       );
     this.dialog.closeAll();
     this.renderDataTable();
   }
+  
   }
 
+eliminarCliente(cod){
+  console.log(cod)
+  if (cod) {
+    this.api.EliminarCliente(cod.num_documento).subscribe(
+      data => {
+        this.toastr.success( data['messaje']);
+      },
+      error => { 
+        console.log(error)
+        this.toastr.error("Error al eliminar el cliente");
+       }
+    );
+    
+  }
 
+}
 
 
   abrirDialog(templateRef,cod:Clientes) {
      let dialogRef = this.dialog.open(templateRef, {
         width: '600px'});
       dialogRef.afterClosed().subscribe(result => {
-        console.log(this.cancela)
-      if(!this.cancela){
-        if(cod){
-          this.api.EliminarCategoria(cod).subscribe(
-            data=>{
-              console.log(data);
-              if(data['STATUS']==true){
-            this.toastr.success(data['messaje']);
-              }else{
-              this.toastr.error(data['messaje']);
-              }
-            },
-            erro=>{console.log(erro)}
-              );
+        if (!this.cancela) {
           this.renderDataTable();
+  
         }
-      }
     });
   }
 
   onLoadDatos(event:any){
-    if(event.target.value!=""){
+    console.log(this.cancela)
+    if(event.target.value!="" && !this.cancela){
     this.api.getCliente(event.target.value).subscribe(data => {
       if(data) {
         console.log(data);

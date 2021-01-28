@@ -35,15 +35,19 @@
       </ng-container>
         <!-- Columna Nacionalidad -->
       <ng-container matColumnDef="fecha_produccion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Producciòn</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Producciòn</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.fecha_produccion}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fecha_vencimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de vencimiento</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.fecha_vencimiento}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="dias">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Dias en Stock</mat-header-cell>
-            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias>=7 ? 'red':'green'}">{{row.dias}}</div></mat-cell>
+            <mat-cell *matCellDef="let row" ><div [ngStyle]="{'color':row.dias>=7 ? 'green':'red'}">Vence en <strong>{{row.dias}}</strong></div></mat-cell>
       </ng-container>
       <ng-container matColumnDef="ciclo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>ciclo</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Reempaque</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.ciclo}} </mat-cell>
       </ng-container>
            

@@ -14,7 +14,7 @@ import { EditInventarioComponent } from './edit-inventario/edit-inventario.compo
 })
 export class InventarioComponent implements OnInit {
   dataSource:any;
-  displayedColumns = ['id','codigo','producto','presentacion','cantidad', 'peso', 'fecha_produccion','dias','ciclo', 'operaciones'];
+  displayedColumns = ['id','codigo','producto','presentacion','cantidad', 'peso', 'fecha_produccion','fecha_vencimiento','dias','ciclo', 'operaciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -34,7 +34,7 @@ export class InventarioComponent implements OnInit {
 
     abrirDialogo() {
       const dialogo1 = this.dialog.open(AddInventarioComponent, {
-        data: new Inventario(0, 0,'','', 0,0, '','', 0, 0, 0, '')
+        data: new Inventario(0, 0,'','', 0,0, '','','', 0, 0, 0, '')
       });
       dialogo1.afterClosed().subscribe(art => {
         if (art != undefined)

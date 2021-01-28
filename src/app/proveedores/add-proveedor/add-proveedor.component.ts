@@ -1,13 +1,18 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, NgModule, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Proveedor } from 'src/app/modelos/proveedor';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-proveedor',
   templateUrl: './add-proveedor.component.html',
   styleUrls: ['./add-proveedor.component.css']
+})
+
+@NgModule({
+  imports: [BrowserModule],  
 })
 export class AddProveedorComponent implements OnInit {
 
@@ -20,7 +25,6 @@ export class AddProveedorComponent implements OnInit {
   ) { }
 
     onLoadDatos(event:any){
-      
     if(event.target.value!=""){
     this.api.getProveedor(event.target.value).subscribe(data => {
       if(data) {
@@ -35,8 +39,10 @@ export class AddProveedorComponent implements OnInit {
     },
     error=>{
       console.log(error)
-      this.toastr.error(error['message']);
+      this.toastr.error("Numero de RUC incorrecto");
     } );
+  }else{
+    this.toastr.warning("Debe indicar el Numero de RUC");
   }
  }
 

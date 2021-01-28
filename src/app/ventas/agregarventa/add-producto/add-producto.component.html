@@ -6,7 +6,7 @@
         <mat-form-field>
           <mat-label>Producto</mat-label>
           <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" (ngModelChange)="handleProducto(data.id_producto)" required >
-            <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
+            <input class="buscador"  (keyup)="onKey($event.target.value)" placeholder="Buscar..">
             <mat-option  *ngFor="let pro of dataProducto" [value]="pro.id">{{pro.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>

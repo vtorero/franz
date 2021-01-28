@@ -1,7 +1,7 @@
 <div style="height: 500px;overflow-y: auto;overflow-x: hidden;">
   <form #formGeneral="ngForm">
     <div mat-dialog-content>
-      <h3>Agregar Ventas</h3>
+      <h3>Agregar Venta</h3>
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 750px; padding: 1rem;">
         <mat-form-field>
           <mat-label>Comprobante</mat-label>
@@ -13,16 +13,34 @@
         <mat-form-field>
           <mat-label>Vendedor</mat-label>
           <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor" [(ngModel)]="data.id_vendedor" required>
+            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
             <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Cliente</mat-label>
+         <mat-radio-group aria-label="Seleccione tipo" required>
+          <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
+          <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
+        </mat-radio-group>
+        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+          <input type="checkbox" (change)="clienteNuevo($event)"class="custom-control-input" id="customSwitch3">
+          <label class="custom-control-label" for="customSwitch3">&nbsp;Cliente Nuevo</label>
+        </div>
+        <mat-form-field *ngIf="filter==1">
+          <mat-label>Cliente con DNI</mat-label>
           <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
-            <mat-option [value]="">Seleccionar</mat-option>
+            <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
             <mat-option *ngFor="let cli of dataClientes" [value]="cli.id">
               {{cli.nombre}} {{cli.apellido}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="filter==2">
+          <mat-label>Cliente CON RUC</mat-label>
+          <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
+            <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
+            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli.id">
+              {{cli.razon_social}}
             </mat-option>
           </mat-select>
         </mat-form-field>

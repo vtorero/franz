@@ -51,7 +51,7 @@ export class VendedoresComponent implements OnInit {
     this.api.GuardarVendedor(art).subscribe(
       data=>{
         console.log(data);
-        this.toastr.success('Aviso', data['messaje']);
+        this.toastr.success(data['messaje'],'Aviso');
         },
       erro=>{console.log(erro)}
         );

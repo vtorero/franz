@@ -12,18 +12,17 @@ export const adminLteConf = {
     {label: 'MENU', separator: true},
     {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
       {label:'Almacen',iconClasses: 'fa fa-table',route: 'general/almacen'},  
-      {label:'Vencimientos',iconClasses: 'fa fa-table',route: 'general/inventario'},  
+      {label:'Vencimiento',iconClasses: 'fa fa-table',route: 'general/inventario'},  
     ]},
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
-    {label: 'Mantenimiento', route: 'general/productos'},  
+    {label: 'Listado', route: 'general/productos'},  
     {label: 'Categorias', route: 'categorias'},
     {label: 'Subcategorias', route: 'subcategorias'},
       
     ]}, 
     {label: 'Compras',iconClasses: 'fa fa-tasks',children:[
-      {label: 'Registrar', route: 'general/compras'},  
-      {label: 'Reportes', route: 'general/dash'}
-      
+      {label: 'Listado', route: 'general/compras'},  
+
     ]},
     {label: 'Vendedores',iconClasses: 'fa fa-tasks',children:[
       {label: 'Listado', route: 'general/vendedores'}
@@ -33,7 +32,7 @@ export const adminLteConf = {
     ]},  
     {label: 'Clientes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Personas (DNI)', route: 'general/clientes'},
-      {label: 'Empresas (RUC)', route: 'general/clientes'}
+      {label: 'Empresas (RUC)', route: 'general/empresas'}
     ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}

@@ -5,3 +5,10 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
+.buscador{
+    margin: 10px;
+    width: 250px;
+    height: 33px;
+    border-radius: 0px;
+    border: solid 1px #ccc;
+}

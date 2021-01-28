@@ -18,6 +18,7 @@ import { Avisos } from './modelos/avisos';
 import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
+import { Clientes } from './modelos/clientes';
 
 
 @Injectable({
@@ -96,6 +97,13 @@ export class ApiService {
     }
   }
 
+  getSelectApi(tabla: string,criterio:string) {
+    return this._http.get(Global.BASE_API_URL + 'api.php/' + tabla+criterio,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
+
   getAvisosInventarios(): Observable<Avisos[]> {
     return this._http.get<Avisos[]>(Global.BASE_API_URL + 'api.php/alertaintentario', { headers: this.headers });
     
@@ -154,6 +162,11 @@ export class ApiService {
   public EliminarProveedor(id:number): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this._http.delete(Global.BASE_API_URL + 'api.php/proveedor/'+id,{headers:headers});
+  }
+
+  public EliminarCliente(id:string): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/cliente/'+id,{headers:headers});
   }
 
   /**Compras  api*/
@@ -225,6 +238,26 @@ enviaFactura(id): Observable<any> {
     ).pipe(map(result => result));
   }
 
+
+  getCliente(dni: string) {
+    return this._http.get(Global.BASE_API_SUNAT + 'dni/' + dni + '?token=' + Global.TOKEN_API_PERU,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
+  GuardarCliente(datos: Clientes): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/cliente',
+      { json: json }, { headers: headers });
+  }
+
+  public GuardarEmpresa(datos: Proveedor): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/empresa',
+      { json: json }, { headers: headers });
+  }
 
   getDatos(empresa: string) {
     return this._http.post(Global.BASE_API_URL + 'api.php/inicio',

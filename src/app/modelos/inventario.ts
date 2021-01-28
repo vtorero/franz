@@ -8,6 +8,7 @@ export class Inventario {
         public peso:number,
         public observacion:string,
         public fecha_produccion:string,
+        public fecha_vencimiento:string,
         public estado:number,
         public ciclo:number,
         public id_usuario:number,

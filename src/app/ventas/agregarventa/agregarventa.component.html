@@ -15,7 +15,7 @@
           <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor" [(ngModel)]="data.id_vendedor" required>
             <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
             <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}}</mat-option>
+            <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}} {{ven.apellidos}}</mat-option>
           </mat-select>
         </mat-form-field>
          <mat-radio-group aria-label="Seleccione tipo" required>

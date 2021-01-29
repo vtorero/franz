@@ -56,7 +56,7 @@
 <button mat-raised-button (click)="abrirDialog(dialog,data)"> Agregar Cliente</button>
 <ng-template #dialog>
   <div>
-    <h1 mat-dialog-title>Agregar Cliente</h1>
+    <h1 mat-dialog-title>Agregar Clientes</h1>
     <form #formGeneral="ngForm">
     <div mat-dialog-content>
         <div style="display: flex;flex-direction: column; width:100%;">
@@ -84,7 +84,7 @@
     </div>
     </form>
     <div mat-dialog-actions>
-        <button mat-button (click)="cancelar()">Cancelar</button>
+        <button mat-button (click)="cancelar()" cdkFocusInitial>Cancelar</button>
         <button mat-raised-button  (click)="addCliente(data)" [disabled]="!formGeneral.form.valid">Confirmar</button>
     </div>
     </div>

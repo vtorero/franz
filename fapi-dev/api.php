@@ -9,7 +9,7 @@ if($method == "OPTIONS") {
 }
 require_once 'vendor/autoload.php';
 $app = new Slim\Slim();
-$db = new mysqli("localhost","marife","libido16","frdash");
+$db = new mysqli("localhost","marife","libido16","franzdev");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //mysqli_set_charset($db, 'utf8');
@@ -597,6 +597,22 @@ $app->get("/clientes",function() use($db,$app){
         echo  $respuesta;
         
 });
+
+$app->delete("/cliente/:dni",function($dni) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+                  $query ="DELETE FROM clientes WHERE num_documento='{$dni}'";
+                  if($db->query($query)){
+       $result = array("STATUS"=>true,"messaje"=>"Cliente eliminado correctamente");
+       }
+       else{
+        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar el cliente");
+       }
+       
+        echo  json_encode($result);
+    });
 
 $app->post("/cliente",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

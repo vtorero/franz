@@ -56,6 +56,7 @@ selectSearch(value:string){
   } );
   
 }
+
   change(event)
   {
     console.log(event.source.value);
@@ -72,7 +73,7 @@ selectSearch(value:string){
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;
       this.data.precio=this.stock[0].precio;
-      console.log("cantidadx",this.stock[0].cantidad);
+      console.log("cantidad",this.stock[0].cantidad);
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
         this.data.cantidad=null;

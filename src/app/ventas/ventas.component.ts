@@ -3,6 +3,7 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
+import { Boleta } from '../modelos/boleta';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
 import { AgregarventaComponent } from './agregarventa/agregarventa.component';
@@ -18,6 +19,7 @@ export class VentasComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta(0,0,0,'',0,0,0);
+  boleta:Boleta = new Boleta('','','','','','',[],[],0,0,0,0,0,'',[],[]);
   cancela: boolean = false;
   displayedColumns = ['id', 'usuario','vendedor','cliente','estado','comprobante','fecha','valor_total','opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -65,6 +67,12 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art:Venta) {
+    console.log(art);
+    if(art.comprobante=='Boleta'){
+      
+
+    }
+
     if (art) {
       this.api.GuardarVenta(art).subscribe(
         data => {

@@ -13,11 +13,11 @@
         <mat-form-field>
           <mat-label>Stock</mat-label>
           <mat-select name="id_productob" #id_productob="ngModel" [(ngModel)]="data.id_productob" required> 
-            <mat-option  *ngFor="let prob of dataExistencias" (onSelectionChange)="change($event)" [value]="prob">Producido:{{prob.fecha_produccion}} - uni:{{prob.cantidad}} - kl:{{prob.peso}}</mat-option>
+            <mat-option  *ngFor="let prob of dataExistencias" (onSelectionChange)="change($event)" [value]="prob">Producido el :{{prob.fecha_produccion}} | unidades disponibles:{{prob.cantidad}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" (oninput)="tipeo($event)" placeholder="Cantidad" required>
           </mat-form-field>
           <mat-form-field>
             <input matInput (focusout)="verificaPeso($event.target.value)"  name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Peso" required>

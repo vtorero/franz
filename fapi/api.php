@@ -382,7 +382,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre, id_producto,sum(cantidad) cantidad, sum(peso) peso FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre,id_producto,sum(granel) granel,sum(cantidad) cantidad, sum(peso) peso,sum(merma) merma FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -395,7 +395,7 @@ $app->get("/almacen",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`cantidad`,peso, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -432,7 +432,7 @@ $app->get("/inventarios",function() use($db,$app){
            try { 
             $fecha=substr($data->fecha_produccion,0,10);
             $fecha2=substr($data->fecha_vencimiento,0,10);
-            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}',{$data->cantidad},{$data->peso},'{$fecha}','{$fecha2}','{$data->observacion}')";
+            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}',{$data->granel},{$data->cantidad},{$data->peso},{$data->merma},'{$fecha}','{$fecha2}','{$data->observacion}')";
             $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $result = array("STATUS"=>true,"messaje"=>"Inventario registrado correctamente","string"=>$fecha);

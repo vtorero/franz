@@ -6,12 +6,12 @@
         <mat-form-field>
           <mat-label>Producto</mat-label>
           <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" required>
-            <input (keyup)="onKey($event.target.value)" placeholder="Buscar..">
+            <input class="buscador" (keyup)="onKey($event.target.value)" placeholder="Buscar..">
             <mat-option  *ngFor="let pro of dataProducto" [value]="pro.id">{{pro.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
         <div class="row">
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <mat-form-field>
               <mat-select  name="presentacion" #presentacion="ngModel" [(ngModel)]="data.presentacion" placeholder="Presentación" required>
                 <mat-option  value="">Seleccionar</mat-option>
@@ -20,17 +20,30 @@
               </mat-select>
             </mat-form-field>
              </div>
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <mat-form-field>
                 <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
             </mat-form-field>
-                </div>
+            </div>
          
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <mat-form-field>
                 <input matInput name="peso" #cantidad="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Ingrese peso" required>
             </mat-form-field>
                 </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field>
+                  <input matInput name="granel" #granel="ngModel" [(ngModel)]="data.granel" type="number" placeholder="Ingrese Granel" required>
+              </mat-form-field>
+              </div>
+              <div class="col-lg-4">
+                <mat-form-field>
+                    <input matInput name="merma" #merma="ngModel" [(ngModel)]="data.merma" type="number" placeholder="Ingrese Merma" required>
+                </mat-form-field>
+                </div>
+
           </div>
          <mat-form-field>
             <mat-label>Observación</mat-label>

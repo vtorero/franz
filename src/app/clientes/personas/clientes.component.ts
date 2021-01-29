@@ -102,7 +102,7 @@ eliminarCliente(cod){
 
   onLoadDatos(event:any){
     console.log(this.cancela)
-    if(event.target.value!="" && !this.cancela){
+    if(event.target.value && !this.cancela){
     this.api.getCliente(event.target.value).subscribe(data => {
       if(data) {
         console.log(data);

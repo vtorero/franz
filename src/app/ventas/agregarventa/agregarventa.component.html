@@ -28,7 +28,7 @@
         </div>
         <mat-form-field *ngIf="filter==1">
           <mat-label>Cliente con DNI</mat-label>
-          <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
+          <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" (ngModelChange)="selectCliente(data.id_cliente)"  required>
             <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
             <mat-option *ngFor="let cli of dataClientes" [value]="cli.id">
               {{cli.nombre}} {{cli.apellido}}

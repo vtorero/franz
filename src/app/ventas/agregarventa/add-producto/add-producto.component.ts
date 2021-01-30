@@ -60,7 +60,7 @@ selectSearch(value:string){
   change(event)
   {
     console.log(event.source.value);
-    this.data.precio=event.source.value.precio;
+    this.data.mtoPrecioUnitario=event.source.value.precio;
     if(event.source.selected){
       this.seleccionados.push(event.source.value);
       }else{
@@ -72,7 +72,7 @@ selectSearch(value:string){
 
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;
-      this.data.precio=this.stock[0].precio;
+      this.data.mtoPrecioUnitario=this.stock[0].precio;
       console.log("cantidad",this.stock[0].cantidad);
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
@@ -86,7 +86,7 @@ selectSearch(value:string){
       console.log("cantidadpesp",this.stockPeso[0].peso);
       if(Number(cantidad) > Number(this.stock[0].peso)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
-        this.data.peso=null;
+        //this.data.peso=null;
       }
       cantidad;
     }

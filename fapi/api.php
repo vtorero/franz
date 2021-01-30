@@ -616,7 +616,7 @@ $app->post("/cliente",function() use($db,$app){
 
 $app->get("/clientes/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `nombre`,`apellido` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");  
+    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

@@ -3,7 +3,9 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
-import { Boleta } from '../modelos/boleta';
+import { Boleta } from '../modelos/Boleta/boleta';
+import { Client } from '../modelos/Boleta/client';
+import { Company } from '../modelos/Boleta/company';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
 import { AgregarventaComponent } from './agregarventa/agregarventa.component';
@@ -16,10 +18,13 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
+  dataClien:any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' },{ id:'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
-  detalleVenta: DetalleVenta = new DetalleVenta(0,0,0,'',0,0,0);
-  boleta:Boleta = new Boleta('','','','','','',[],[],0,0,0,0,0,'',[],[]);
+  detalleVenta: DetalleVenta = new DetalleVenta('','','',0,0,0,0,0,0,0,0,0);
+  boleta:Boleta = new Boleta('','','','','','',{rznSocial:'',numDoc:'',tipoDoc:'',address:{direccion:''}},[],0,0,0,0,0,'',[],{code:'',value:''});
+  company:Company = new Company('','',{direccion:''});
+  client:Client = new Client('','','',{direccion:''});
   cancela: boolean = false;
   displayedColumns = ['id', 'usuario','vendedor','cliente','estado','comprobante','fecha','valor_total','opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -59,7 +64,7 @@ export class VentasComponent implements OnInit {
       data: new Venta(0,localStorage.getItem("currentId"),0,0,0,'','',0,[])
     });
     dialogo1.afterClosed().subscribe(art => {
-      console.log(art);
+      //console.log(art);
       if (art != undefined)
         this.agregar(art);
       this.renderDataTable();
@@ -67,12 +72,22 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art:Venta) {
-    console.log(art);
-    if(art.comprobante=='Boleta'){
-      
-
-    }
-
+    this.company.ruc="20605174095";
+     this.company.razonSocial="VVIAN FOODS S.A.C";
+     this.company.address.direccion="AV. PARDO Y ALIAGA N° 699 INT. 802";
+     this.traerClient(art.id_cliente);
+     this.boleta.tipoOperacion="0101";
+     this.boleta.tipoDoc="03";
+     this.boleta.fechaEmision=art.fecha;
+     this.boleta.tipoMoneda="PEN";
+     this.boleta.mtoIGV=18;
+     this.boleta.details=art.detalleVenta;
+     this.boleta.company.push(this.company);
+     this.boleta.client=this.client;
+    console.log(this.boleta);
+    
+  }
+/*
     if (art) {
       this.api.GuardarVenta(art).subscribe(
         data => {
@@ -81,9 +96,19 @@ export class VentasComponent implements OnInit {
         error => { console.log(error) }
       );
       this.renderDataTable();
-    }
-  }
+    }*/
+  
 
+traerClient(id:number){
+
+  this.api.getApi('clientes/'+id).subscribe(data=>{
+    this.dataClien=data;
+    this.client.numDoc=this.dataClien.num_documento;
+    this.client.tipoDoc="1";
+    this.client.rznSocial=this.dataClien.nombre;
+
+  });
+}    
 
 cancelar(){
    this.dialog.closeAll();

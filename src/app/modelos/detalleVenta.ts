@@ -1,12 +1,16 @@
 export class DetalleVenta {
     constructor( 
-        public id:number,
-        public id_producto:number,
-        public id_productob:number,
-        public nombre:string,
-        public cantidad: number,
-        public peso: number,
-        public precio:number
-
+        public codProducto: string,
+        public  unidad: string,
+        public  descripcion:string,
+        public  cantidad:number,
+        public  mtoValorUnitario: number,
+        public mtoValorVenta: number,
+        public mtoBaseIgv: number,
+        public porcentajeIgv: number,
+        public igv: number,
+        public tipAfeIgv: number,
+        public totalImpuestos: number,
+        public mtoPrecioUnitario: number
     ){}
 }

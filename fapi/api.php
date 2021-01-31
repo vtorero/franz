@@ -324,6 +324,30 @@ $app->post("/compra",function() use($db,$app){
              echo  json_encode($result);   
 });
 
+$app->post("/comprobante",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+       //$sql = "UPDATE compras SET comprobante='".$data->comprobante."',id_proveedor=".$data->id_proveedor.",num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
+        /*$db->query($sql);
+        $borra="DELETE FROM detalle_compras where id_compra={$data->id}";
+        $db->query($borra);
+        foreach($data->detalleCompra as $valor){
+          $proc="call p_compra_detalle(0,{$valor->cantidad},{$valor->precio},{$data->id},'{$valor->descripcion}')";
+           $stmt = mysqli_prepare($db,$proc);
+            mysqli_stmt_execute($stmt);
+            $proc="";*/
+        
+        $result = array("STATUS"=>true,"messaje"=>"Compra actualizada correctamente");
+       
+       /*  catch(PDOException $e) {
+        $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
+         }*/
+        echo  json_encode($data);   
+    });
+
 
 
 $app->post("/compraedit",function() use($db,$app){
@@ -617,6 +641,19 @@ $app->post("/cliente",function() use($db,$app){
 $app->get("/clientes/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
+$app->get("/cliente/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where id={$id}");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

@@ -643,6 +643,20 @@ $app->get("/clientes/:criterio",function($criterio) use($db,$app){
         
 });
 
+$app->get("/clientes/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT id, nombre,apellido,num_documento,direccion FROM `clientes` where id={$id}");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
+
 $app->get("/empresas/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT `id`, `razon_social` FROM `empresas` where razon_social like '%".$criterio."%'");  

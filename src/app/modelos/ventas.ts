@@ -1,6 +1,4 @@
-import { DetalleCompra } from "./detalleCompra";
 import { DetalleVenta } from "./detalleVenta";
-
 export class Venta {
     constructor(
         public id:number,

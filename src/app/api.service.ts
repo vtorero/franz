@@ -19,6 +19,7 @@ import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
+import { Boleta } from './modelos/Boleta/boleta';
 
 
 @Injectable({
@@ -54,6 +55,16 @@ export class ApiService {
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/producto',
       { json: json }, { headers: headers });
+  }
+
+  public GuardarComprobante(datos:Boleta):Observable<any>{
+    let headers = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Connection','keep-alive')
+    .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
+    let string = JSON.stringify(datos);
+    return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',
+      {datos}, { headers: headers });
   }
 
   public EliminarProducto(datos: Producto): Observable<any> {

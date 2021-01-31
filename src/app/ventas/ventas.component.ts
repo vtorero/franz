@@ -72,11 +72,12 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art:Venta) {
+    this.traerClient(art.id_cliente);
     this.company.ruc="20605174095";
-     this.company.razonSocial="VVIAN FOODS S.A.C";
-     this.company.address.direccion="AV. PARDO Y ALIAGA N° 699 INT. 802";
-     this.traerClient(art.id_cliente);
+    this.company.razonSocial="VVIAN FOODS S.A.C";
+    this.company.address.direccion="AV. PARDO Y ALIAGA N° 699 INT. 802";
      this.boleta.tipoOperacion="0101";
+     
      this.boleta.tipoDoc="03";
      this.boleta.fechaEmision=art.fecha;
      this.boleta.tipoMoneda="PEN";
@@ -85,7 +86,10 @@ export class VentasComponent implements OnInit {
      this.boleta.company.push(this.company);
      this.boleta.client=this.client;
     console.log(this.boleta);
-    
+    this.api.GuardarComprobante(this.boleta).subscribe(
+      data => {
+        console.log(data);
+      });
   }
 /*
     if (art) {
@@ -100,13 +104,12 @@ export class VentasComponent implements OnInit {
   
 
 traerClient(id:number){
-
-  this.api.getApi('clientes/'+id).subscribe(data=>{
+  this.api.getApi('cliente/'+id).subscribe(data=>{
     this.dataClien=data;
-    this.client.numDoc=this.dataClien.num_documento;
+    this.client.numDoc=this.dataClien[0].num_documento;
     this.client.tipoDoc="1";
-    this.client.rznSocial=this.dataClien.nombre;
-
+    this.client.address.direccion=this.dataClien[0].direccion;
+    this.client.rznSocial=this.dataClien[0].nombre;
   });
 }    
 

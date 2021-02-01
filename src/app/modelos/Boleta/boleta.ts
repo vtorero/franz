@@ -10,13 +10,8 @@ export class Boleta {
         public correlativo:string,
         public fechaEmision:string,
         public tipoMoneda:string,
-        public client:{
-         tipoDoc: string,
-         numDoc: string,
-         rznSocial: string,
-         address: {direccion: string}
-        },
-        public company:Array<Company>,
+        public client:Client,
+        public company:Company,
         public mtoOperGravadas: number,
         public mtoIGV:number,
         public totalImpuestos:number,
@@ -24,11 +19,10 @@ export class Boleta {
         public mtoImpVenta:number,
         public ublVersion: string,
         public details:Array<Details>,
-        public legends: 
-        {
+        public legends:[{
             code: string,
             value: string
-            }
+            }]
         ){}
 }
 

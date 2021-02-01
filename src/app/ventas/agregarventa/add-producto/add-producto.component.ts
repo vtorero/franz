@@ -86,7 +86,7 @@ selectSearch(value:string){
       console.log("cantidadpesp",this.stockPeso[0].peso);
       if(Number(cantidad) > Number(this.stock[0].peso)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
-        //this.data.peso=null;
+        this.data.cantidad=null;
       }
       cantidad;
     }

@@ -19,7 +19,7 @@ import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
-import { Boleta } from './modelos/Boleta/boleta';
+
 
 
 @Injectable({
@@ -56,15 +56,22 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/producto',
       { json: json }, { headers: headers });
   }
-
-  public GuardarComprobante(datos:Boleta):Observable<any>{
+/*
+  public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
-    .set('Connection','keep-alive')
     .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
-    let string = JSON.stringify(datos);
+    let string = JSON.stringify(Boleta);
     return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',
-      {datos}, { headers: headers });
+      {string},{ headers: headers });
+  }*/
+
+
+  public GuardarComprobante(Boleta):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(Boleta);
+    return this._http.post(Global.BASE_API_URL + 'api.php/comprobante',
+      { json: json }, { headers: headers });
   }
 
   public EliminarProducto(datos: Producto): Observable<any> {
@@ -92,6 +99,10 @@ export class ApiService {
     return this._http.get<Categoria[]>(Global.BASE_API_URL + 'api.php/categorias', { headers: this.headers });
   }
 
+  getClienteVenta(id:number): Observable<Clientes[]> {
+    return this._http.get<Clientes[]>(Global.BASE_API_URL + 'api.php/cliente/'+id, { headers: this.headers });
+  }
+  
   getProveedorSelect(value = ''): Observable<Proveedor[]> {
     if (value == '') {
       return this._http.get<Proveedor[]>(Global.BASE_API_URL + 'api.php/proveedores', { headers: this.headers });

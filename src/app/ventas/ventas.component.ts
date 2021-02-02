@@ -19,12 +19,12 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
-  public dataClien: any;
+  client:any
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
   company: Company = new Company('', '', { direccion: '' });
-  client: Client = new Client('', '', '', { direccion: '' });
+  cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
   displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -70,13 +70,18 @@ export class VentasComponent implements OnInit {
       this.renderDataTable();
     });
   }
-
+  getcliente(id:number): void {
+ 
+  }
 
 
   agregar(art: Venta) {
-    let cliente=this.traerClient(art.id_cliente);
-    console.log("cliiii",cliente);
-    let boleta: Boleta = new Boleta('', '', '', '', '', '',this.client,this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
+    this.api.getClienteVenta(art.id_cliente).subscribe(data => {
+      console.log("xxxx",data[0].nombre)
+       this.cliente.rznSocial=data[0].nombre;   
+    });
+   
+    let boleta: Boleta = new Boleta('', '', '', '', '', '',this.cliente,this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
     boleta.tipoOperacion = "0101";
     boleta.tipoDoc = "03";
     boleta.serie = "B00";
@@ -90,7 +95,7 @@ export class VentasComponent implements OnInit {
     /**cliente*/
     boleta.client.tipoDoc="1";
     boleta.client.numDoc="25750816";
-    boleta.client.rznSocial="Victor Jimenez";
+    boleta.client.rznSocial=this.cliente.rznSocial;
     boleta.client.address.direccion="la molina"
 
       /*company*/
@@ -115,8 +120,11 @@ export class VentasComponent implements OnInit {
       detalleBoleta.mtoPrecioUnitario = 0
       boleta.details.push(detalleBoleta);
     });
+    setTimeout(function(){
+      console.log(this.cliente);
+    }, 5000);
     boleta.company=this.company;
-    boleta.client=this.client;
+    //boleta.client=this.client;
     console.log(boleta);
     this.api.GuardarComprobante(boleta).subscribe(
       data => {

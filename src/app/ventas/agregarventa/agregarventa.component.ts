@@ -6,6 +6,7 @@ import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { Client } from 'src/app/modelos/Boleta/client';
 
 @Component({
   selector: 'app-agregarventa',
@@ -22,6 +23,7 @@ export class AgregarventaComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataClientes: any;
+  dataClient: any;
   dataEmpresas: any;
   dataProductos: any;
   exampleArray: any[] = [];

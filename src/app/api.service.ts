@@ -19,6 +19,7 @@ import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
+import { Client } from './modelos/Boleta/client';
 
 
 
@@ -99,7 +100,7 @@ export class ApiService {
     return this._http.get<Categoria[]>(Global.BASE_API_URL + 'api.php/categorias', { headers: this.headers });
   }
 
-  getClienteVenta(id:number): Observable<Clientes[]> {
+  getClienteVenta(id:number):Observable<Clientes[]> {
     return this._http.get<Clientes[]>(Global.BASE_API_URL + 'api.php/cliente/'+id, { headers: this.headers });
   }
   

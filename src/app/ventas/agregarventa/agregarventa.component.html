@@ -37,9 +37,9 @@
         </mat-form-field>
         <mat-form-field *ngIf="filter==2">
           <mat-label>Cliente CON RUC</mat-label>
-          <mat-select name="id_cliente" [(ngModel)]="data.id_cliente" [(ngModel)]="data.id_cliente" required>
+          <mat-select name="cliente" [(ngModel)]="data.cliente" [(ngModel)]="data.cliente" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
-            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli.id">
+            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli">
               {{cli.razon_social}}
             </mat-option>
           </mat-select>

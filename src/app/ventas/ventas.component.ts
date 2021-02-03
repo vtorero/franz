@@ -88,7 +88,12 @@ export class VentasComponent implements OnInit {
     boleta.legends=[{code:"1000",value:"SON 100 Y 00/800 SOLES"}];
   
     /**cliente*/
+    if(art.cliente.nombre){
     boleta.client.rznSocial=art.cliente.nombre +' '+art.cliente.apellido;   
+  }
+  if(art.cliente.razon_social){
+    boleta.client.rznSocial=art.cliente.razon_social;  
+  }
     boleta.client.tipoDoc="1";
     boleta.client.numDoc=art.cliente.num_documento;
     boleta.client.address.direccion=art.cliente.direccion;

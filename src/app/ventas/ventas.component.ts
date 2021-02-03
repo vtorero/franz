@@ -61,25 +61,20 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', 0, [])
+  data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', 0, [])
     });
     dialogo1.afterClosed().subscribe(art => {
-      //console.log(art);
       if (art != undefined)
         this.agregar(art);
       this.renderDataTable();
     });
   }
-  getcliente(id:number): void {
- 
-  }
 
 
   agregar(art: Venta) {
-    this.api.getClienteVenta(art.id_cliente).subscribe(data => {
-      console.log("xxxx",data[0].nombre)
-       this.cliente.rznSocial=data[0].nombre;   
-    });
+    console.log("vveeennnt",art)
+  
+
    
     let boleta: Boleta = new Boleta('', '', '', '', '', '',this.cliente,this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
     boleta.tipoOperacion = "0101";
@@ -93,10 +88,10 @@ export class VentasComponent implements OnInit {
     boleta.legends=[{code:"1000",value:"SON 100 Y 00/800 SOLES"}];
   
     /**cliente*/
+    boleta.client.rznSocial=art.cliente.nombre +' '+art.cliente.apellido;   
     boleta.client.tipoDoc="1";
-    boleta.client.numDoc="25750816";
-    boleta.client.rznSocial=this.cliente.rznSocial;
-    boleta.client.address.direccion="la molina"
+    boleta.client.numDoc=art.cliente.num_documento;
+    boleta.client.address.direccion=art.cliente.direccion;
 
       /*company*/
       boleta.company.ruc = "20605174095";
@@ -120,11 +115,7 @@ export class VentasComponent implements OnInit {
       detalleBoleta.mtoPrecioUnitario = 0
       boleta.details.push(detalleBoleta);
     });
-    setTimeout(function(){
-      console.log(this.cliente);
-    }, 5000);
     boleta.company=this.company;
-    //boleta.client=this.client;
     console.log(boleta);
     this.api.GuardarComprobante(boleta).subscribe(
       data => {

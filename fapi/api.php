@@ -339,7 +339,6 @@ $app->post("/comprobante",function() use($db,$app){
            $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
             $proc="";*/
-        
         $result = array("STATUS"=>true,"messaje"=>"Compra actualizada correctamente");
        
        /*  catch(PDOException $e) {
@@ -566,9 +565,14 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $data = json_decode($j['json']);
            $valor_total=0;
            /*total de la venta*/
-           foreach($data->detalleVenta as $value){
+           
+           /*foreach($data->detalleVenta as $value){
                 $valor_total+=$value->cantidad*$value->precio;
-           }
+           }*/
+
+           var_dump($data);
+           die();
+
            try { 
             $fecha=substr($data->fecha,0,10);
             $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$valor_total})";
@@ -663,6 +667,24 @@ $app->get("/cliente/:id",function($id) use($db,$app){
         echo  $respuesta;
         
 });
+
+$app->delete("/cliente/:dni",function($dni) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+                  $query ="DELETE FROM clientes WHERE num_documento='{$dni}'";
+                  if($db->query($query)){
+       $result = array("STATUS"=>true,"messaje"=>"Cliente eliminado correctamente");
+       }
+       else{
+        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar el cliente");
+       }
+       
+        echo  json_encode($result);
+    });
+
+/*empresas*/
 
 $app->get("/empresas/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");

@@ -19,7 +19,7 @@ import { Client } from 'src/app/modelos/Boleta/client';
   providers: [{ provide: OWL_DATE_TIME_FORMATS, useValue: { useUtc: true } },]
 })
 export class AgregarventaComponent implements OnInit {
-  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio', 'borrar'];
+  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataClientes: any;
@@ -64,7 +64,7 @@ export class AgregarventaComponent implements OnInit {
 
   radioChange(selected) {
     this.filter = selected.value;
-    console.log(this.filter);
+    //console.log(this.filter);
 
   }
 
@@ -125,10 +125,10 @@ export class AgregarventaComponent implements OnInit {
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
-      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0)
+      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0)
     });
     dialogo1.afterClosed().subscribe(art => {
-      console.log("art", art)
+      //console.log("art",art)
       if (art != undefined)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();

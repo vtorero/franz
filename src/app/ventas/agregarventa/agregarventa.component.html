@@ -60,11 +60,11 @@
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.id_producto}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.codProductob.codigo}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="nombre"> 
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.id_productob.nombre}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.codProductob.nombre}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
@@ -75,10 +75,13 @@
         <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="precio">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>precio</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.precio}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
+        <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario}} </mat-cell>
       </ng-container>
-
+      <ng-container matColumnDef="subtotal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
+        <mat-cell *matCellDef="let row">S/.{{row.mtoValorUnitario*row.cantidad}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row ;let j = index;">

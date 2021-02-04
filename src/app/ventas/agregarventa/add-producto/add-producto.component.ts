@@ -28,7 +28,9 @@ dataExistencias:any;
 constructor(private api:ApiService,
   private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: DetalleVenta
-    ) { }
+    ) { 
+
+    }
   getProductos(): void {
     this.api.getApi('productos').subscribe(data => {
       if(data) {
@@ -72,11 +74,11 @@ selectSearch(value:string){
 
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;
-      this.data.mtoPrecioUnitario=this.stock[0].precio;
+      this.data.mtoValorUnitario=this.stock[0].precio;
       console.log("cantidad",this.stock[0].cantidad);
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
-        this.data.cantidad=null;
+         this.data.cantidad=null;
       }
       cantidad;
     }

@@ -7,6 +7,15 @@ import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { Client } from 'src/app/modelos/Boleta/client';
+export const MY_MOMENT_FORMATS = {
+  parseInput: 'l LT',
+  fullPickerInput: 'l LT',
+  datePickerInput: 'l',
+  timePickerInput: 'LT',
+  monthYearLabel: 'MM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MM YYYY',
+};
 
 @Component({
   selector: 'app-agregarventa',
@@ -14,9 +23,10 @@ import { Client } from 'src/app/modelos/Boleta/client';
   styleUrls: ['./agregarventa.component.css']
 })
 
+
 @NgModule({
   imports: [OwlDateTimeModule, OwlNativeDateTimeModule, BrowserModule, MatPaginatorModule],
-  providers: [{ provide: OWL_DATE_TIME_FORMATS, useValue: { useUtc: true } },]
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
 export class AgregarventaComponent implements OnInit {
   displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];

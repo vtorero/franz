@@ -57,24 +57,24 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/producto',
       { json: json }, { headers: headers });
   }
-/*
+
   public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
     let string = JSON.stringify(Boleta);
     return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',
-      {string},{ headers: headers });
-  }*/
+    JSON.stringify(Boleta),{ headers: headers });
+  }
 
-
+/*
   public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(Boleta);
     return this._http.post(Global.BASE_API_URL + 'api.php/comprobante',
       { json: json }, { headers: headers });
   }
-
+*/
   public EliminarProducto(datos: Producto): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
@@ -288,6 +288,13 @@ enviaFactura(id): Observable<any> {
         emp: empresa
       }, { headers: this.headers }
     ).pipe(map(result => result));
+  }
+
+
+  getNumeroALetras(cantidad:number) {
+    return this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,
+    { headers: this.headers }
+  ).pipe(map(result => result));
   }
 
   public GuardarDataBanco(datos: Databanco): Observable<any> {

@@ -566,16 +566,13 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $valor_total=0;
            /*total de la venta*/
            
-           /*foreach($data->detalleVenta as $value){
-                $valor_total+=$value->cantidad*$value->precio;
-           }*/
+           foreach($data->detalleVenta as $value){
+                $valor_total+=$value->cantidad*$value->mtoValorUnitario;
+           }
 
-           var_dump($data);
-           die();
-
-           try { 
+          try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->id_cliente}','{$data->comprobante}','{$fecha}',{$valor_total})";
+            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$fecha}',{$valor_total})";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");
@@ -585,14 +582,14 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
              }
             foreach($data->detalleVenta as $valor){
             /*inserta detalla*/
-            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->id_producto},{$valor->cantidad},{$valor->peso},{$valor->precio})";
+            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
             $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
 
              $proc="";
             
              /*actualiza inventario*/   
-            $actualiza="call p_actualiza_inventario({$valor->id_productob->id},{$valor->cantidad},{$valor->peso})";    
+            $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->cantidad},{$valor->peso})";    
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
 
@@ -733,6 +730,13 @@ if($estado){
        echo  json_encode($result);
     });
 
+    $app->get("/numeroletras/:cantidad",function($cantidad) use($db,$app){
+        //header("Content-type: application/json; charset=utf-8");
+        $json = file_get_contents("https://nal.azurewebsites.net/api/Nal?num={$cantidad}");
+        $data = json_decode($json);
+           echo json_encode($data->letras);
+        });   
+    
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");
@@ -1254,6 +1258,14 @@ $db=new mysqli("localhost","marife","libido16","adops");
          $data[]=$row;
      }
         return $data;
+}
+
+function numero_letras(){
+    header("Content-type: application/json; charset=utf-8");
+    $json = file_get_contents("https://nal.azurewebsites.net/api/Nal?num={$cantidad}");
+    $data = json_decode($json);
+    return json_encode($data);
+
 }
 
 function ordena_fecha($inicio,$fin){

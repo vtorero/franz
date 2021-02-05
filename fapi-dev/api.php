@@ -705,6 +705,39 @@ if($estado){
     });
 
 
+$app->get("/numeroletras"),function() use($db,$app){
+  
+    $curl = curl_init();
+    
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://numeros-a-letras1.p.rapidapi.com/api/NAL/23",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "x-rapidapi-host: numeros-a-letras1.p.rapidapi.com",
+            "x-rapidapi-key: SIGN-UP-FOR-KEY"
+        ],
+    ]);
+    
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    
+    curl_close($curl);
+    
+    if ($err) {
+        echo "cURL Error #:" . $err;
+    } else {
+        echo $response;
+    }
+
+});   
+
+
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");
     $json = $app->request->getBody();

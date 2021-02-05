@@ -20,7 +20,8 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
-  client: any
+  client: any;
+  letras:any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -73,19 +74,22 @@ export class VentasComponent implements OnInit {
 
 
   agregar(art: Venta) {
+    let texto:string;
     console.log("venta",art);
     let boleta: Boleta = new Boleta('', '', '', '', '', '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
     boleta.tipoOperacion = "0101";
-    boleta.correlativo = "000";
     boleta.fechaEmision = art.fecha;
+    //var fec1 = art.fecha.split(" ",4); 
+    //let ini=fec1[1]+'-'+fec1[2]+'-'+fec1[3];
+    //boleta.fechaEmision = "2021-02-04T00:00:00-05:00";
     boleta.tipoMoneda = "PEN";
     boleta.ublVersion = "2.1";
-    boleta.legends = [{ code: "1000", value: "SON 100 Y 00/800 SOLES" }];
-
+    
     /**cliente*/
     if (art.cliente.nombre) {
       boleta.tipoDoc = "03";
       boleta.serie = "B00";
+      boleta.correlativo = "4";
       boleta.client.tipoDoc = "1";
       boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
     }
@@ -128,22 +132,36 @@ export class VentasComponent implements OnInit {
       boleta.valorVenta = total,
       boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
       boleta.company = this.company;
-    console.log(boleta);
-    this.api.GuardarComprobante(boleta).subscribe(
-      data => {
-        console.log(data);
+
+      this.api.getNumeroALetras(total).subscribe(data => {
+      boleta.legends = [{ code: "1000", value:"SON: "+data+ " SOLES"}];  
       });
-  
-  
-      if (art) {
-        this.api.GuardarVenta(art).subscribe(
-          data => {
-            this.toastr.success(data['messaje']);
-          },
-          error => { console.log(error) }
-        );
-        this.renderDataTable();
-      }
+      
+      setTimeout(function() { 
+      console.log(boleta);
+      },5000);
+
+      this.api.GuardarComprobante(boleta).subscribe(
+        data => {
+          console.log(data);
+          if(data.sunatResponse.succes){
+            this.toastr.success(art.comprobante + " Emitido correctamente");
+          }else{
+            this.toastr.error(art.comprobante + " no recibida");
+          }
+        });
+/*
+        if (art) {
+          this.api.GuardarVenta(art).subscribe(
+            data => {
+              this.toastr.success(data['messaje']);
+            },
+            error => { console.log(error) }
+          );
+          this.renderDataTable();
+        }
+        */
+      
     }
 
 

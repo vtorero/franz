@@ -7,7 +7,7 @@ export class Venta {
         public cliente:any,
         public	estado:number,
         public comprobante:string,
-        public fecha:string,
+        public fecha:Date,
         public valor_total:number,
         public detalleVenta:Array<DetalleVenta>,
         ){}

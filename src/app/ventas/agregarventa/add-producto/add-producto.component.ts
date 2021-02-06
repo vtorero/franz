@@ -3,7 +3,6 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { ApiService } from 'src/app/api.service';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { BrowserModule } from '@angular/platform-browser';
-import { ThrowStmt } from '@angular/compiler';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -79,8 +78,9 @@ selectSearch(value:string){
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
          this.data.cantidad=null;
+         cantidad;
       }
-      cantidad;
+      
     }
 
     verificaPeso(cantidad){

@@ -20,6 +20,7 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
+  public Moment = new Date();
   client: any;
   letras:any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
@@ -63,7 +64,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', 0, [])
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, 0, [])
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -72,23 +73,39 @@ export class VentasComponent implements OnInit {
     });
   }
 
+  replaceStr(str, find, replace) {
+    for (var i = 0; i < find.length; i++) {
+        str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
+    }
+    return str;
+}
+
 
   agregar(art: Venta) {
     let texto:string;
+    let fec1;
+    let fecha1;
     console.log("venta",art);
-    let boleta: Boleta = new Boleta('', '', '', '', '', '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
+    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
     boleta.tipoOperacion = "0101";
     boleta.fechaEmision = art.fecha;
-    //var fec1 = art.fecha.split(" ",4); 
-    //let ini=fec1[1]+'-'+fec1[2]+'-'+fec1[3];
-    //boleta.fechaEmision = "2021-02-04T00:00:00-05:00";
+    fec1= art.fecha.toDateString().split(" ",4); 
+    
+    var find = ["Jan","Feb"];
+var replace = ['01','02'];
+let text = this.replaceStr(fec1[1],find, replace);
+  console.log(text);
+  fecha1=fec1[3]+'-'+this.replaceStr(fec1[1], find, replace)+'-'+fec1[2]+"T00:00:00-05:00";
+  console.log("fecha1",fecha1);
+  
+  boleta.fechaEmision = fecha1;
     boleta.tipoMoneda = "PEN";
     boleta.ublVersion = "2.1";
     
     /**cliente*/
     if (art.cliente.nombre) {
       boleta.tipoDoc = "03";
-      boleta.serie = "B00";
+      boleta.serie = "B001";
       boleta.correlativo = "4";
       boleta.client.tipoDoc = "1";
       boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
@@ -132,10 +149,9 @@ export class VentasComponent implements OnInit {
       boleta.valorVenta = total,
       boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
       boleta.company = this.company;
-
-      this.api.getNumeroALetras(total).subscribe(data => {
-      boleta.legends = [{ code: "1000", value:"SON: "+data+ " SOLES"}];  
-      });
+      boleta.legends = [{ code: "1000", value:"SON xxx SOLES"}]; 
+      /*this.api.getNumeroALetras(total).subscribe(data => {
+      });*/
       
       setTimeout(function() { 
       console.log(boleta);

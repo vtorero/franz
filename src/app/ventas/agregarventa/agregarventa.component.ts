@@ -30,7 +30,7 @@ export const MY_MOMENT_FORMATS = {
 })
 export class AgregarventaComponent implements OnInit {
   displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
-  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
+  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataClientes: any;
   dataClient: any;
@@ -43,6 +43,7 @@ export class AgregarventaComponent implements OnInit {
   selected: string;
   filter: any;
   constructor(
+
     private api: ApiService,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
@@ -74,7 +75,7 @@ export class AgregarventaComponent implements OnInit {
 
   radioChange(selected) {
     this.filter = selected.value;
-    //console.log(this.filter);
+    console.log(this.filter);
 
   }
 
@@ -138,14 +139,15 @@ export class AgregarventaComponent implements OnInit {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0)
     });
     dialogo1.afterClosed().subscribe(art => {
-      //console.log("art",art)
-      if (art != undefined)
+      console.log("art",art)
+      if (art)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
     });
   }
+
   ngOnInit() {
     this.getVendedores();
     this.getclientes();

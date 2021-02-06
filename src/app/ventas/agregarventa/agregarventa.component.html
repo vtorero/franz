@@ -10,57 +10,60 @@
             <mat-option *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Vendedor</mat-label>
-          <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor" [(ngModel)]="data.id_vendedor" required>
-            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
-            <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}} {{ven.apellidos}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-         <mat-radio-group aria-label="Seleccione tipo" required>
+        <mat-radio-group aria-label="Seleccione tipo" required *ngIf="data.comprobante=='Pendiente'">
           <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
           <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
         </mat-radio-group>
-        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+
+        <!--<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
           <input type="checkbox" (change)="clienteNuevo($event)"class="custom-control-input" id="customSwitch3">
           <label class="custom-control-label" for="customSwitch3">&nbsp;Cliente Nuevo</label>
-        </div>
-        <mat-form-field *ngIf="filter==1">
+        </div>-->
+        <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente' && filter=='1')">
           <mat-label>Cliente con DNI</mat-label>
-          <mat-select name="cliente" [(ngModel)]="data.cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)"  required>
+          <mat-select name="cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)"  required>
             <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
+            <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let cli of dataClientes" [value]="cli">
               {{cli.nombre}} {{cli.apellido}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field *ngIf="filter==2">
+        <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente' && filter=='2')">
           <mat-label>Cliente CON RUC</mat-label>
-          <mat-select name="cliente" [(ngModel)]="data.cliente" [(ngModel)]="data.cliente" required>
+          <mat-select name="cliente" [(ngModel)]="data.cliente" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
+            <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let cli of dataEmpresas" [value]="cli">
               {{cli.razon_social}}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>Fecha</mat-label>
-          <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha"
-            placeholder="Fecha" required>
-          <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
-          <mat-datepicker #myPicker></mat-datepicker>
+          <mat-label>Vendedor</mat-label>
+          <mat-select name="id_vendedor" [(ngModel)]="data.id_vendedor" required>
+            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}} {{ven.apellidos}}</mat-option>
+          </mat-select>
         </mat-form-field>
+        <div class="input-group date"  style="width: 300px;float:right">
+          <div class="input-group-addon">Fecha&nbsp;&nbsp;
+                      <i class="fa fa-calendar"></i>
+                          </div>
+                          <input class="form-control" [owlDateTimeTrigger]="dt" [owlDateTime]="dt" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha">
+                          <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time> 
+          </div>
       </div>
     </div>
   </form>
-  <h4>Detalle de venta</h4>
-  <button class="btn btn-success" (click)="abrirDialog()">Agregar Producto</button>
+  <h4>Detalle</h4>
+  <button class="btn btn-success" (click)="abrirDialog()"  [disabled]="!formGeneral.form.valid">Agregar Item</button>
   <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height: auto;">
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.codProductob.codigo}} </mat-cell>
+        <mat-cell  *matCellDef="let row"> {{row.codProductob.codigo}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="nombre"> 
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>

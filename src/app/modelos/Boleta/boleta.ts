@@ -8,7 +8,7 @@ export class Boleta {
         public tipoDoc:string,
         public serie:string,
         public correlativo:string,
-        public fechaEmision:string,
+        public fechaEmision:Date,
         public tipoMoneda:string,
         public client:Client,
         public company:Company,

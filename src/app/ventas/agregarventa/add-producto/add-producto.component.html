@@ -17,11 +17,15 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
+          <mat-label>Unidad Medida</mat-label>
+          <mat-select name="unidadmedida" #unidadmedida="ngModel" [(ngModel)]="data.unidadmedida" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let und of dataUnidades" [value]="und.id">{{und.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
           <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput (focusout)="verificaPeso($event.target.value)"  name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Peso" required>
-            </mat-form-field>
           <mat-form-field>
             <input matInput name="mtoValorUnitario" #mtoValorUnitario="ngModel" [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
             </mat-form-field>

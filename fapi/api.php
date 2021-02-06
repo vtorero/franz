@@ -537,7 +537,7 @@ $app->get("/vendedores",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT  v.id, v.id_usuario,u.nombre usuario,concat(ve.nombre,' ',ve.apellidos) vendedor,concat(c.nombre,' ',c.apellido) cliente,valor_total, estado, comprobante, v.fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id order by id desc");  
+    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,concat(ve.nombre,' ',ve.apellidos) vendedor,concat(c.nombre,' ',c.apellido) cliente,valor_total, estado, comprobante, v.fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' UNION all SELECT v.id, v.id_usuario,u.nombre usuario,concat(ve.nombre,' ',ve.apellidos) vendedor,concat(c.razon_social) cliente,valor_total, v.estado, comprobante, v.fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;

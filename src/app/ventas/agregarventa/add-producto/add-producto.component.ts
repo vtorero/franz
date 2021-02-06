@@ -24,6 +24,7 @@ dataArray;
 stock;
 stockPeso;
 dataExistencias:any;
+dataUnidades = [{ id: 'NIU', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo' }];
 constructor(private api:ApiService,
   private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: DetalleVenta

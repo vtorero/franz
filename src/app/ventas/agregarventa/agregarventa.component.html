@@ -10,7 +10,7 @@
             <mat-option *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-checkbox [(ngModel)]="print">Visualizar PDF</mat-checkbox>
+        <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar PDF</mat-checkbox>
         <mat-radio-group aria-label="Seleccione tipo" required *ngIf="data.comprobante=='Pendiente'">
           <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
           <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>

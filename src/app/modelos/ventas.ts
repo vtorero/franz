@@ -10,5 +10,6 @@ export class Venta {
         public fecha:Date,
         public valor_total:number,
         public detalleVenta:Array<DetalleVenta>,
+        public imprimir:boolean,
         ){}
 }

@@ -49,7 +49,6 @@ export class VentasComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  imprimir = false;
   displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -85,7 +84,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, 0, [])
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, 0, [],false)
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -162,16 +161,16 @@ export class VentasComponent implements OnInit {
         total = total + (value.cantidad * value.mtoValorUnitario);
         console.log("total", total);
         boleta.details.push(detalleBoleta);
-
       });
+
       boleta.mtoOperGravadas = total;
       boleta.mtoIGV = total * Global.BASE_IGV;
-      boleta.totalImpuestos = 18,
+      boleta.totalImpuestos = total * Global.BASE_IGV;
         boleta.valorVenta = total,
         boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
         boleta.company = this.company;
-      boleta.legends = [{ code: "1000", value: "SON xxx SOLES" }];
-      this.api.getNumeroALetras(total).subscribe(data => {
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
+        console.log("letrass",data);
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
       });
 
@@ -185,10 +184,12 @@ export class VentasComponent implements OnInit {
               this.toastr.error(art.comprobante + " no recibida");
             }
           });
+          if (art.imprimir) {
+            sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
+          }
+
       }, 4000);
-      if (this.imprimir) {
-        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
-      }
+  
 
     }
 

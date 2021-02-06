@@ -13,23 +13,22 @@ import { Venta } from '../modelos/ventas';
 import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 
 
-function sendInvoice(data) {
-            
+function sendInvoice(data, nro) {
   fetch('https://facturacion.apisperu.com/api/v1/invoice/pdf', {
-      method: 'post',
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + Global.TOKEN_FACTURACION
-      },
-      body: data
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + Global.TOKEN_FACTURACION
+    },
+    body: data
   })
-  .then(response => response.blob())
-  .then(blob => {
+    .then(response => response.blob())
+    .then(blob => {
       var link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = "Boleta.pdf";
+      link.download = "comprobante-" + nro + ".pdf";
       link.click();
-  });   
+    });
 }
 
 
@@ -43,13 +42,14 @@ export class VentasComponent implements OnInit {
   dataDetalle: any;
   public Moment = new Date();
   client: any;
-  letras:any;
+  letras: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
+  imprimir = false;
   displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -96,111 +96,114 @@ export class VentasComponent implements OnInit {
 
   replaceStr(str, find, replace) {
     for (var i = 0; i < find.length; i++) {
-        str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
+      str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
     }
     return str;
-}
+  }
 
 
 
   agregar(art: Venta) {
-    let texto:string;
-    let fec1;
-    let fecha1;
-    console.log("venta",art);
-    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
-    boleta.tipoOperacion = "0101";
-    boleta.fechaEmision = art.fecha;
-    fec1= art.fecha.toDateString().split(" ",4); 
-    
-    var find = ["Jan","Feb"];
-var replace = ['01','02'];
-let text = this.replaceStr(fec1[1],find, replace);
-  console.log(text);
-  fecha1=fec1[3]+'-'+this.replaceStr(fec1[1], find, replace)+'-'+fec1[2]+"T00:00:00-05:00";
-  console.log("fecha1",fecha1);
-  
-  boleta.fechaEmision = fecha1;
-    boleta.tipoMoneda = "PEN";
-    boleta.ublVersion = "2.1";
-    
-    /**cliente*/
-    if (art.cliente.nombre) {
-      boleta.tipoDoc = "03";
-      boleta.serie = "B001";
-      boleta.correlativo = "4";
-      boleta.client.tipoDoc = "1";
-      boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
-    }
-    if (art.cliente.razon_social) {
-      boleta.tipoDoc = "01";
-      boleta.serie = "F00";
-      boleta.client.tipoDoc = "6";
-      boleta.client.rznSocial = art.cliente.razon_social;
-    }
-    
-    boleta.client.numDoc = art.cliente.num_documento;
-    boleta.client.address.direccion = art.cliente.direccion;
+    if (art.comprobante != 'Pendiente') {
+      let fec1;
+      let fecha1;
+      let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
+      boleta.tipoOperacion = "0101";
+      boleta.fechaEmision = art.fecha;
+      fec1 = art.fecha.toDateString().split(" ", 4);
+      var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
-    /*company*/
-    boleta.company.ruc = "20605174095";
-    boleta.company.razonSocial = "VVIAN FOODS S.A.C";
-    boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
-    let total = 0;
-    art.detalleVenta.forEach(function (value: any) {
-      let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-      detalleBoleta.codProducto = value.codProductob.codigo;
-      detalleBoleta.unidad = "NIU";
-      detalleBoleta.descripcion = value.codProductob.nombre;
-      detalleBoleta.cantidad = value.cantidad;
-      detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
-      detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
-      detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
-      detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
-      detalleBoleta.igv = 18;
-      detalleBoleta.tipAfeIgv = 10;
-      detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
-      detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
-      total = total + value.cantidad * value.mtoValorUnitario;
-      console.log("total",total);
-      boleta.details.push(detalleBoleta);
-    });
-    boleta.mtoOperGravadas = total;
-    boleta.mtoIGV = total * Global.BASE_IGV;
-    boleta.totalImpuestos = 18,
-      boleta.valorVenta = total,
-      boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
-      boleta.company = this.company;
-      boleta.legends = [{ code: "1000", value:"SON xxx SOLES"}]; 
-      /*this.api.getNumeroALetras(total).subscribe(data => {
-      });*/
-      
-      setTimeout(function() { 
-      console.log(boleta);
-      },5000);
-      sendInvoice(JSON.stringify(boleta));
-      this.api.GuardarComprobante(boleta).subscribe(
-        data => {
-          console.log(data);
-          if(data.sunatResponse.succes){
-            this.toastr.success(art.comprobante + " Emitido correctamente");
-          }else{
-            this.toastr.error(art.comprobante + " no recibida");
-          }
-        });
-/*
-        if (art) {
-          this.api.GuardarVenta(art).subscribe(
-            data => {
-              this.toastr.success(data['messaje']);
-            },
-            error => { console.log(error) }
-          );
-          this.renderDataTable();
-        }
-        */
-      
+      fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
+      boleta.fechaEmision = fecha1;
+      boleta.tipoMoneda = "PEN";
+      boleta.ublVersion = "2.1";
+
+      /**cliente*/
+      if (art.cliente.nombre) {
+        boleta.tipoDoc = "03";
+        boleta.serie = "B001";
+        boleta.correlativo = "4";
+        boleta.client.tipoDoc = "1";
+        boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
+      }
+      if (art.cliente.razon_social) {
+        boleta.tipoDoc = "01";
+        boleta.serie = "F001";
+        boleta.correlativo = "4";
+        boleta.client.tipoDoc = "6";
+        boleta.client.rznSocial = art.cliente.razon_social;
+      }
+
+      boleta.client.numDoc = art.cliente.num_documento;
+      boleta.client.address.direccion = art.cliente.direccion;
+
+      /*company*/
+      boleta.company.ruc = "20605174095";
+      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
+      let total = 0;
+      art.detalleVenta.forEach(function (value: any) {
+
+        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        detalleBoleta.codProducto = value.codProductob.codigo;
+        detalleBoleta.unidad = "NIU";
+        detalleBoleta.descripcion = value.codProductob.nombre;
+        detalleBoleta.cantidad = value.cantidad;
+        detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
+        detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
+
+        detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
+        detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
+        detalleBoleta.igv = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
+        detalleBoleta.tipAfeIgv = 10;
+        detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
+        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
+        total = total + (value.cantidad * value.mtoValorUnitario);
+        console.log("total", total);
+        boleta.details.push(detalleBoleta);
+
+      });
+      boleta.mtoOperGravadas = total;
+      boleta.mtoIGV = total * Global.BASE_IGV;
+      boleta.totalImpuestos = 18,
+        boleta.valorVenta = total,
+        boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
+        boleta.company = this.company;
+      boleta.legends = [{ code: "1000", value: "SON xxx SOLES" }];
+      this.api.getNumeroALetras(total).subscribe(data => {
+        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+      });
+
+      setTimeout(() => {
+        this.api.GuardarComprobante(boleta).subscribe(
+          data => {
+
+            if (data.sunatResponse.success) {
+              this.toastr.success(data.sunatResponse.cdrResponse.description);
+            } else {
+              this.toastr.error(art.comprobante + " no recibida");
+            }
+          });
+      }, 4000);
+      if (this.imprimir) {
+        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
+      }
+
     }
+
+    if (art) {
+      this.api.GuardarVenta(art).subscribe(
+        data => {
+          this.toastr.success(data['messaje']);
+        },
+        error => { console.log(error) }
+      );
+      this.renderDataTable();
+    }
+
+
+  }
 
 
   cancelar() {

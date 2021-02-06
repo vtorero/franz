@@ -12,6 +12,27 @@ import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
 import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 
+
+function sendInvoice(data) {
+            
+  fetch('https://facturacion.apisperu.com/api/v1/invoice/pdf', {
+      method: 'post',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Global.TOKEN_FACTURACION
+      },
+      body: data
+  })
+  .then(response => response.blob())
+  .then(blob => {
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "Boleta.pdf";
+      link.click();
+  });   
+}
+
+
 @Component({
   selector: 'app-ventas',
   templateUrl: './ventas.component.html',
@@ -79,6 +100,7 @@ export class VentasComponent implements OnInit {
     }
     return str;
 }
+
 
 
   agregar(art: Venta) {
@@ -156,7 +178,7 @@ let text = this.replaceStr(fec1[1],find, replace);
       setTimeout(function() { 
       console.log(boleta);
       },5000);
-
+      sendInvoice(JSON.stringify(boleta));
       this.api.GuardarComprobante(boleta).subscribe(
         data => {
           console.log(data);

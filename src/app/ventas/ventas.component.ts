@@ -45,7 +45,7 @@ export class VentasComponent implements OnInit {
   letras: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
-  detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'');
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
@@ -103,6 +103,7 @@ export class VentasComponent implements OnInit {
 
 
   agregar(art: Venta) {
+    console.log(art);
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -146,7 +147,7 @@ export class VentasComponent implements OnInit {
 
         let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
         detalleBoleta.codProducto = value.codProductob.codigo;
-        detalleBoleta.unidad = "NIU";
+        detalleBoleta.unidad = value.unidadmedida;
         detalleBoleta.descripcion = value.codProductob.nombre;
         detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
@@ -192,7 +193,7 @@ export class VentasComponent implements OnInit {
   
 
     }
-
+/*
     if (art) {
       this.api.GuardarVenta(art).subscribe(
         data => {
@@ -202,7 +203,7 @@ export class VentasComponent implements OnInit {
       );
       this.renderDataTable();
     }
-
+*/
 
   }
 

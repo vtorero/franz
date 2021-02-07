@@ -59,7 +59,7 @@
       </div>
   </form>
   <h4>Detalle de venta</h4>
-  <button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
+  <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
   <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id_producto">
@@ -80,11 +80,11 @@
       </ng-container>
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
-        <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario}} </mat-cell>
+        <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario | number }} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="subtotal">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
-        <mat-cell *matCellDef="let row">S/.{{row.mtoValorUnitario*row.cantidad}} </mat-cell>
+        <mat-cell *matCellDef="let row">S/.{{row.mtoValorUnitario*row.cantidad | number }} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>

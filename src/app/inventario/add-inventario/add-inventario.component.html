@@ -7,7 +7,7 @@
           <mat-label>Producto</mat-label>
           <mat-select  name="id_producto" #id_producto="ngModel" [(ngModel)]="data.id_producto" required>
             <input class="buscador" (keyup)="onKey($event.target.value)" placeholder="Buscar..">
-            <mat-option  *ngFor="let pro of dataProducto" [value]="pro.id">{{pro.nombre}}</mat-option>
+            <mat-option  *ngFor="let pro of dataProducto"  [value]="pro.id">{{pro.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
         <div class="row">
@@ -22,7 +22,7 @@
              </div>
           <div class="col-lg-4">
             <mat-form-field>
-                <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
+                <input matInput name="cantidad" #cantidad="ngModel" (keyup)="onCantidad($event.target.value,data)" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
             </mat-form-field>
             </div>
          

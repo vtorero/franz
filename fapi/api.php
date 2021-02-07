@@ -22,7 +22,7 @@ $data=array();
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT p.id,codigo,p.nombre,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria,id_subcategoria,usuario FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT p.id,codigo,p.nombre,p.peso,c.nombre nombrecategoria,costo,IGV,precio_sugerido,c.id id_categoria,id_subcategoria,usuario FROM  productos p, categorias c WHERE p.id_categoria=c.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -140,6 +140,23 @@ $app->get("/categorias",function() use($db,$app){
 
 /*productos*/
 
+$app->get("/producto/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    try{
+    $resultado = $db->query("SELECT `id`, `codigo`, `nombre`,`peso` FROM `productos` where id ={$id}");  
+    $prods=array();
+    while ($fila = $resultado->fetch_array()) {
+        
+        $prods[]=$fila;
+    }
+    $respuesta=json_encode($prods);
+}catch (PDOException $e){
+    $respuesta=json_encode(array("status"=>$e->message));
+}
+             echo  $respuesta;
+        
+});
+
     $app->get("/productos/:criterio",function($criterio) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
             try{
@@ -165,6 +182,7 @@ $app->get("/categorias",function() use($db,$app){
     
            $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
+            $peso=(is_array($data->peso))? array_shift($data->peso): $data->peso;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
@@ -172,9 +190,10 @@ $app->get("/categorias",function() use($db,$app){
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
     
         
-           $query ="INSERT INTO productos (codigo,nombre,costo,precio_sugerido,id_categoria,id_subcategoria,usuario) VALUES ("
+           $query ="INSERT INTO productos (codigo,nombre,peso,costo,precio_sugerido,id_categoria,id_subcategoria,usuario) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
+          ."'{$peso}',"
           ."{$costo},"
           ."{$precio},"
           ."{$categoria},"
@@ -195,13 +214,14 @@ $app->get("/categorias",function() use($db,$app){
              
             $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
+            $peso=(is_array($data->peso))? array_shift($data->peso): $data->peso;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
             $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
             $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
 
-            $sql = "UPDATE productos SET nombre='".$nombre."',costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
+            $sql = "UPDATE productos SET nombre='".$nombre."',peso=".$peso.",costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
             try { 
             $db->query($sql);
              $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
@@ -405,7 +425,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre,id_producto,sum(granel) granel,sum(cantidad) cantidad, sum(peso) peso,sum(merma) merma FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre,id_producto,sum(granel) granel,sum(cantidad) cantidad, sum(i.peso) peso,sum(merma) merma FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -418,7 +438,7 @@ $app->get("/almacen",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,i.peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -512,7 +532,7 @@ $app->post("/vendedores",function() use($db,$app){
 
 $app->get("/vendedores",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc`, `fecha` FROM `vendedor` order by id desc");  
+    $resultado = $db->query("SELECT `id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc`,`fecha_registro` FROM `vendedor` order by id desc");  
     $vendedores=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -525,6 +545,8 @@ $app->get("/vendedores",function() use($db,$app){
     $app->delete("/vendedores/:id",function($id) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $resultado = $db->query("DELETE FROM `vendedor` where  id={$id}");  
+        var_dump($resultado);
+        die();
         if($resultado){
             $result = array("STATUS"=>true,"messaje"=>"Vendedor eliminado correctamente");
              }else{

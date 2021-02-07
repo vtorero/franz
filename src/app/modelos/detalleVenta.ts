@@ -13,6 +13,7 @@ export class DetalleVenta {
         public igv: number,
         public tipAfeIgv: number,
         public totalImpuestos: number,
-        public mtoPrecioUnitario: number
+        public mtoPrecioUnitario: number,
+        public unidadmedida:string
     ){}
 }

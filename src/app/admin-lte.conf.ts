@@ -20,15 +20,13 @@ export const adminLteConf = {
     {label: 'Subcategorias', route: 'subcategorias'},
       
     ]}, 
-    {label: 'Compras',iconClasses: 'fa fa-tasks',children:[
-      {label: 'Listado', route: 'general/compras'},  
+    {label: 'Compras',iconClasses:'fa fa-tasks',children:[
+      {label: 'Listado de compras', route: 'general/compras'},  
+      {label: 'Proveedores', route: 'general/proveedores'},  
 
     ]},
     {label: 'Vendedores',iconClasses: 'fa fa-tasks',children:[
-      {label: 'Listado', route: 'general/vendedores'}
-    ]},  
-     {label: 'Proveedores', iconClasses: 'fa fa-tasks',children:[
-      {label: 'Listado', route: 'general/proveedores'},  
+      {label: 'Mantenimiento', route: 'general/vendedores'}
     ]},  
     {label: 'Clientes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Personas (DNI)', route: 'general/clientes'},

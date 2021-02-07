@@ -74,12 +74,15 @@ selectSearch(value:string){
 
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;
+      console.log("stockkk",this.stock)
       this.data.mtoValorUnitario=this.stock[0].precio;
       console.log("cantidad",this.stock[0].cantidad);
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
          this.data.cantidad=null;
          cantidad;
+      }else{
+        this.stock[0].cantidad=this.stock[0].cantidad-cantidad
       }
       
     }

@@ -136,7 +136,7 @@ export class AgregarventaComponent implements OnInit {
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
-      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0)
+      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,'')
     });
     dialogo1.afterClosed().subscribe(art => {
       console.log("art",art)

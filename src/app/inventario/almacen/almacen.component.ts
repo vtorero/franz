@@ -14,7 +14,7 @@ import { AddInventarioComponent } from '../add-inventario/add-inventario.compone
 export class AlmacenComponent implements OnInit {
 dataSource:any;
 cancela: boolean = false;
-displayedColumns = ['id_producto','codigo', 'nombre','granel', 'cantidad','peso','merma'];
+displayedColumns = ['id_producto','codigo', 'nombre','granel', 'cantidad','merma'];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,

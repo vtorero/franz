@@ -570,7 +570,7 @@ $app->get("/ventas",function() use($db,$app){
 
 $app->get("/inventarios/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} order by fecha_produccion asc");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,i.peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} order by fecha_produccion asc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

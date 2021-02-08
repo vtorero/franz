@@ -43,6 +43,16 @@
   <ng-container matColumnDef="opciones">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row">
+            <div ngbDropdown>
+                  <button class="btn btn-outline-primary btn-sm" ngbDropdownToggle>Actions</button>
+                  <div ngbDropdownMenu>
+                    <button ngbDropdownItem>Edit</button>
+                    <button ngbDropdownItem>Duplicate</button>
+                    <button ngbDropdownItem>Move</button>
+                    <div class="dropdown-divider"></div>
+                    <button ngbDropdownItem>Delete</button>
+                  </div>
+                </div>
             <button class="btn btn-outline-secondary" (click)="abrirEditar(row)">Editar</button>&nbsp; 
             <!--<button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>-->
           

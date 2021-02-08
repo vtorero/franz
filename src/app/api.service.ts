@@ -82,6 +82,13 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
+  public EditarCliente(datos: Clientes): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.put(Global.BASE_API_URL + 'api.php/cliente',
+      { json: json }, { headers: headers });
+  }
+
   public EditarProducto(datos: Producto): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);

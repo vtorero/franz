@@ -687,6 +687,23 @@ $app->get("/cliente/:id",function($id) use($db,$app){
         
 });
 
+$app->put("/cliente",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       try { 
+        $query ="UPDATE clientes SET nombre='{$data->nombre}',apellido='{$data->apellido}',direccion='{$data->direccion}',telefono='{$data->telefono}',num_documento='{$data->num_documento}' where id={$data->id}";
+        $db->query($query);
+        $result = array("STATUS"=>true,"messaje"=>"Ciente actualizado correctamente");
+          }
+         catch(PDOException $e) {
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+    }
+        echo  json_encode($result);   
+});
+
+
 $app->delete("/cliente/:dni",function($dni) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();

@@ -604,16 +604,18 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
              }
             foreach($data->detalleVenta as $valor){
             /*inserta detalla*/
-            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
+            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->codProducto},'{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
             $stmt = mysqli_prepare($db,$proc);
             mysqli_stmt_execute($stmt);
+            $stmt->close();
 
-             $proc="";
+             //$proc="";
             
              /*actualiza inventario*/   
             $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
+            $stmtb->close();
             }
            
             $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string"=>$valor->codProductob->id.'-'.$valor->cantidad.'-'.$valor->peso.'-'.$valor->codProducto);

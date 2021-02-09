@@ -152,22 +152,24 @@ export class VentasComponent implements OnInit {
         detalleBoleta.descripcion = value.codProductob.nombre;
         detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
-        if(value.unidadmedida=='NUI'){
+
+        if(value.unidadmedida=="NIU"){
         detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
         detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
         detalleBoleta.igv = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
         detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
-        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
+        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario +(value.mtoValorUnitario * Global.BASE_IGV);
         total = total + (value.cantidad * value.mtoValorUnitario);
         }
-        if(value.unidadmedida=='KGM'){
+        if(value.unidadmedida=="KGM"){
          detalleBoleta.mtoValorVenta = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
          detalleBoleta.mtoBaseIgv = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
          detalleBoleta.igv = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
          detalleBoleta.totalImpuestos = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
+         detalleBoleta.mtoPrecioUnitario = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) + value.mtoValorUnitario * Global.BASE_IGV;
         total = total + ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario);
         }
-        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
+        
         detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.tipAfeIgv = 10;
         console.log("total", total);
@@ -180,7 +182,7 @@ export class VentasComponent implements OnInit {
         boleta.valorVenta = total,
         boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
         boleta.company = this.company;
-      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
+        this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
         console.log("letrass",data);
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
       });

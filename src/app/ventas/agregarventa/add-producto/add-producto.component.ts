@@ -59,6 +59,10 @@ selectSearch(value:string){
   
 }
 
+changemedida(ev){
+  console.log("unidad",ev.source.value);
+}
+
   change(event)
   {
     console.log(event.source.value);
@@ -74,30 +78,26 @@ selectSearch(value:string){
 
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;
-      console.log("stockkk",this.stock)
       this.data.mtoValorUnitario=this.stock[0].precio;
-      console.log("cantidad",this.stock[0].cantidad);
+      if(this.data.unidadmedida=="NIU"){
       if(Number(cantidad) > Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
          this.data.cantidad=null;
          cantidad;
-      }else{
-        this.stock[0].cantidad=this.stock[0].cantidad-cantidad
-      }
       
     }
-
-    verificaPeso(cantidad){
-      this.stockPeso=this.seleccionados;
-      console.log("cantidadpesp",this.stockPeso[0].peso);
-      if(Number(cantidad) > Number(this.stock[0].peso)){
+  }
+    if(this.data.unidadmedida=="KGM"){
+      if(Number(cantidad)> Number(this.stock[0].peso)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
-        this.data.cantidad=null;
+         this.data.cantidad=null;
+         cantidad;
       }
-      cantidad;
     }
-
+    }
   
+
+ 
   handleProducto(id){
     this.getProdExiste(id);
   }

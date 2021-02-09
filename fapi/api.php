@@ -570,7 +570,7 @@ $app->get("/ventas",function() use($db,$app){
 
 $app->get("/inventarios/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,i.peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} order by fecha_produccion asc");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,i.peso,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} and i.cantidad>0 order by fecha_produccion asc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -611,13 +611,12 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
              $proc="";
             
              /*actualiza inventario*/   
-            $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->cantidad},{$valor->peso})";    
+            $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
-
             }
            
-            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id);
+            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string"=>$valor->codProductob->id.'-'.$valor->cantidad.'-'.$valor->peso.'-'.$valor->codProducto);
             
             }
              catch(PDOException $e) {

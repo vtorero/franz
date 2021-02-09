@@ -148,18 +148,28 @@ export class VentasComponent implements OnInit {
         let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
         detalleBoleta.codProducto = value.codProductob.codigo;
         detalleBoleta.unidad = value.unidadmedida;
+
         detalleBoleta.descripcion = value.codProductob.nombre;
         detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
+        if(value.unidadmedida=='NUI'){
         detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
-
         detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
-        detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.igv = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
-        detalleBoleta.tipAfeIgv = 10;
         detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
         detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
         total = total + (value.cantidad * value.mtoValorUnitario);
+        }
+        if(value.unidadmedida=='KGM'){
+         detalleBoleta.mtoValorVenta = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
+         detalleBoleta.mtoBaseIgv = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
+         detalleBoleta.igv = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
+         detalleBoleta.totalImpuestos = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
+        total = total + ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario);
+        }
+        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario * Global.BASE_IGV;
+        detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
+        detalleBoleta.tipAfeIgv = 10;
         console.log("total", total);
         boleta.details.push(detalleBoleta);
       });
@@ -189,13 +199,15 @@ export class VentasComponent implements OnInit {
             sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
           }
 
-      }, 4000);
+      }, 5000);
   
 
     }
-/*
-    if (art) {
+
+    if (art){
+      console.log("ventaaaa",art)
       this.api.GuardarVenta(art).subscribe(
+
         data => {
           this.toastr.success(data['messaje']);
         },
@@ -203,7 +215,7 @@ export class VentasComponent implements OnInit {
       );
       this.renderDataTable();
     }
-*/
+
 
   }
 

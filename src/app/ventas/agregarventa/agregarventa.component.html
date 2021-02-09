@@ -10,7 +10,7 @@
             <mat-option *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar PDF</mat-checkbox>
+        <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
         <mat-radio-group aria-label="Seleccione tipo" required *ngIf="data.comprobante=='Pendiente'">
           <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
           <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
@@ -71,12 +71,12 @@
         <mat-cell *matCellDef="let row">{{row.codProductob.nombre}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
@@ -84,7 +84,9 @@
       </ng-container>
       <ng-container matColumnDef="subtotal">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
-        <mat-cell *matCellDef="let row">S/.{{row.mtoValorUnitario*row.cantidad | number }} </mat-cell>
+        <mat-cell *matCellDef="let row"><div *ngIf="row.unidadmedida=='NIU'">S/.{{ row.mtoValorUnitario*row.cantidad | number }}</div>
+                                        <div *ngIf="row.unidadmedida=='KGM'">S/.{{ row.mtoValorUnitario*(row.codProductob.peso/row.cantidad) | number }}</div>
+        </mat-cell>
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>

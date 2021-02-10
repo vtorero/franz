@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../api.service';
 import { Clientes } from '../../modelos/clientes';
+import { EditClienteComponent } from './edit-cliente/edit-cliente.component';
+
+
 
 @Component({
   selector: 'app-clientes',
@@ -100,6 +103,43 @@ eliminarCliente(cod){
     });
   }
 
+  abrirDialogoEdit(cod) {
+    console.log("edit",cod);
+    //cod.usuario=this.usuario;
+    const dialogo2 = this.dialog2.open(EditClienteComponent, {
+      width: '600px',
+      data: cod
+    });
+    dialogo2.afterClosed().subscribe(art => {
+      if(!this.cancela){
+       if (art!= undefined)
+        this.editar(cod);
+        this.renderDataTable();
+      }
+      });
+
+  }
+
+
+editar(art:Clientes) {
+  if(art){
+  this.api.EditarCliente(art).subscribe(
+    data=>{
+      this.toastr.success('Aviso', data['messaje']);
+      },
+    erro=>{console.log(erro)}
+      );
+    this.renderDataTable();
+}
+}
+
+  abrirEditar(templateRef,cod) {
+    console.log("edit",cod);
+    const dialogo2 = this.dialog2.open(templateRef,{
+      data:cod
+    });
+  }
+
   onLoadDatos(event:any){
     console.log(this.cancela)
     if(event.target.value!="" && !this.cancela){
@@ -120,5 +160,6 @@ eliminarCliente(cod){
     this.toastr.warning("Debe indicar el Numero de DNI");
   }
  }
+ 
 
 }

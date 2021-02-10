@@ -19,6 +19,8 @@ import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
+import { Client } from './modelos/Boleta/client';
+
 
 
 @Injectable({
@@ -56,10 +58,34 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
+  public GuardarComprobante(Boleta):Observable<any>{
+    let headers = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
+    let string = JSON.stringify(Boleta);
+    return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',
+    JSON.stringify(Boleta),{ headers: headers });
+  }
+
+/*
+  public GuardarComprobante(Boleta):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(Boleta);
+    return this._http.post(Global.BASE_API_URL + 'api.php/comprobante',
+      { json: json }, { headers: headers });
+  }
+*/
   public EliminarProducto(datos: Producto): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/productodel',
+      { json: json }, { headers: headers });
+  }
+
+  public EditarCliente(datos: Clientes): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.put(Global.BASE_API_URL + 'api.php/cliente',
       { json: json }, { headers: headers });
   }
 
@@ -81,6 +107,10 @@ export class ApiService {
     return this._http.get<Categoria[]>(Global.BASE_API_URL + 'api.php/categorias', { headers: this.headers });
   }
 
+  getClienteVenta(id:number):Observable<Clientes[]> {
+    return this._http.get<Clientes[]>(Global.BASE_API_URL + 'api.php/cliente/'+id, { headers: this.headers });
+  }
+  
   getProveedorSelect(value = ''): Observable<Proveedor[]> {
     if (value == '') {
       return this._http.get<Proveedor[]>(Global.BASE_API_URL + 'api.php/proveedores', { headers: this.headers });
@@ -223,6 +253,12 @@ enviaFactura(id): Observable<any> {
     ).pipe(map(result => result));
   }
 
+  GetDetalleVenta(id: any) {
+    return this._http.get(Global.BASE_API_URL + 'api.php/venta/' + id,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
   getReportes(inicio: string, final: string, empresa: string) {
     const url = Global.BASE_API_URL + 'api.php/reporte';
     return this._http.post(url, {
@@ -265,6 +301,13 @@ enviaFactura(id): Observable<any> {
         emp: empresa
       }, { headers: this.headers }
     ).pipe(map(result => result));
+  }
+
+
+  getNumeroALetras(cantidad:number) {
+    return this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,
+    { headers: this.headers }
+  ).pipe(map(result => result));
   }
 
   public GuardarDataBanco(datos: Databanco): Observable<any> {

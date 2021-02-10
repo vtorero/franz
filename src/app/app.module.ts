@@ -54,6 +54,9 @@ import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-pro
 import { ClientesComponent } from './clientes/personas/clientes.component';
 import { EmpresasComponent } from './clientes/empresas/empresas.component';
 import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa.component';
+import { DropdownModule } from './+dropdown/dropdown.module';
+import { EditClienteComponent } from './clientes/personas/edit-cliente/edit-cliente.component';
+import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.component';
 
 
 
@@ -99,9 +102,11 @@ import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa
     AgregarventaComponent,
     AddProductoComponent,
     AddEmpresaComponent,
-    ClientesComponent],
+    ClientesComponent,
+    EditClienteComponent,
+    EditarVentaComponent],
   declarations: [
-    AppComponent,
+      AppComponent,
     PagoComponent,
     HomeComponent,
     GeneralComponent,
@@ -128,7 +133,9 @@ import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa
     AddProductoComponent,
     ClientesComponent,
     EmpresasComponent,
-    AddEmpresaComponent
+    AddEmpresaComponent,
+    EditClienteComponent,
+    EditarVentaComponent
     ],
   bootstrap: [AppComponent]
 })

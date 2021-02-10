@@ -1,4 +1,4 @@
-<mk-box header="Inventarios" [isCollapsable]="false" [isRemovable]="false">
+<mk-box header="Inventarios vencimientos" [isCollapsable]="false" [isRemovable]="false">
   <div class="example-header mat-elevation-z8">
       <mat-form-field>
          <input matInput (keyup)="applyFilter($event.target.value)" 
@@ -24,16 +24,15 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Presentación</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.presentacion}} </mat-cell>
       </ng-container>
+   
       <ng-container matColumnDef="cantidad">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
       </ng-container>
-     <!-- Columna Apellido -->
-      <ng-container matColumnDef="peso">
+     <ng-container matColumnDef="peso">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
       </ng-container>
-        <!-- Columna Nacionalidad -->
       <ng-container matColumnDef="fecha_produccion">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Producciòn</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.fecha_produccion}} </mat-cell>
@@ -51,11 +50,11 @@
             <mat-cell *matCellDef="let row">{{row.ciclo}} </mat-cell>
       </ng-container>
            
-  <ng-container matColumnDef="operaciones">
+ <!-- <ng-container matColumnDef="operaciones">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row">
             <button class="btn btn-outline-secondary" (click)="abrirEditar(row)">Editar</button>&nbsp; 
-            <!--<button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>-->
+            <!--<button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
           
           <ng-template #dialogTemplate>
            <h5>Eliminar el producto: {{row.nombre}} ?</h5>
@@ -64,6 +63,7 @@
           </ng-template>
         </td>
       </ng-container>
+-->
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

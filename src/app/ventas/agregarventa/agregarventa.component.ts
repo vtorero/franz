@@ -6,6 +6,16 @@ import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { Client } from 'src/app/modelos/Boleta/client';
+export const MY_MOMENT_FORMATS = {
+  parseInput: 'l LT',
+  fullPickerInput: 'l LT',
+  datePickerInput: 'l',
+  timePickerInput: 'LT',
+  monthYearLabel: 'MM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MM YYYY',
+};
 
 @Component({
   selector: 'app-agregarventa',
@@ -13,15 +23,17 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrls: ['./agregarventa.component.css']
 })
 
+
 @NgModule({
   imports: [OwlDateTimeModule, OwlNativeDateTimeModule, BrowserModule, MatPaginatorModule],
-  providers: [{ provide: OWL_DATE_TIME_FORMATS, useValue: { useUtc: true } },]
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
 export class AgregarventaComponent implements OnInit {
-  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio', 'borrar'];
-  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
+  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
+  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataClientes: any;
+  dataClient: any;
   dataEmpresas: any;
   dataProductos: any;
   exampleArray: any[] = [];
@@ -31,6 +43,7 @@ export class AgregarventaComponent implements OnInit {
   selected: string;
   filter: any;
   constructor(
+
     private api: ApiService,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
@@ -123,17 +136,18 @@ export class AgregarventaComponent implements OnInit {
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
-      data: new DetalleVenta(0, 0, 0, '', 0, 0, 0)
+      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,'')
     });
     dialogo1.afterClosed().subscribe(art => {
-      console.log("art", art)
-      if (art != undefined)
+      console.log("art",art)
+      if (art)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
     });
   }
+
   ngOnInit() {
     this.getVendedores();
     this.getclientes();

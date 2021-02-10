@@ -46,7 +46,7 @@ export class EditCompraComponent implements OnInit {
     public dialog:MatDialog,
     @Inject(MAT_DIALOG_DATA) public data:Compra,
     dateTimeAdapter: DateTimeAdapter<any>,
-    private toastr: ToastrService,
+    private toastr: ToastrService
       ) {
      
         dateTimeAdapter.setLocale('es-PE');
@@ -58,7 +58,7 @@ export class EditCompraComponent implements OnInit {
             this.dataProveedor = data;
           }
         } );
-            }
+      }
 
       deleteTicket(rowid: number){
        

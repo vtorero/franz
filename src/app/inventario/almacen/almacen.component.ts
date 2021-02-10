@@ -14,7 +14,7 @@ import { AddInventarioComponent } from '../add-inventario/add-inventario.compone
 export class AlmacenComponent implements OnInit {
 dataSource:any;
 cancela: boolean = false;
-displayedColumns = ['id_producto','codigo', 'nombre', 'cantidad', 'peso','opciones'];
+displayedColumns = ['id_producto','codigo', 'nombre','granel', 'cantidad','merma'];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -42,7 +42,7 @@ displayedColumns = ['id_producto','codigo', 'nombre', 'cantidad', 'peso','opcion
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddInventarioComponent, {
-      data: new Inventario(0, 0,'','', 0, 0,'','','', 0, 0, 0, '')
+      data: new Inventario(0,0,0,0,0,0,0,0,0,'','','','','')
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)

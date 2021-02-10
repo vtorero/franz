@@ -11,6 +11,7 @@ import { Details } from '../modelos/Boleta/details';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
 import { AgregarventaComponent } from './agregarventa/agregarventa.component';
+import { EditarVentaComponent } from './editar-venta/editar-venta.component';
 
 
 function sendInvoice(data, nro) {
@@ -45,7 +46,7 @@ export class VentasComponent implements OnInit {
   letras: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
-  detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'');
+  detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
@@ -84,7 +85,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, 0, [],false)
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, Global.BASE_IGV, 0, 0, [], false)
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -147,29 +148,29 @@ export class VentasComponent implements OnInit {
 
         let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
         detalleBoleta.codProducto = value.codProductob.codigo;
-        detalleBoleta.unidad = value.unidadmedida;
-
         detalleBoleta.descripcion = value.codProductob.nombre;
-        detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
 
-        if(value.unidadmedida=="NIU"){
+        detalleBoleta.unidad = value.unidadmedida;
+        //if(value.unidadmedida=="NIU"){
+        detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
         detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
         detalleBoleta.igv = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
         detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
-        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario +(value.mtoValorUnitario * Global.BASE_IGV);
+        detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario + (value.mtoValorUnitario * Global.BASE_IGV);
         total = total + (value.cantidad * value.mtoValorUnitario);
-        }
-        if(value.unidadmedida=="KGM"){
-         detalleBoleta.mtoValorVenta = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
-         detalleBoleta.mtoBaseIgv = (value.codProductob.peso/value.cantidad)* value.mtoValorUnitario;
-         detalleBoleta.igv = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
-         detalleBoleta.totalImpuestos = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) * Global.BASE_IGV;
-         detalleBoleta.mtoPrecioUnitario = ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario) + value.mtoValorUnitario * Global.BASE_IGV;
-        total = total + ((value.codProductob.peso/value.cantidad)* value.mtoValorUnitario);
-        }
-        
+        //}
+        /*if(value.unidadmedida=="KGM"){
+        detalleBoleta.cantidad = value.cantidad/1000;
+         detalleBoleta.mtoValorVenta = (value.cantidad/value.codProductob.peso/1000)* value.mtoValorUnitario;
+         detalleBoleta.mtoBaseIgv = (value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario;
+         detalleBoleta.igv = ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario) * Global.BASE_IGV;
+         detalleBoleta.totalImpuestos = ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario) * Global.BASE_IGV;
+         detalleBoleta.mtoPrecioUnitario = ((value.cantidad/value.codProductob.peso/1000)* value.mtoValorUnitario) + value.mtoValorUnitario * Global.BASE_IGV;
+        total = total + ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario);
+        }*/
+
         detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.tipAfeIgv = 10;
         console.log("total", total);
@@ -179,11 +180,11 @@ export class VentasComponent implements OnInit {
       boleta.mtoOperGravadas = total;
       boleta.mtoIGV = total * Global.BASE_IGV;
       boleta.totalImpuestos = total * Global.BASE_IGV;
-        boleta.valorVenta = total,
+      boleta.valorVenta = total,
         boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
         boleta.company = this.company;
-        this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
-        console.log("letrass",data);
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
+        console.log("letrass", data);
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
       });
 
@@ -197,30 +198,40 @@ export class VentasComponent implements OnInit {
               this.toastr.error(art.comprobante + " no recibida");
             }
           });
-          if (art.imprimir) {
-            sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
-          }
+        if (art.imprimir) {
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
+        }
 
       }, 5000);
-  
+
 
     }
 
-    if (art){
-      console.log("ventaaaa",art)
-      this.api.GuardarVenta(art).subscribe(
-
-        data => {
-          this.toastr.success(data['messaje']);
-        },
+    if (art) {
+      this.api.GuardarVenta(art).subscribe(data => {
+        this.toastr.success(data['messaje']);
+      },
         error => { console.log(error) }
       );
       this.renderDataTable();
     }
-
-
   }
 
+  abrirEditar(cod: Venta) {
+    const dialogo2 = this.dialog2.open(EditarVentaComponent, {
+      data: cod
+    });
+    dialogo2.afterClosed().subscribe(art => {
+      console.log(art);
+      if (art != undefined)
+        this.editar(art);
+      //this.renderDataTable();
+    });
+  }
+
+  editar(art) {
+    sendInvoice(JSON.stringify(art), art.serie + art.correlativo);
+  }
 
   cancelar() {
     this.dialog.closeAll();

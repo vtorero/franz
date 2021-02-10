@@ -8,6 +8,8 @@ export class Venta {
         public	estado:number,
         public comprobante:string,
         public fecha:Date,
+        public igv:number,
+        public monto_igv:number,
         public valor_total:number,
         public detalleVenta:Array<DetalleVenta>,
         public imprimir:boolean,

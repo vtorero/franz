@@ -16,6 +16,7 @@ import { VendedoresComponent } from './vendedores/vendedores.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { ClientesComponent } from './clientes/personas/clientes.component';
 import { EmpresasComponent } from './clientes/empresas/empresas.component';
+import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path:'inventario',
         component:InventarioComponent
+      },
+      {
+        path:'dosimetria',
+        component:DosimetriaComponent
       },
       {
         path:'almacen',

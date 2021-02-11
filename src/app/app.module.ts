@@ -58,6 +58,7 @@ import { DropdownModule } from './+dropdown/dropdown.module';
 import { EditClienteComponent } from './clientes/personas/edit-cliente/edit-cliente.component';
 import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.component';
 import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empresa.component';
+import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 
 
 
@@ -138,7 +139,8 @@ import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empr
     AddEmpresaComponent,
     EditClienteComponent,
     EditarVentaComponent,
-    EditEmpresaComponent
+    EditEmpresaComponent,
+    DosimetriaComponent
     ],
   bootstrap: [AppComponent]
 })

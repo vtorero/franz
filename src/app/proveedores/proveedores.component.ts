@@ -76,7 +76,7 @@ export class ProveedoresComponent implements OnInit {
   
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddProveedorComponent, {
-      data: new Proveedor('', '','', '','','','','')
+      data: new Proveedor('', '','', '','','','','','')
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)

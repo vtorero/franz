@@ -45,6 +45,12 @@ export class ApiService {
     ).pipe(map(result => result));
   }
 
+  getMaxId(tabla:string){
+    return this._http.get(Global.BASE_API_URL + 'api.php/correlativo/' +tabla,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
   getProductos() {
     return this._http.get(Global.BASE_API_URL + 'api.php/productos',
       { headers: this.headers }
@@ -194,6 +200,11 @@ export class ApiService {
     return this._http.delete(Global.BASE_API_URL + 'api.php/proveedor/'+id,{headers:headers});
   }
 
+  public EliminarEmpresa(id:number): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/empresa/'+id,{headers:headers});
+  }
+
   public EliminarCliente(id:string): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this._http.delete(Global.BASE_API_URL + 'api.php/cliente/'+id,{headers:headers});
@@ -292,6 +303,13 @@ enviaFactura(id): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/empresa',
+      { json: json }, { headers: headers });
+  }
+
+  EditarEmpresa(datos:Proveedor): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.put(Global.BASE_API_URL + 'api.php/empresa',
       { json: json }, { headers: headers });
   }
 

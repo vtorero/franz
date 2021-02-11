@@ -14,8 +14,8 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 import { EditarVentaComponent } from './editar-venta/editar-venta.component';
 
 
-function sendInvoice(data, nro) {
-  fetch('https://facturacion.apisperu.com/api/v1/invoice/pdf', {
+function sendInvoice(data, nro,url) {
+  fetch(url, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -41,6 +41,7 @@ function sendInvoice(data, nro) {
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
+  boletacorrelativo:any;
   public Moment = new Date();
   client: any;
   letras: any;
@@ -68,6 +69,14 @@ export class VentasComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
+
+  getID(){
+    this.api.getMaxId('ventas').subscribe(id=>{
+      this.boletacorrelativo=id[0].ultimo;
+      //console.log("idddddddddddd",id[0].ultimo)
+    });
+  }
+
   renderDataTable() {
     this.api.getApi('ventas').subscribe(x => {
       this.dataSource = new MatTableDataSource();
@@ -80,12 +89,14 @@ export class VentasComponent implements OnInit {
       });
   }
   ngOnInit() {
+    this.getID();
     this.renderDataTable();
+
   }
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, Global.BASE_IGV, 0, 0, [], false)
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -101,15 +112,13 @@ export class VentasComponent implements OnInit {
     return str;
   }
 
-
-
   agregar(art: Venta) {
     console.log(art);
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
       let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
-      boleta.tipoOperacion = "0101";
+ 
       boleta.fechaEmision = art.fecha;
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -122,16 +131,18 @@ export class VentasComponent implements OnInit {
 
       /**cliente*/
       if (art.cliente.nombre) {
+        boleta.tipoOperacion = "0101";
         boleta.tipoDoc = "03";
         boleta.serie = "B001";
-        boleta.correlativo = "4";
+        boleta.correlativo = this.boletacorrelativo;
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
+        boleta.tipoOperacion = "1001";
         boleta.tipoDoc = "01";
         boleta.serie = "F001";
-        boleta.correlativo = "4";
+        boleta.correlativo = this.boletacorrelativo;
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
       }
@@ -191,7 +202,6 @@ export class VentasComponent implements OnInit {
       setTimeout(() => {
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
-
             if (data.sunatResponse.success) {
               this.toastr.success(data.sunatResponse.cdrResponse.description);
             } else {
@@ -199,10 +209,10 @@ export class VentasComponent implements OnInit {
             }
           });
         if (art.imprimir) {
-          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo);
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
 
-      }, 5000);
+      },5000);
 
 
     }
@@ -222,7 +232,6 @@ export class VentasComponent implements OnInit {
       data: cod
     });
     dialogo2.afterClosed().subscribe(art => {
-      console.log(art);
       if (art != undefined)
         this.editar(art);
       //this.renderDataTable();
@@ -230,7 +239,78 @@ export class VentasComponent implements OnInit {
   }
 
   editar(art) {
-    sendInvoice(JSON.stringify(art), art.serie + art.correlativo);
+    console.log(art);
+    let fech;
+    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
+    fech=art.fecha+"T00:00:00-05:00"
+    boleta.fechaEmision = fech  ;
+    boleta.tipoMoneda = "PEN";
+    boleta.ublVersion = "2.1";
+
+    /**cliente*/
+    if (art.comprobante=='Boleta') {
+      boleta.tipoOperacion = "0101";
+      boleta.tipoDoc = "03";
+      boleta.serie = "B001";
+      boleta.correlativo = art.id;
+      boleta.client.tipoDoc = "1";
+      boleta.client.rznSocial = art.cliente;
+    }
+    if (art.comprobante=='Factura') {
+      boleta.tipoOperacion = "1001";
+      boleta.tipoDoc = "01";
+      boleta.serie = "F001";
+      boleta.correlativo = this.boletacorrelativo;
+      boleta.client.tipoDoc = "6";
+      boleta.client.rznSocial = art.cliente;
+    }
+
+    boleta.client.numDoc = art.num_documento;
+    boleta.client.address.direccion = art.direccion;
+
+    /*company*/
+    boleta.company.ruc = "20605174095";
+    boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+    boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
+    let total = 0;
+    art.detalleVenta.forEach(function (value: any) {
+      
+      let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      detalleBoleta.codProducto = value.codigo;
+      detalleBoleta.descripcion = value.nombre;
+      detalleBoleta.mtoValorUnitario = Number(value.precio);
+      detalleBoleta.unidad = value.unidad_medida;
+     
+      detalleBoleta.cantidad = Number(value.cantidad);
+      detalleBoleta.mtoValorVenta = Number(value.precio) * Number(value.cantidad);
+      detalleBoleta.mtoBaseIgv = Number(value.precio);
+      detalleBoleta.igv = Number(value.precio) * Global.BASE_IGV;
+      detalleBoleta.totalImpuestos = Number(value.precio) * Global.BASE_IGV;
+      detalleBoleta.mtoPrecioUnitario = Number(value.precio) + (value.precio * Global.BASE_IGV);
+      detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
+      detalleBoleta.tipAfeIgv = 10;
+      boleta.details.push(detalleBoleta);
+    });
+
+    boleta.mtoOperGravadas = Number(art.valor_neto);
+    boleta.mtoIGV = Number(art.monto_igv);
+    boleta.totalImpuestos = Number(art.monto_igv);
+    boleta.valorVenta = Number(art.valor_total),
+      boleta.mtoImpVenta = Number(art.valor_total),
+      boleta.company = this.company;
+    this.api.getNumeroALetras(art.valor_total).subscribe(data => {
+      boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+    });
+
+    setTimeout(() => {
+      console.log("boletaaaa",boleta);
+      sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
+    },2000);
+
+  
+
+
+    //sendInvoice(JSON.stringify(art), art.serie + art.correlativo);
   }
 
   cancelar() {

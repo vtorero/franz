@@ -8,6 +8,9 @@ if($method == "OPTIONS") {
     die();
 }
 require_once 'vendor/autoload.php';
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 $app = new Slim\Slim();
 $db = new mysqli("localhost","marife","libido16","frdash");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -184,18 +187,16 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $peso=(is_array($data->peso))? array_shift($data->peso): $data->peso;
             $costo=(is_array($data->costo))? array_shift($data->costo): $data->costo;
-            $precio=(is_array($data->precio_sugerido))? array_shift($data->precio_sugerido): $data->precio_sugerido;
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
             $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
     
         
-           $query ="INSERT INTO productos (codigo,nombre,peso,costo,precio_sugerido,id_categoria,id_subcategoria,usuario) VALUES ("
+           $query ="INSERT INTO productos (codigo,nombre,peso,costo,id_categoria,id_subcategoria,usuario) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
           ."'{$peso}',"
           ."{$costo},"
-          ."{$precio},"
           ."{$categoria},"
           ."{$sub_categoria},"
           ."'{$usuario}'".")";
@@ -250,7 +251,7 @@ $app->get("/proveedores",function() use($db,$app){
 
 $app->get("/empresas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `empresas` order by id desc");  
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` order by id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -559,7 +560,7 @@ $app->get("/vendedores",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -629,6 +630,18 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
         
             echo  json_encode($result);   
     });
+
+    $app->get("/correlativo/:tabla",function($tabla) use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");  
+        $prods=array();
+            while ($fila = $resultado->fetch_array()) {
+                $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+            echo  $respuesta;    
+    });
+
 
     $app->get("/venta/:id",function($id) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
@@ -747,38 +760,60 @@ $app->get("/empresas/:criterio",function($criterio) use($db,$app){
         
 });
 
-     
+$app->delete("/empresa/:ruc",function($ruc) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+                  $query ="DELETE FROM empresas WHERE num_documento='{$ruc}'";
+                  if($db->query($query)){
+       $result = array("STATUS"=>true,"messaje"=>"Empresa eliminado correctamente");
+       }
+       else{
+        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar empresa");
+       }
+       
+        echo  json_encode($result);
+    });
+
+    $app->put("/empresa",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+           try { 
+            $query ="UPDATE empresas SET razon_social='{$data->razon_social}',direccion='{$data->direccion}',telefono='{$data->telefono}',departamento='{$data->departamento}',provincia='{$data->provincia}',distrito='{$data->distrito}' where id={$data->id}";
+            $db->query($query);
+            $result = array("STATUS"=>true,"messaje"=>"Ciente actualizado correctamente");
+              }
+             catch(PDOException $e) {
+            $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+    });
+    
 $app->post("/empresa",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-        $ruc=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
-        $razon_social=(is_array($data->razon_social)) ? array_shift(str_replace("'","\'",$data->razon_social)):str_replace("'","\'",$data->razon_social);
-        $direccion=(is_array($data->direccion))? array_shift($data->direccion): $data->direccion;
-        $departamento=(is_array($data->departamento))? array_shift($data->departamento): $data->departamento;
-        $provincia=(is_array($data->provincia))? array_shift($data->provincia): $data->provincia;
-        $distrito=(is_array($data->distrito))? array_shift($data->distrito): $data->distrito;
-        $num_documento=(is_array($data->num_documento))? array_shift($data->num_documento): $data->num_documento;
-        $estado=(is_array($data->estado))? array_shift($data->estado): $data->estado;
-
-      $query ="INSERT INTO empresas (razon_social, direccion, num_documento, departamento,provincia,distrito,estado) VALUES ("
-      ."'{$razon_social}',"
-      ."'{$direccion}',"
-      ."'{$ruc}',"
-      ."'{$departamento}',"
-      ."'{$provincia}',"
-      ."'{$distrito}',"
-      ."'{$estado}'".")";
-        $estado=$db->query($query);
-        $db->close();
-if($estado){
-        $result = array("STATUS"=>true,"messaje"=>"Empresa registrada correctamente","string"=>$estado);
-    }else{
-        $result = array("STATUS"=>false,"messaje"=>$estado);
-    }
-       echo  json_encode($result);
+       $query ="INSERT INTO empresas (razon_social, direccion, num_documento, departamento,provincia,distrito,estado) VALUES ("
+      ."'{$data->razon_social}',"
+      ."'{$data->direccion}',"
+      ."'{$data->num_documento}',"
+      ."'{$data->departamento}',"
+      ."'{$data->provincia}',"
+      ."'{$data->distrito}',"
+      ."'{$data->estado}'".")";
+         $exe=$db->query($query);
+        if($exe){
+        $result = array("STATUS"=>true,"messaje"=>"Cliente registrado correctamente");    
+        }else {
+            $result = array("STATUS"=>false,"messaje"=>"Cliente no registrado correctamente");    
+        }
+        
+      echo  json_encode($result); 
     });
 
     $app->get("/numeroletras/:cantidad",function($cantidad) use($db,$app){

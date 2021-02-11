@@ -6,6 +6,7 @@ export class Proveedor {
         public departamento:string,
         public provincia:string,
         public distrito:string,
+        public telefono:string,
         public num_documento: string,
         public estado:string
     ){}

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../api.service';
 import { Proveedor } from '../../modelos/proveedor';
 import { AddEmpresaComponent } from './add-empresa/add-empresa.component';
+import { EditEmpresaComponent } from './edit-empresa/edit-empresa.component';
 
 @Component({
   selector: 'app-empresas',
@@ -51,7 +52,7 @@ export class EmpresasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!this.cancela) {
         if (cod) {
-          this.api.EliminarProveedor(cod).subscribe(
+          this.api.EliminarEmpresa(cod).subscribe(
             data => {
               this.toastr.success( data['messaje']);
             },
@@ -76,11 +77,10 @@ export class EmpresasComponent implements OnInit {
   
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddEmpresaComponent, {
-      data: new Proveedor('', '','', '','','','','')
+      data: new Proveedor('', '','', '','','','','','')
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
-     console.log("·");
        this.agregar(art);
       }
       );
@@ -95,6 +95,30 @@ export class EmpresasComponent implements OnInit {
       erro=>{console.log(erro['messaje'])}
         );
       this.renderDataTable();
+  }
+}
+
+abrirEditar(cod: Proveedor) {
+  console.log("compra",cod)
+  const dialogo2 = this.dialog2.open(EditEmpresaComponent, {
+    data: cod
+  });
+  dialogo2.afterClosed().subscribe(art => {
+    console.log(art);
+    if (art != undefined)
+      this.editar(art);
+    this.renderDataTable();
+  });
+}
+
+editar(art: any) {
+  if (art) {
+    this.api.EditarEmpresa(art).subscribe(
+      data => {
+        this.toastr.success(data['messaje']);
+      },
+      erro => { console.log(erro) }
+    );
   }
 }
 

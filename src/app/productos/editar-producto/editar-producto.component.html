@@ -13,11 +13,8 @@
         </mat-form-field>
           <mat-form-field>
             <input matInput [(ngModel)]="data.costo" type="number" placeholder="S/.Ingrese costo" required>
+            <input hidden [(ngModel)]="data.usuario" type="texto">
         </mat-form-field>
-          <mat-form-field>
-              <input matInput [(ngModel)]="data.precio_sugerido" type="number" placeholder="S/.Ingrese precio sugerido" required>
-              <input hidden [(ngModel)]="data.usuario" type="texto">
-          </mat-form-field>
           <mat-form-field>
             <mat-label>Categoria</mat-label>
             <mat-select [(ngModel)]="data.id_categoria">

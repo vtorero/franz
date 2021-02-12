@@ -1,0 +1,36 @@
+<div style="height: auto;overflow-y: auto;overflow-x: hidden;">
+  <form #formGeneral="ngForm">
+    <div mat-dialog-content>
+      <h3>Registrar Movimiento</h3>
+      <div style="display: flex;flex-direction:column; margin:0.5rem auto; width:500px; padding: 1rem;">
+        <mat-form-field>
+          <mat-label>Seleccionar Insumo</mat-label>
+          <mat-select name="id" [(ngModel)]="data">
+            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar insumo..">
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let dat of dataInsumos" [value]="dat.id">{{dat.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Operación</mat-label>
+          <mat-select name="operacion" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let ope of dataOperacion" [value]="ope.id">{{ope.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Unidad Medida</mat-label>
+          <mat-select name="unidadmedida" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let und of dataUnidades" (onSelectionChange)="changemedida($event)" [value]="und.id">{{und.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cantidad</mat-label>
+          <input matInput  type="text" placeholder="Ingrese cantidad" required>
+      </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>

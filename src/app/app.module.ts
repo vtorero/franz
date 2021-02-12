@@ -59,6 +59,7 @@ import { EditClienteComponent } from './clientes/personas/edit-cliente/edit-clie
 import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.component';
 import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empresa.component';
 import { DosimetriaComponent } from './dosimetria/dosimetria.component';
+import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetria.component';
 
 
 
@@ -107,7 +108,8 @@ import { DosimetriaComponent } from './dosimetria/dosimetria.component';
     ClientesComponent,
     EditClienteComponent,
     EditarVentaComponent,
-  EditEmpresaComponent],
+  EditEmpresaComponent,
+  AddDosimetriaComponent],
   declarations: [
       AppComponent,
     PagoComponent,
@@ -140,7 +142,8 @@ import { DosimetriaComponent } from './dosimetria/dosimetria.component';
     EditClienteComponent,
     EditarVentaComponent,
     EditEmpresaComponent,
-    DosimetriaComponent
+    DosimetriaComponent,
+    AddDosimetriaComponent
     ],
   bootstrap: [AppComponent]
 })

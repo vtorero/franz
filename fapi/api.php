@@ -36,6 +36,30 @@ $app->get("/productos",function() use($db,$app){
         
     });
 
+    $app->get("/dosimetria",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+        $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria");  
+        $prods=array();
+            while ($fila = $resultado->fetch_array()) {
+             $prods[]=$fila;
+            }
+            $respuesta=json_encode($prods);
+            echo  $respuesta;
+            
+ });
+
+ $app->get("/dosimetria/:criterio",function($criterio) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria where descripcion like '%{$criterio}%'");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+         $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 $app->get("/categorias",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $resultado = $db->query("SELECT id, nombre  FROM  categorias order by id");  

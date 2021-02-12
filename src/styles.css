@@ -14,6 +14,23 @@
 /* based on angular-toastr css https://github.com/Foxandxss/angular-toastr/blob/cb508fe6801d6b288d3afc525bb40fee1b101650/dist/angular-toastr.css */
 
 /* position */
+
+.mat-cell{
+  justify-content: center;
+}
+.mat-header-cell{
+  justify-content: center;
+  font-weight: bold;
+}
+
+.mat-cell,.mat-header-cell {
+  text-align: center !important;
+  justify-content: center !important;
+}
+td.mat-cell,th.mat-header-cell{
+  border-bottom-style: unset !important;
+}
+
 .toast-center-center {
   top: 50%;
   left: 50%;

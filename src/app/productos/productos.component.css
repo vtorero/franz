@@ -1,3 +1,11 @@
+.mat-cell{
+    justify-content: center;
+}
+.mat-header-cell{
+    justify-content: center;
+    font-weight: bold;
+}
+
 .mat-cell,.mat-header-cell {
     text-align: center !important;
     justify-content: center !important;
@@ -5,10 +13,3 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
-
-@media (max-width: 767px) {
-    .mat-cell,.mat-header-cell{
-        font-size: 10px;
-    }
-}
-

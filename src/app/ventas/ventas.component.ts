@@ -171,17 +171,6 @@ export class VentasComponent implements OnInit {
         detalleBoleta.totalImpuestos = (value.cantidad * value.mtoValorUnitario) * Global.BASE_IGV;
         detalleBoleta.mtoPrecioUnitario = value.mtoValorUnitario + (value.mtoValorUnitario * Global.BASE_IGV);
         total = total + (value.cantidad * value.mtoValorUnitario);
-        //}
-        /*if(value.unidadmedida=="KGM"){
-        detalleBoleta.cantidad = value.cantidad/1000;
-         detalleBoleta.mtoValorVenta = (value.cantidad/value.codProductob.peso/1000)* value.mtoValorUnitario;
-         detalleBoleta.mtoBaseIgv = (value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario;
-         detalleBoleta.igv = ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario) * Global.BASE_IGV;
-         detalleBoleta.totalImpuestos = ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario) * Global.BASE_IGV;
-         detalleBoleta.mtoPrecioUnitario = ((value.cantidad/value.codProductob.peso/1000)* value.mtoValorUnitario) + value.mtoValorUnitario * Global.BASE_IGV;
-        total = total + ((value.cantidad/value.codProductob.peso/1000) * value.mtoValorUnitario);
-        }*/
-
         detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.tipAfeIgv = 10;
         console.log("total", total);
@@ -307,10 +296,6 @@ export class VentasComponent implements OnInit {
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
     },2000);
 
-  
-
-
-    //sendInvoice(JSON.stringify(art), art.serie + art.correlativo);
   }
 
   cancelar() {

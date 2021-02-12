@@ -5,7 +5,7 @@
       <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
         <mat-form-field>
           <input matInput [(ngModel)]="data.num_documento" ng-minlength="11" name="num_documento" type="text"
-            placeholder="Ingrese Ruc" (focusout)="onLoadDatos($event)" readonly>
+            placeholder="Ingrese Ruc" readonly>
         </mat-form-field>
         <mat-form-field>
           <input matInput [(ngModel)]="data.razon_social" name="razon_social" type="text"

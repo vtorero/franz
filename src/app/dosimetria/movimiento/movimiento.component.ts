@@ -18,7 +18,7 @@ export class MovimientoComponent implements OnInit {
   startDate: Date = new Date();
   
   cancela: boolean = false;
-  displayedColumns = ['codigo', 'descripcion', 'movimiento','unidad','cantidad','fecha_registro','usuario' ,'borrar'];
+  displayedColumns = ['codigo', 'descripcion', 'movimiento','unidad','cantidad_movimiento','cantidad','fecha_registro' ];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -28,6 +28,11 @@ export class MovimientoComponent implements OnInit {
     dateTimeAdapter.setLocale('es-PE');
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
   renderDataTable() {
     this.api.getApi('movimientos').subscribe(x => {
       this.dataSource = new MatTableDataSource();
@@ -46,10 +51,22 @@ export class MovimientoComponent implements OnInit {
       width:'600px'
     });
     dialogo1.afterClosed().subscribe(art => {
-      console.log(art);
-      //  this.agregar(art);
+      this.agregar(art);
       this.renderDataTable();
     });
+  }
+
+  agregar(art:any) {
+    console.log(art)
+    if (art) {
+      this.api.GuardarDosimetriaMov(art).subscribe(
+        data => {
+          this.toastr.success(data['messaje']);
+        },
+        error => { console.log(error) }
+      );
+      this.renderDataTable();
+    }
   }
 
   ngOnInit() {

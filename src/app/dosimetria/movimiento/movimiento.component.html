@@ -13,7 +13,7 @@
       </ng-container>
       <ng-container matColumnDef="codigo">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{row.codigo_insumo}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="descripcion">
@@ -28,24 +28,23 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.unidad}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="cantidad_movimiento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Movimiento</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad_movimiento}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="fecha_registro">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Registro</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Movimiento</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha_registro}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="inventario_inicial">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Inventario inicial</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.inventario_inicial}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="usuario">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Creado por</span>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.usuario}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="borrar">
+        <!--<ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row ">
           <button class="btn btn-outline-secondary" (click)="A(row)">Editar</button>&nbsp;
@@ -57,7 +56,7 @@
             <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
           </ng-template>
         </td>
-      </ng-container>
+      </ng-container>-->
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>

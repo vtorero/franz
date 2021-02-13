@@ -15,10 +15,6 @@
               <mat-option *ngFor="let und of dataUnidades"  [value]="und.id">{{und.tipo}}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
-            <input matInput name="inventario_inicial" #inventario_inicial="ngModel"  [(ngModel)]="data.inventario_inicial" type="number" placeholder="Inventario inicial" required>
-            <input hidden [(ngModel)]="usuario" type="text">
-        </mat-form-field>
              </div>
   </div>
   <div mat-dialog-actions>

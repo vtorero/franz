@@ -19,7 +19,7 @@ export class DosimetriaComponent implements OnInit {
   startDate: Date = new Date();
   
   cancela: boolean = false;
-  displayedColumns = ['codigo', 'descripcion', 'inventario_inicial','fecha_registro','usuario' ,'borrar'];
+  displayedColumns = ['codigo', 'descripcion', 'fecha_registro','usuario' ,'borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -29,6 +29,13 @@ export class DosimetriaComponent implements OnInit {
     dateTimeAdapter: DateTimeAdapter<any>) {
     dateTimeAdapter.setLocale('es-PE');
   }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); 
+    filterValue = filterValue.toLowerCase(); 
+    this.dataSource.filter = filterValue;
+}
+
 
   renderDataTable() {
     this.api.getApi('dosimetria').subscribe(x => {

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { ApiService } from 'src/app/api.service';
 import { Movimiento } from 'src/app/modelos/movimiento';
 
@@ -11,10 +11,12 @@ import { Movimiento } from 'src/app/modelos/movimiento';
 export class AddDosimetriaComponent implements OnInit {
 dataInsumos;
 dataArray;
+unidad:string='';
 dataOperacion = [{ id:'entrada',tipo: 'Entrada' },{ id:'salida', tipo:'Salida'}];
 dataUnidades = [{ id: 'unidad', tipo: 'Unidades' }, { id: 'kilogramo', tipo: 'Kilogramo' }];
   constructor(private api: ApiService,
-    @Inject(MAT_DIALOG_DATA) public data: Movimiento
+    @Inject(MAT_DIALOG_DATA) public data: Movimiento,
+    public dialog: MatDialog,
     
     ) { }
 
@@ -39,8 +41,19 @@ dataUnidades = [{ id: 'unidad', tipo: 'Unidades' }, { id: 'kilogramo', tipo: 'Ki
 
   }
 
+  selectInsumo(ev,value){
+    if (ev.source.selected) {
+    this.data.unidad=value.unidad;
+    }
+  }
+
   ngOnInit() {
     this.getInsumos();
   }
+
+  cancelar() {
+    this.dialog.closeAll();
+  }
+
 
 }

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { Dosimetria } from 'src/app/modelos/dosimetria';
 
 @Component({
@@ -9,13 +9,18 @@ import { Dosimetria } from 'src/app/modelos/dosimetria';
 })
 export class AddInsumoComponent implements OnInit {
   dataOperacion = [{ id: 'entrada', tipo: 'Entrada' }, { id:'salida', tipo: 'Salida' }];
-  dataUnidades = [{ id: 'NIU', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo' }];
+  dataUnidades = [{ id: 'UNI', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo' }];
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: Dosimetria)
+    @Inject(MAT_DIALOG_DATA) public data: Dosimetria,
+    public dialog: MatDialog,)
   { }
 
   ngOnInit() {
 
+  }
+
+  cancelar() {
+    this.dialog.closeAll();
   }
 
 }

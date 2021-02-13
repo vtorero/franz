@@ -73,6 +73,12 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/dosimetria',
       { json: json }, { headers: headers });
   }
+  public GuardarDosimetriaMov(datos){
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/dosimetriamov',
+      { json: json }, { headers: headers });
+  }
 
   public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()

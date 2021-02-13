@@ -12,12 +12,12 @@ export const adminLteConf = {
     {label: 'MENU', separator: true},
     {label: 'Inventarios',iconClasses: 'fa fa-edit',children:[
       {label:'Almacen',iconClasses: 'fa fa-table',route: 'general/almacen'},  
-      {label:'Vencimiento',iconClasses: 'fa fa-table',route: 'general/inventario'},  
-      {label:'Dosimetria',iconClasses: 'fa fa-table',children:[
-        {label:'Insumos',iconClasses: 'fa fa-table',route: 'general/dosimetria'},
-        {label:'Movimientos',iconClasses: 'fa fa-table',route: 'general/movimientos'}
-      ]}  
+      {label:'Vencimiento',iconClasses: 'fa fa-table',route: 'general/inventario'}
     ]},
+    {label:'Dosimetria',iconClasses: 'fa fa-table',children:[
+      {label:'Insumos',iconClasses: 'fa fa-table',route: 'general/dosimetria'},
+      {label:'Movimientos',iconClasses: 'fa fa-table',route: 'general/movimientos'}
+    ]},  
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
     {label: 'Listado', route: 'general/productos'},  
     {label: 'Categorias', route: 'categorias'},
@@ -38,6 +38,9 @@ export const adminLteConf = {
     ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}
+    ]},
+    {label: 'Reportes',iconClasses: 'fa fa-files-o',children:[
+      {label: 'Productos', route: 'dash/reportes'}
     ]},
      /*
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},

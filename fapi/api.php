@@ -38,7 +38,7 @@ $app->get("/productos",function() use($db,$app){
 
     $app->get("/dosimetria",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
+        $resultado = $db->query("SELECT id,codigo,descripcion,unidad,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
              $prods[]=$fila;
@@ -47,6 +47,19 @@ $app->get("/productos",function() use($db,$app){
             echo  $respuesta;
             
  });
+
+ $app->get("/movimientos",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo order by m.id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+         $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 
  $app->delete("/dosimetria/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -84,6 +97,28 @@ $app->get("/productos",function() use($db,$app){
     
              echo  json_encode($result);   
 });
+
+$app->post("/dosimetriamov",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       try { 
+        
+        $sql="call p_movimiento('{$data->codigo}','{$data->operacion}','{$data->unidad}',{$data->cantidad},'{$data->usuario}')";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $result = array("STATUS"=>true,"messaje"=>"Movimiento registrado correctamente");
+        }
+        catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+             echo  json_encode($result);   
+});
+
 
  $app->get("/dosimetria/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -1116,7 +1151,25 @@ if(count($contar)>0){
             $respuesta=json_encode($prods);
             echo  $respuesta;
         });
+/*reporte productos*/
 
+$app->get("/reportesubcategoria",function() use($db,$app){
+    $json = $app->request->getBody();
+       $dat = json_decode($json, true);
+       $fechainicio= $dat["inicio"];
+       $fechafin=$dat["fin"];
+       $sucur=array();
+       $result=$db->query("SELECT s.nombre,count(*) total from productos p,  sub_categorias s where p.id_subcategoria=s.id  group by 1 order by 2 desc");
+    
+      $datos=array();
+       while ($filas = $result->fetch_array()){
+               $datos[]=$filas;
+           }
+            $data = array("status"=>200,"data"=>$datos);
+   
+             echo  json_encode($data);
+   
+   });
 
 /*dashboard adops*/
 
@@ -1367,30 +1420,6 @@ $app->post("/inicio",function() use($db,$app){
 
 
 /*final adops dashobard*/
-
-    $app->post("/skoda",function() use($db,$app){
-        $query ="INSERT INTO skoda (source,origen,nombres,apellidos,rut,telefono,correo,marca,modelo,concesionario,dispositivo)  VALUES ("
-        ."'{$app->request->post("source")}',"
-        ."'{$app->request->post("origen")}',"
-         ."'{$app->request->post("nombres")}',"
-         ."'{$app->request->post("apellidos")}',"
-         ."'{$app->request->post("rut")}',"
-         ."'{$app->request->post("telefono")}',"
-         ."'{$app->request->post("correo")}',"
-         ."'{$app->request->post("marca")}',"
-         ."'{$app->request->post("modelo")}',"
-         ."'{$app->request->post("concesionario")}',"
-         ."'{$app->request->post("dispositivo")}'"
-         .")";
-
-         $insert= $db->query($query);
-          if($insert){
-          $result = array("STATUS"=>true,"messaje"=>"Skoda registrado correctamente");
-           }else{
-           $result = array("STATUS"=>false,"messaje"=>"Skoda no creado");
-           }
-            echo json_encode($result);
-           }); 
 
 
 function traer_datos($ini,$fin,$emp,$tasa){

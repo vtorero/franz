@@ -102,7 +102,7 @@ const routes: Routes = [
   },
   children: [
     {
-      path: '',
+      path: 'reportes',
       component: HomeComponent
     }, {
       path: 'accordion',

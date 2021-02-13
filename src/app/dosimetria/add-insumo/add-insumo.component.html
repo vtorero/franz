@@ -1,0 +1,28 @@
+<div>
+  <h1 mat-dialog-title>Agregar Insumo</h1>
+  <div mat-dialog-content>
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 550px; padding: 1rem;">
+          <mat-form-field>
+              <input matInput name="codigo" #codigo="ngModel" [(ngModel)]="data.codigo" type="text" placeholder="Ingrese código" required>
+          </mat-form-field>
+          <mat-form-field>
+              <input matInput name="descripcion" #descripcion="ngModel" [(ngModel)]="data.descripcion" type="text" placeholder="Ingrese descripción" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Unidad Medida</mat-label>
+            <mat-select  #unidad="ngModel" [(ngModel)]="data.unidad" name="unidad" required>
+              <mat-option [value]="">Seleccionar</mat-option>
+              <mat-option *ngFor="let und of dataUnidades"  [value]="und.id">{{und.tipo}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput name="inventario_inicial" #inventario_inicial="ngModel"  [(ngModel)]="data.inventario_inicial" type="number" placeholder="Inventario inicial" required>
+            <input hidden [(ngModel)]="usuario" type="text">
+        </mat-form-field>
+             </div>
+  </div>
+  <div mat-dialog-actions>
+      <button mat-button (click)="cancelar()">Cancelar</button>
+      <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+  </div>
+  </div>

@@ -28,7 +28,7 @@ export class ProductosComponent implements OnInit {
   dataSource:any;
   cancela:boolean=false;
   usuario:string;
-  displayedColumns = ['id','codigo','nombre','peso','nombrecategoria','costo','IGV','precio_sugerido','usuario','borrar'];
+  displayedColumns = ['codigo','nombre','peso','nombrecategoria','costo','usuario','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private _login:LoginService,private router:Router,private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}
@@ -66,7 +66,7 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto(0,'', '',0, '',0,0,0,0,0,0,this.usuario)
+      data: new Producto(0,'', '',0, '',0,0,0,0,0,this.usuario)
     });
 
      dialogo1.afterClosed().subscribe(art => {

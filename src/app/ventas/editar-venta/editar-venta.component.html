@@ -42,7 +42,6 @@
         <mat-form-field>
           <mat-label>Vendedor</mat-label>
           <mat-select name="id_vendedor" #id_vendedor="ngModel" [(ngModel)]="data.id_vendedor" readonly>
-            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
             <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let ven of dataVendedores" [value]="data.id_vendedor">{{ven.nombre}} {{ven.apellidos}}
             </mat-option>

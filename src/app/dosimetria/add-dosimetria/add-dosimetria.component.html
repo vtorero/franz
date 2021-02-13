@@ -1,0 +1,40 @@
+<div style="height: auto;overflow-y: auto;overflow-x: hidden;">
+  <form #formGeneral="ngForm">
+    <div mat-dialog-content>
+      <h3>Registrar Movimiento</h3>
+      <div style="display: flex;flex-direction:column; margin:0.5rem auto; width:500px; padding: 1rem;">
+        <mat-form-field>
+          <mat-label>Seleccionar Insumo</mat-label>
+          <mat-select name="codigo" [(ngModel)]="data.codigo">
+            <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar insumo..">
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let dat of dataInsumos" [value]="dat.codigo">{{dat.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Operación</mat-label>
+          <mat-select name="operacion" #operacion="ngModel" [(ngModel)]="data.operacion"  required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let ope of dataOperacion" [value]="ope.id">{{ope.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Unidad Medida</mat-label>
+          <mat-select name="unidad" #unidad="ngModel" [(ngModel)]="data.unidad" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let und of dataUnidades" [value]="und.id">{{und.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cantidad</mat-label>
+          <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Inventrio inicial" required>
+      </mat-form-field>
+      </div>
+      <div mat-dialog-actions>
+        <button mat-button (click)="cancelar()">Cancelar</button>
+        <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+    </div>
+    </div>
+  </form>
+</div>

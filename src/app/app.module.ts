@@ -57,6 +57,11 @@ import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa
 import { DropdownModule } from './+dropdown/dropdown.module';
 import { EditClienteComponent } from './clientes/personas/edit-cliente/edit-cliente.component';
 import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.component';
+import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empresa.component';
+import { DosimetriaComponent } from './dosimetria/dosimetria.component';
+import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetria.component';
+import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
+import { AddInsumoComponent } from './dosimetria/add-insumo/add-insumo.component';
 
 
 
@@ -104,7 +109,10 @@ import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.compone
     AddEmpresaComponent,
     ClientesComponent,
     EditClienteComponent,
-    EditarVentaComponent],
+    EditarVentaComponent,
+  EditEmpresaComponent,
+  AddDosimetriaComponent,
+  AddInsumoComponent],
   declarations: [
       AppComponent,
     PagoComponent,
@@ -135,7 +143,12 @@ import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.compone
     EmpresasComponent,
     AddEmpresaComponent,
     EditClienteComponent,
-    EditarVentaComponent
+    EditarVentaComponent,
+    EditEmpresaComponent,
+    DosimetriaComponent,
+    AddDosimetriaComponent,
+    MovimientoComponent,
+    AddInsumoComponent
     ],
   bootstrap: [AppComponent]
 })

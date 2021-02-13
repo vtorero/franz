@@ -1,0 +1,70 @@
+<mk-box header="Movimientos de Dosimetrìa" [isCollapsable]="false" [isRemovable]="false">
+  <div class="example-header mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+    </mat-form-field>
+  </div>
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="descripcion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.descripcion}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="movimiento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Movimiento</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.movimiento}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="unidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.unidad}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cantidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fecha_registro">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Registro</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.fecha_registro}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="inventario_inicial">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Inventario inicial</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.inventario_inicial}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="usuario">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Creado por</span>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.usuario}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="borrar">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let row ">
+          <button class="btn btn-outline-secondary" (click)="A(row)">Editar</button>&nbsp;
+          <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
+
+          <ng-template #dialogTemplate>
+            <h5>Eliminar el producto: {{row.descripcion}} ?</h5>
+            <button mat-button (click)="cancelar()">Cancelar</button>
+            <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
+          </ng-template>
+        </td>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+  </div>
+  <ng-container>
+
+  </ng-container>
+</mk-box>
+<button mat-raised-button (click)="abrirDialogo()">Agregar Movimiento</button>

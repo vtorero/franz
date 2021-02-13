@@ -177,6 +177,18 @@ CREATE TABLE `categorias` (
   `nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `dosimetria` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(45),
+  `descripcion` varchar(200),
+  `inventario_inicial` decimal(10,2),
+  `fecha_registro` datetime  DEFAULT CURRENT_TIMESTAMP,
+  `id_usuario` varchar(40)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `dosimetria`
+  ADD PRIMARY KEY (`id`);
 --
 -- Volcado de datos para la tabla `categorias`
 --

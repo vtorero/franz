@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
 import { ApiService } from 'src/app/api.service';
+import { Movimiento } from 'src/app/modelos/movimiento';
 
 @Component({
   selector: 'app-add-dosimetria',
@@ -9,9 +11,12 @@ import { ApiService } from 'src/app/api.service';
 export class AddDosimetriaComponent implements OnInit {
 dataInsumos;
 dataArray;
-dataOperacion = [{ id: 'entrada', tipo: 'Entrada' }, { id:'salida', tipo: 'Salida' }];
-dataUnidades = [{ id: 'NIU', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo' }];
-  constructor(private api: ApiService,) { }
+dataOperacion = [{ id:'entrada',tipo: 'Entrada' },{ id:'salida', tipo:'Salida'}];
+dataUnidades = [{ id: 'unidad', tipo: 'Unidades' }, { id: 'kilogramo', tipo: 'Kilogramo' }];
+  constructor(private api: ApiService,
+    @Inject(MAT_DIALOG_DATA) public data: Movimiento
+    
+    ) { }
 
   getInsumos(): void {
     this.api.getApi('dosimetria').subscribe(data => {

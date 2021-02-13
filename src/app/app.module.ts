@@ -60,6 +60,8 @@ import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.compone
 import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empresa.component';
 import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetria.component';
+import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
+import { AddInsumoComponent } from './dosimetria/add-insumo/add-insumo.component';
 
 
 
@@ -109,7 +111,8 @@ import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetr
     EditClienteComponent,
     EditarVentaComponent,
   EditEmpresaComponent,
-  AddDosimetriaComponent],
+  AddDosimetriaComponent,
+  AddInsumoComponent],
   declarations: [
       AppComponent,
     PagoComponent,
@@ -143,7 +146,9 @@ import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetr
     EditarVentaComponent,
     EditEmpresaComponent,
     DosimetriaComponent,
-    AddDosimetriaComponent
+    AddDosimetriaComponent,
+    MovimientoComponent,
+    AddInsumoComponent
     ],
   bootstrap: [AppComponent]
 })

@@ -20,6 +20,7 @@ import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
 import { Client } from './modelos/Boleta/client';
+import { Dosimetria } from './modelos/dosimetria';
 
 
 
@@ -64,6 +65,15 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
+  /*dosimetria*/
+
+  public GuardarDosimetria(datos){
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/dosimetria',
+      { json: json }, { headers: headers });
+  }
+
   public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
@@ -86,6 +96,11 @@ export class ApiService {
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/productodel',
       { json: json }, { headers: headers });
+  }
+
+  public EliminarDosimetria(dato):Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/dosimetria/'+dato,{ headers: headers });
   }
 
   public EditarCliente(datos: Clientes): Observable<any> {

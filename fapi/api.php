@@ -38,7 +38,7 @@ $app->get("/productos",function() use($db,$app){
 
     $app->get("/dosimetria",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria");  
+        $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
              $prods[]=$fila;
@@ -47,6 +47,43 @@ $app->get("/productos",function() use($db,$app){
             echo  $respuesta;
             
  });
+
+ $app->delete("/dosimetria/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+                  $query ="DELETE FROM dosimetria WHERE id='{$id}'";
+                  if($db->query($query)){
+       $result = array("STATUS"=>true,"messaje"=>"Dosimetria  eliminada correctamente");
+       }
+       else{
+        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar dosimetria");
+       }
+       
+        echo  json_encode($result);
+    });
+
+ $app->post("/dosimetria",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       try { 
+        
+        $sql="call p_dosimetria('{$data->codigo}','{$data->descripcion}','{$data->unidad}',{$data->inventario_inicial},'{$data->usuario}')";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $result = array("STATUS"=>true,"messaje"=>"Insumo registrado correctamente");
+        }
+        catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+             echo  json_encode($result);   
+});
 
  $app->get("/dosimetria/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");

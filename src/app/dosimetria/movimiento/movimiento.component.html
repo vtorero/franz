@@ -1,4 +1,4 @@
-<mk-box header="Insumos de Dosimetrìa" [isCollapsable]="false" [isRemovable]="false">
+<mk-box header="Movimientos de Dosimetrìa" [isCollapsable]="false" [isRemovable]="false">
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -20,6 +20,18 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.descripcion}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="movimiento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Movimiento</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.movimiento}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="unidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.unidad}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cantidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="fecha_registro">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Registro</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha_registro}}</mat-cell>
@@ -36,11 +48,11 @@
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row ">
-          <!--<button class="btn btn-outline-secondary" (click)="A(row)">Editar</button>&nbsp;-->
+          <button class="btn btn-outline-secondary" (click)="A(row)">Editar</button>&nbsp;
           <button class="btn btn-primary" (click)="abrirDialog(dialogTemplate,row)">Eliminar</button>
 
           <ng-template #dialogTemplate>
-            <h5>Eliminar el insumo: {{row.descripcion}} ?</h5>
+            <h5>Eliminar el producto: {{row.descripcion}} ?</h5>
             <button mat-button (click)="cancelar()">Cancelar</button>
             <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirmar</button>
           </ng-template>
@@ -55,4 +67,4 @@
 
   </ng-container>
 </mk-box>
-<button mat-raised-button (click)="abrirDialogo()">Agregar Insumo</button>
+<button mat-raised-button (click)="abrirDialogo()">Agregar Movimiento</button>

@@ -3,7 +3,9 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/m
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
+import { Dosimetria } from '../modelos/dosimetria';
 import { AddDosimetriaComponent } from './add-dosimetria/add-dosimetria.component';
+import { AddInsumoComponent } from './add-insumo/add-insumo.component';
 
 @Component({
   selector: 'app-dosimetria',
@@ -22,6 +24,7 @@ export class DosimetriaComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
     public dialog: MatDialog,
+    public dialogo: MatDialog,
     private toastr: ToastrService,
     dateTimeAdapter: DateTimeAdapter<any>) {
     dateTimeAdapter.setLocale('es-PE');
@@ -39,15 +42,50 @@ export class DosimetriaComponent implements OnInit {
       });
   }
 
-  abrirDialog() {
-    const dialogo1 = this.dialog.open(AddDosimetriaComponent,{
+  abrirDialogo() {
+    const dialogo1 = this.dialog.open(AddInsumoComponent,{
+      data: new Dosimetria(0,'','','',0,'',localStorage.getItem("currentUser")),
       width:'600px'
     });
     dialogo1.afterClosed().subscribe(art => {
-      //  this.agregar(art);
+      this.agregar(art);
       this.renderDataTable();
     });
   }
+
+  abrirDialog(templateRef,cod) {
+    let dialogRef = this.dialogo.open(templateRef, {
+   width: '500px' });
+ dialogRef.afterClosed().subscribe(result => {
+ if(!this.cancela){
+     if(cod){
+     this.api.EliminarDosimetria(cod.id).subscribe(
+       data=>{
+       this.toastr.success(data['messaje']);
+       },
+       erro=>{console.log(erro)}
+         );
+     this.renderDataTable();
+   }
+ }
+
+});
+}
+
+    agregar(art:any) {
+      console.log(art)
+      if (art) {
+        this.api.GuardarDosimetria(art).subscribe(
+          data => {
+            this.toastr.success(data['messaje']);
+          },
+          error => { console.log(error) }
+        );
+        this.renderDataTable();
+      }
+    }
+
+  
 
   ngOnInit() {
     this,this.renderDataTable();

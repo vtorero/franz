@@ -17,6 +17,7 @@ export class Boleta {
         public totalImpuestos:number,
         public valorVenta:number,
         public mtoImpVenta:number,
+        public mtoOperExoneradas:number,
         public ublVersion: string,
         public details:Array<Details>,
         public legends:[{

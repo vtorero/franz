@@ -727,12 +727,36 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             echo  json_encode($result);   
     });
 
+    $app->post("/factura",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+                  try { 
+           $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $stmt = mysqli_prepare($db,$sql);
+           mysqli_stmt_execute($stmt);
+           $stmt->close();            
+            $result = array("STATUS"=>true,"messaje"=>"Factura grabada correctamente");
+            }
+             catch(PDOException $e) {
+                $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+     });
+
+
     $app->get("/correlativo/:tabla",function($tabla) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT max(id) ultimo  FROM {$tabla}");  
+        $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");  
+
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
+                if($fila["ultimo"]==NULL){
+                $prods[]=array(0=>1,"ultimo"=>1);
+                }else{
                 $prods[]=$fila;
+                }
             }
             $respuesta=json_encode($prods);
             echo  $respuesta;    

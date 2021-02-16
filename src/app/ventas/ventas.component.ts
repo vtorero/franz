@@ -41,7 +41,7 @@ function sendInvoice(data, nro,url) {
 export class VentasComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
-  boletacorrelativo:any;
+  public boletacorrelativo:string;
   public Moment = new Date();
   client: any;
   letras: any;
@@ -70,12 +70,12 @@ export class VentasComponent implements OnInit {
   }
 
 
-  getID(){
-    this.api.getMaxId('ventas').subscribe(id=>{
-      this.boletacorrelativo=id[0].ultimo;
-      //console.log("idddddddddddd",id[0].ultimo)
+  /*getID(){
+    this.api.getMaxId('facturas').subscribe(id=>{
+      this.boletacorrelativo=id[0].ultimo.toString();
+      console.log("boleee",this.boletacorrelativo)
     });
-  }
+  }*/
 
   renderDataTable() {
     this.api.getApi('ventas').subscribe(x => {
@@ -89,10 +89,8 @@ export class VentasComponent implements OnInit {
       });
   }
   ngOnInit() {
-    this.getID();
     this.renderDataTable();
-
-  }
+ }
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
@@ -113,7 +111,7 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art: Venta) {
-    console.log(art);
+    
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -133,16 +131,18 @@ export class VentasComponent implements OnInit {
       if (art.cliente.nombre) {
         boleta.tipoOperacion = "0101";
         boleta.tipoDoc = "03";
-        boleta.serie = "B00";
+        boleta.serie = "B001";
         boleta.correlativo = this.boletacorrelativo;
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
-        boleta.tipoOperacion = "1001";
+        boleta.tipoOperacion = "0101";
         boleta.tipoDoc = "01";
-        boleta.serie = "F00";
-        boleta.correlativo = this.boletacorrelativo;
+        boleta.serie = "F001";
+        this.api.getMaxId('facturas').subscribe(id=>{
+        boleta.correlativo=id[0].ultimo.toString();
+        });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
       }
@@ -163,7 +163,6 @@ export class VentasComponent implements OnInit {
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
 
         detalleBoleta.unidad = value.unidadmedida;
-        //if(value.unidadmedida=="NIU"){
         detalleBoleta.cantidad = value.cantidad;
         detalleBoleta.mtoValorVenta = value.cantidad * value.mtoValorUnitario;
         detalleBoleta.mtoBaseIgv = value.cantidad * value.mtoValorUnitario;
@@ -190,8 +189,11 @@ export class VentasComponent implements OnInit {
 
 
       setTimeout(() => {
+        art.nro_comprobante=boleta.serie + boleta.correlativo;
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
+            this.api.GuardarFactura(data).subscribe(dat=>{console.log(dat)});
+            console.log("factura",data);
             if (data.sunatResponse.success) {
               this.toastr.success(data.sunatResponse.cdrResponse.description);
             } else {
@@ -201,14 +203,14 @@ export class VentasComponent implements OnInit {
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
-
+        
       },6000);
-
+      
 
     }
 
     if (art) {
-      art.nro_comprobante=boleta.serie + boleta.correlativo;
+        console.log("arrrt",art);
       this.api.GuardarVenta(art).subscribe(data => {
         this.toastr.success(data['messaje']);
       },
@@ -242,16 +244,16 @@ export class VentasComponent implements OnInit {
     if (art.comprobante=='Boleta') {
       boleta.tipoOperacion = "0101";
       boleta.tipoDoc = "03";
-      boleta.serie = "B00";
-      boleta.correlativo = art.nro_comprobante.substring(3,10);
+      boleta.serie = "B001";
+      boleta.correlativo = art.nro_comprobante.substring(4,10);
       boleta.client.tipoDoc = "1";
       boleta.client.rznSocial = art.cliente;
     }
     if (art.comprobante=='Factura') {
       boleta.tipoOperacion = "1001";
       boleta.tipoDoc = "01";
-      boleta.serie = "F00";
-      boleta.correlativo = art.nro_comprobante.substring(3,10);
+      boleta.serie = "F001";
+      boleta.correlativo = art.nro_comprobante.substring(4,10);
       boleta.client.tipoDoc = "6";
       boleta.client.rznSocial = art.cliente;
     }

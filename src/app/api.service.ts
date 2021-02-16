@@ -84,9 +84,14 @@ export class ApiService {
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
-    let string = JSON.stringify(Boleta);
-    return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',
-    JSON.stringify(Boleta),{ headers: headers });
+    return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',JSON.stringify(Boleta),{ headers: headers });
+  }
+
+  public GuardarFactura(datos):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/factura',
+      { json: json }, { headers: headers });
   }
 
 /*

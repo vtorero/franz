@@ -59,8 +59,10 @@ selectSearch(value:string){
   
 }
 
-changemedida(ev){
-  console.log("unidad",ev.source.value);
+changemedida(ev,val){
+if(ev.source){
+  console.log("unidad",val);
+}
 }
 
   change(event)

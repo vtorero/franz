@@ -7,6 +7,7 @@ export class Venta {
         public cliente:any,
         public	estado:number,
         public comprobante:string,
+        public nro_comprobante:string,
         public fecha:Date,
         public igv:number,
         public monto_igv:number,

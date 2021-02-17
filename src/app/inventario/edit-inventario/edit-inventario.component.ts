@@ -1,13 +1,31 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DateTimeAdapter } from 'ng-pick-datetime';
+import { Component, Inject, NgModule } from '@angular/core';
+import { MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { Inventario } from 'src/app/modelos/inventario';
+
+
+export const MY_MOMENT_FORMATS = {
+  parseInput: 'l LT',
+  fullPickerInput: 'l LT',
+  datePickerInput: 'l',
+  timePickerInput: 'LT',
+  monthYearLabel: 'MM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MM YYYY',
+};
 
 @Component({
   selector: 'app-edit-inventario',
   templateUrl: './edit-inventario.component.html',
   styleUrls: ['./edit-inventario.component.css']
+})
+
+
+@NgModule({
+  imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS}]
 })
 export class EditInventarioComponent {
   dataProducto:any;
@@ -17,7 +35,8 @@ export class EditInventarioComponent {
     public dialogRef: MatDialogRef<EditInventarioComponent>,
     @Inject(MAT_DIALOG_DATA) public data:Inventario,
     dateTimeAdapter: DateTimeAdapter<any>
-  ) {  dateTimeAdapter.setLocale('es-PE');}
+    )
+    {  dateTimeAdapter.setLocale('es-PE')}
 
   ngOnInit() {
     this.getProductos();

@@ -42,7 +42,7 @@
               <h3> {{ingreso_cpm}}
                 <sup style="font-size: 20px">$</sup>
               </h3>
-            <p>CPM</p>
+            <p>ventas</p>
           </div>
           <div class="icon">
             <i class="fa ion-stats-bars"></i>
@@ -51,7 +51,7 @@
         </div>
    
   </div>
-  <div class="col-md-3 col-xs-12">
+<!--  <div class="col-md-3 col-xs-12">
       <div class="small-box btn_imp">
           <div class="inner">
               <h3> {{impresiones}}
@@ -64,7 +64,7 @@
           </div>
           <a href="#" class="small-box-footer">&nbsp;</a>
         </div>
-  </div>
+  </div>-->
   <div class="col-md-3 col-xs-12">
 
       <div class="small-box btn_per">
@@ -92,6 +92,7 @@
     </div> 
   </div>
 </mk-box>
+<!--
 <mk-box header="Por dispositivo y Creatividad"  [isCollapsable]="true" [isRemovable]="true">
 <div class="row">
 <div class="col-md-6 col-xs-12">
@@ -111,39 +112,39 @@
 
 </div>
 </mk-box>
-
+-->
+<!--
 
 <mk-box header="Datos consultados por día" [isCollapsable]="true" [isRemovable]="false">
-  <!--<div class="example-header mat-elevation-z8">
+  <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" 
       placeholder="Escriba algo para filtrar">
     </mat-form-field>
-</div>-->
+</div>
 <br>
 <div class="example-container mat-elevation-z8">
 </div>
 
 <div class="example-container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort>
-    <!--  Columna ID-->
+
     <ng-container matColumnDef="dimensiondate">
           <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Fecha</span></mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.dimensiondate}} </mat-cell>
     </ng-container>
-   <!-- Columna Apellido -->
+
     <ng-container matColumnDef="columnad_exchange_ad_ecpm">
           <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">CPM (USD)</span></mat-header-cell>
           <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_ad_ecpm}} </mat-cell>
     </ng-container>
 
-      <!-- Columna Nacionalidad -->
+
     <ng-container matColumnDef="columnad_exchange_estimated_revenue">
           <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Ingresos (USD)</span></mat-header-cell>
           <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_estimated_revenue}} </mat-cell>
     </ng-container>
 
-     <!-- Columna Edad -->
      <ng-container matColumnDef="columnad_exchange_impressions">
           <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Impresiones</span></mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.columnad_exchange_impressions}} </mat-cell>
@@ -155,3 +156,4 @@
 <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
 </div>
 </mk-box>
+-->

@@ -24,10 +24,6 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Registro</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha_registro}}</mat-cell>
       </ng-container>
-      <ng-container matColumnDef="inventario_inicial">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Inventario inicial</span></mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.inventario_inicial}} </mat-cell>
-      </ng-container>
       <ng-container matColumnDef="usuario">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Creado por</span>
         </mat-header-cell>

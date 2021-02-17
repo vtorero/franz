@@ -38,7 +38,7 @@ $app->get("/productos",function() use($db,$app){
 
     $app->get("/dosimetria",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
+        $resultado = $db->query("SELECT id,codigo,descripcion,unidad,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
              $prods[]=$fila;
@@ -47,6 +47,19 @@ $app->get("/productos",function() use($db,$app){
             echo  $respuesta;
             
  });
+
+ $app->get("/movimientos",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo order by m.id desc");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+         $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 
  $app->delete("/dosimetria/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -84,6 +97,28 @@ $app->get("/productos",function() use($db,$app){
     
              echo  json_encode($result);   
 });
+
+$app->post("/dosimetriamov",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       try { 
+        
+        $sql="call p_movimiento('{$data->codigo}','{$data->operacion}','{$data->unidad}',{$data->cantidad},'{$data->usuario}')";
+        $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $result = array("STATUS"=>true,"messaje"=>"Movimiento registrado correctamente");
+        }
+        catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+             echo  json_encode($result);   
+});
+
 
  $app->get("/dosimetria/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -487,7 +522,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre,id_producto,sum(granel) granel,sum(cantidad) cantidad, sum(i.peso) peso,sum(merma) merma FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,id_producto,DATE_FORMAT(fecha_produccion, '%Y-%m-%d') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') fecha_vencimiento,observacion,granel,cantidad, i.peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -559,8 +594,9 @@ $app->get("/inventarios",function() use($db,$app){
                $j = json_decode($json,true);
                $data = json_decode($j['json']);
                try { 
-                $fecha=substr($data->fecha_produccion,0,10);
-                $sql="call p_inventario_upd({$data->id},'{$fecha}','{$data->presentacion}','{$data->unidad}',{$data->cantidad})";
+                $fecha_prod=substr($data->fecha_produccion,0,10);
+                $fecha_venc=substr($data->fecha_vencimiento,0,10);
+                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad})";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
                 $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente");
@@ -572,6 +608,22 @@ $app->get("/inventarios",function() use($db,$app){
                 echo  $respuesta;
     
         });
+
+        $app->delete("/inventario/:id",function($id) use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+                          $query ="DELETE FROM inventario WHERE id='{$id}'";
+                          if($db->query($query)){
+               $result = array("STATUS"=>true,"messaje"=>"Item de inventario  eliminado correctamente");
+               }
+               else{
+                $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
+               }
+               
+                echo  json_encode($result);
+            });
 
 /*vendedores*/
 
@@ -621,7 +673,7 @@ $app->get("/vendedores",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -656,7 +708,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
           try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$fecha}',{$valor_total},{$data->igv})";
+            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$data->nro_comprobante}','{$fecha}',{$valor_total},{$data->igv})";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");
@@ -692,12 +744,70 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             echo  json_encode($result);   
     });
 
+    $app->post("/factura",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+                  try { 
+           $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $stmt = mysqli_prepare($db,$sql);
+           mysqli_stmt_execute($stmt);
+           $stmt->close();
+           $datos=$db->query("SELECT max(id) ultimo_id FROM facturas");
+           $ultimo_id=array();
+           while ($d = $datos->fetch_object()) {
+            $ultimo_id=$d;
+            }
+               
+            $result = array("STATUS"=>true,"messaje"=>"Factura grabada correctamente","max"=>$ultimo_id);
+            }
+             catch(PDOException $e) {
+                $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+     });
+
+     $app->post("/boleta",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+
+           print_r($data);
+           die;
+
+                  try { 
+           $sql="call p_boleta('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $stmt = mysqli_prepare($db,$sql);
+           mysqli_stmt_execute($stmt);
+           $stmt->close();
+           $datos=$db->query("SELECT max(id) ultimo_id FROM boletas");
+           $ultimo_id=array();
+           while ($d = $datos->fetch_object()) {
+            $ultimo_id=$d;
+            }
+               
+            $result = array("STATUS"=>true,"messaje"=>"Boleta grabada correctamente","max"=>$ultimo_id);
+            }
+             catch(PDOException $e) {
+                $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+     });
+
+
     $app->get("/correlativo/:tabla",function($tabla) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");  
+
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
+                if($fila["ultimo"]==NULL){
+                $prods[]=array(0=>1,"ultimo"=>1);
+                }else{
                 $prods[]=$fila;
+                }
             }
             $respuesta=json_encode($prods);
             echo  $respuesta;    
@@ -1116,7 +1226,25 @@ if(count($contar)>0){
             $respuesta=json_encode($prods);
             echo  $respuesta;
         });
+/*reporte productos*/
 
+$app->get("/reportesubcategoria",function() use($db,$app){
+    $json = $app->request->getBody();
+       $dat = json_decode($json, true);
+       $fechainicio= $dat["inicio"];
+       $fechafin=$dat["fin"];
+       $sucur=array();
+       $result=$db->query("SELECT s.nombre,count(*) total from productos p,  sub_categorias s where p.id_subcategoria=s.id  group by 1 order by 2 desc");
+    
+      $datos=array();
+       while ($filas = $result->fetch_array()){
+               $datos[]=$filas;
+           }
+            $data = array("status"=>200,"data"=>$datos);
+   
+             echo  json_encode($data);
+   
+   });
 
 /*dashboard adops*/
 
@@ -1367,30 +1495,6 @@ $app->post("/inicio",function() use($db,$app){
 
 
 /*final adops dashobard*/
-
-    $app->post("/skoda",function() use($db,$app){
-        $query ="INSERT INTO skoda (source,origen,nombres,apellidos,rut,telefono,correo,marca,modelo,concesionario,dispositivo)  VALUES ("
-        ."'{$app->request->post("source")}',"
-        ."'{$app->request->post("origen")}',"
-         ."'{$app->request->post("nombres")}',"
-         ."'{$app->request->post("apellidos")}',"
-         ."'{$app->request->post("rut")}',"
-         ."'{$app->request->post("telefono")}',"
-         ."'{$app->request->post("correo")}',"
-         ."'{$app->request->post("marca")}',"
-         ."'{$app->request->post("modelo")}',"
-         ."'{$app->request->post("concesionario")}',"
-         ."'{$app->request->post("dispositivo")}'"
-         .")";
-
-         $insert= $db->query($query);
-          if($insert){
-          $result = array("STATUS"=>true,"messaje"=>"Skoda registrado correctamente");
-           }else{
-           $result = array("STATUS"=>false,"messaje"=>"Skoda no creado");
-           }
-            echo json_encode($result);
-           }); 
 
 
 function traer_datos($ini,$fin,$emp,$tasa){

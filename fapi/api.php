@@ -522,7 +522,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT id_producto,p.codigo,p.nombre,id_producto,sum(granel) granel,sum(cantidad) cantidad, sum(i.peso) peso,sum(merma) merma FROM inventario i, productos p where i.id_producto=p.id GROUP by 1,2,3,4");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,id_producto,DATE_FORMAT(fecha_produccion, '%Y-%m-%d') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') fecha_vencimiento,observacion,granel,cantidad, i.peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -594,8 +594,9 @@ $app->get("/inventarios",function() use($db,$app){
                $j = json_decode($json,true);
                $data = json_decode($j['json']);
                try { 
-                $fecha=substr($data->fecha_produccion,0,10);
-                $sql="call p_inventario_upd({$data->id},'{$fecha}','{$data->presentacion}','{$data->unidad}',{$data->cantidad})";
+                $fecha_prod=substr($data->fecha_produccion,0,10);
+                $fecha_venc=substr($data->fecha_vencimiento,0,10);
+                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad})";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
                 $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente");
@@ -607,6 +608,22 @@ $app->get("/inventarios",function() use($db,$app){
                 echo  $respuesta;
     
         });
+
+        $app->delete("/inventario/:id",function($id) use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+                          $query ="DELETE FROM inventario WHERE id='{$id}'";
+                          if($db->query($query)){
+               $result = array("STATUS"=>true,"messaje"=>"Item de inventario  eliminado correctamente");
+               }
+               else{
+                $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
+               }
+               
+                echo  json_encode($result);
+            });
 
 /*vendedores*/
 
@@ -736,8 +753,42 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
-           $stmt->close();            
-            $result = array("STATUS"=>true,"messaje"=>"Factura grabada correctamente");
+           $stmt->close();
+           $datos=$db->query("SELECT max(id) ultimo_id FROM facturas");
+           $ultimo_id=array();
+           while ($d = $datos->fetch_object()) {
+            $ultimo_id=$d;
+            }
+               
+            $result = array("STATUS"=>true,"messaje"=>"Factura grabada correctamente","max"=>$ultimo_id);
+            }
+             catch(PDOException $e) {
+                $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+     });
+
+     $app->post("/boleta",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+
+           print_r($data);
+           die;
+
+                  try { 
+           $sql="call p_boleta('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $stmt = mysqli_prepare($db,$sql);
+           mysqli_stmt_execute($stmt);
+           $stmt->close();
+           $datos=$db->query("SELECT max(id) ultimo_id FROM boletas");
+           $ultimo_id=array();
+           while ($d = $datos->fetch_object()) {
+            $ultimo_id=$d;
+            }
+               
+            $result = array("STATUS"=>true,"messaje"=>"Boleta grabada correctamente","max"=>$ultimo_id);
             }
              catch(PDOException $e) {
                 $result = array("STATUS"=>false,"messaje"=>$e->getMessage());

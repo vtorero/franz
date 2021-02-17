@@ -70,12 +70,12 @@ export class VentasComponent implements OnInit {
   }
 
 
-  /*getID(){
+  getID(){
     this.api.getMaxId('facturas').subscribe(id=>{
       this.boletacorrelativo=id[0].ultimo.toString();
-      console.log("boleee",this.boletacorrelativo)
+      console.log("boleee",this.boletacorrelativo);
     });
-  }*/
+  }
 
   renderDataTable() {
     this.api.getApi('ventas').subscribe(x => {
@@ -111,13 +111,10 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art: Venta) {
-    
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
       var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
- 
-      boleta.fechaEmision = art.fecha;
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -126,22 +123,24 @@ export class VentasComponent implements OnInit {
       boleta.fechaEmision = fecha1;
       boleta.tipoMoneda = "PEN";
       boleta.ublVersion = "2.1";
-
+      boleta.tipoOperacion = "0101";
       /**cliente*/
       if (art.cliente.nombre) {
-        boleta.tipoOperacion = "0101";
         boleta.tipoDoc = "03";
         boleta.serie = "B001";
-        boleta.correlativo = this.boletacorrelativo;
+        this.api.getMaxId('boletas').subscribe(id=>{
+          boleta.correlativo=id[0].ultimo.toString();
+          art.nro_comprobante="B001"+id[0].ultimo.toString();
+          });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
-        boleta.tipoOperacion = "0101";
         boleta.tipoDoc = "01";
         boleta.serie = "F001";
         this.api.getMaxId('facturas').subscribe(id=>{
         boleta.correlativo=id[0].ultimo.toString();
+        art.nro_comprobante="F001"+id[0].ultimo.toString();
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
@@ -189,11 +188,29 @@ export class VentasComponent implements OnInit {
 
 
       setTimeout(() => {
-        art.nro_comprobante=boleta.serie + boleta.correlativo;
+        
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
-            this.api.GuardarFactura(data).subscribe(dat=>{console.log(dat)});
-            console.log("factura",data);
+
+            if(art.cliente.razon_social){
+            this.api.GuardarFactura(data).subscribe(dat=>{
+              console.log("faccc",dat.max.ultimo_id);
+              console.log("dddd",dat['max'].ultimo_id)
+              boleta.correlativo=dat['max'];
+              art.nro_comprobante=dat.max.ultimo_id.toString();
+          
+          });
+        }
+
+        if(art.cliente.nombre){
+          this.api.GuardarBoleta(data).subscribe(dat=>{
+            console.log("bollll",dat.max.ultimo_id);
+            boleta.correlativo=dat['max'];
+            art.nro_comprobante=dat.max.ultimo_id.toString();
+        
+        });
+      }
+
             if (data.sunatResponse.success) {
               this.toastr.success(data.sunatResponse.cdrResponse.description);
             } else {
@@ -203,24 +220,28 @@ export class VentasComponent implements OnInit {
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
+
+        if (art) {
+          console.log("arrrt",art);
+        this.api.GuardarVenta(art).subscribe(data => {
+          this.toastr.success(data['messaje']);
+        },
+          error => { console.log(error) }
+        );
+        this.renderDataTable();
+        }
         
       },6000);
       
 
     }
 
-    if (art) {
-        console.log("arrrt",art);
-      this.api.GuardarVenta(art).subscribe(data => {
-        this.toastr.success(data['messaje']);
-      },
-        error => { console.log(error) }
-      );
-      this.renderDataTable();
+
     }
-  }
+
 
   abrirEditar(cod: Venta) {
+    console.log(cod);
     const dialogo2 = this.dialog2.open(EditarVentaComponent, {
       data: cod
     });

@@ -94,6 +94,13 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
+  public GuardarBoleta(datos):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/boleta',
+      { json: json }, { headers: headers });
+  }
+
 /*
   public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -108,6 +115,12 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/productodel',
       { json: json }, { headers: headers });
   }
+
+  public EliminarAlmacen(dato): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/inventario/'+dato, { headers: headers });
+  }
+
 
   public EliminarDosimetria(dato):Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

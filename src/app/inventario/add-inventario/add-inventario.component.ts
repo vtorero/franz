@@ -27,9 +27,11 @@ export class AddInventarioComponent implements OnInit {
 
 
   onCantidad(value,da) {
-    console.log(da.id_producto);
-    this.getProdPeso(da.id_producto)
+    this.getProdPeso(da.id_producto);
+    setTimeout(() => {
       this.data.peso = value * this.dataPeso[0].peso;
+     },1500);
+    
   }
 
   getProdPeso(id) {

@@ -62,6 +62,7 @@ import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetria.component';
 import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
 import { AddInsumoComponent } from './dosimetria/add-insumo/add-insumo.component';
+import { ResumenComponent } from './inventario/resumen/resumen.component';
 
 
 
@@ -148,7 +149,8 @@ import { AddInsumoComponent } from './dosimetria/add-insumo/add-insumo.component
     DosimetriaComponent,
     AddDosimetriaComponent,
     MovimientoComponent,
-    AddInsumoComponent
+    AddInsumoComponent,
+    ResumenComponent
     ],
   bootstrap: [AppComponent]
 })

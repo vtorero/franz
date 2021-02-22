@@ -28,7 +28,7 @@ export class ProductosComponent implements OnInit {
   dataSource:any;
   cancela:boolean=false;
   usuario:string;
-  displayedColumns = ['codigo','nombre','peso','nombrecategoria','costo','usuario','borrar'];
+  displayedColumns = ['codigo','nombre','peso','nombrecategoria','subcategoria','costo','usuario','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private _login:LoginService,private router:Router,private api:ApiService,public dialog:MatDialog,public dialog2:MatDialog,public dialogo:MatDialog,private toastr: ToastrService) {}

@@ -46,6 +46,12 @@ export class ApiService {
     ).pipe(map(result => result));
   }
 
+  getInventarios(id: string) {
+    return this._http.get(Global.BASE_API_URL + 'reportes.php/' + id,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
   getMaxId(tabla:string){
     return this._http.get(Global.BASE_API_URL + 'api.php/correlativo/' +tabla,
       { headers: this.headers }

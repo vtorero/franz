@@ -18,6 +18,7 @@ import { ClientesComponent } from './clientes/personas/clientes.component';
 import { EmpresasComponent } from './clientes/empresas/empresas.component';
 import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
+import { ResumenComponent } from './inventario/resumen/resumen.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,12 @@ const routes: Routes = [
     }
   ]
   },
+  {path:'inventario',children:[
+    {path:'resumen',
+    component:ResumenComponent
+    }
+  ]},
+
   {path:'general',
   
     children: [

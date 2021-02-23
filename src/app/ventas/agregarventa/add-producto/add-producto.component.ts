@@ -76,7 +76,7 @@ if(ev.source){
       }
       //console.log(event.source.value,event.source.selected);
       //console.log(this.seleccionados)
-    }
+  }
 
     verificaCantidad(cantidad){
       this.stock=this.seleccionados;

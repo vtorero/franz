@@ -1,0 +1,113 @@
+<div style="height: auto;overflow-y: auto;overflow-x: hidden;">
+  <form #formGeneral="ngForm">
+    <div mat-dialog-content>
+      <h3>Registrar Nota de Debito/Credito</h3>
+      <div style="display: flex;flex-direction:column; margin:0.5rem auto; width: 800px; padding: 1rem;">
+        <mat-form-field>
+          <mat-label>Comprobante</mat-label>
+          <mat-select name="comprobante" #comprobante="ngModel" [(ngModel)]="data.comprobante" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let cat of dataComprobantes" [value]="cat.id">{{cat.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Tipo Documento</mat-label>
+          <mat-select name="tipDocAfectado" #tipDocAfectado="ngModel" [(ngModel)]="data.tipDocAfectado" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let doc of dataTipoDocumentos" [value]="doc.id">{{doc.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Documento Afectado</mat-label>
+          <input matInput [(ngModel)]="data.afectado" type="text" placeholder="Ingrese nro Documento" required>
+      </mat-form-field>
+        <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
+        <hr>
+        <mat-radio-group aria-label="Seleccione tipo" required>
+          <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
+          <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
+        </mat-radio-group>
+
+        <!--<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+          <input type="checkbox" (change)="clienteNuevo($event)"class="custom-control-input" id="customSwitch3">
+          <label class="custom-control-label" for="customSwitch3">&nbsp;Cliente Nuevo</label>
+        </div>-->
+        <mat-form-field *ngIf="filter=='1'">
+          <mat-label>Cliente con DNI</mat-label>
+          <mat-select name="cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
+            <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let cli of dataClientes" [value]="cli">
+              {{cli.nombre}} {{cli.apellido}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="filter=='2'">
+          <mat-label>Cliente CON RUC</mat-label>
+          <mat-select name="cliente" [(ngModel)]="data.cliente" required>
+            <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli">
+              {{cli.razon_social}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Motivo</mat-label>
+          <input matInput [(ngModel)]="data.motivo" type="text" placeholder="Ingrese motivo" required>
+      </mat-form-field>
+           <mat-form-field>
+          <mat-label>Fecha de Venta</mat-label>
+          <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha" required>
+          <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
+          <mat-datepicker #myPicker></mat-datepicker>
+        </mat-form-field>
+  </div>
+      </div>
+  </form>
+  <h4>Detalle de items</h4>
+  <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
+  <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="id_producto">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.codProducto.codigo}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="nombre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.codProducto.nombre}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cantidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="peso">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="precio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
+        <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario | number }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="subtotal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
+        <mat-cell *matCellDef="let row">S/.{{ row.mtoValorUnitario*row.cantidad | number }}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="borrar">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let row ;let j = index;">
+          <button class="btn btn-primary" (click)="deleteTicket(j)" cdkFocusInitial>Eliminar</button>
+        </td>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="5" [showFirstLastButtons]></mat-paginator>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid"
+      cdkFocusInitial>Registrar</button>
+  </div>
+</div>

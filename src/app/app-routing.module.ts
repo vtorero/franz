@@ -19,6 +19,7 @@ import { EmpresasComponent } from './clientes/empresas/empresas.component';
 import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
 import { ResumenComponent } from './inventario/resumen/resumen.component';
+import { NotacreditoComponent } from './notacredito/notacredito.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,11 @@ const routes: Routes = [
   {path:'inventario',children:[
     {path:'resumen',
     component:ResumenComponent
+    }
+  ]},
+  {path:'notas',children:[
+    {path:'credito',
+    component:NotacreditoComponent
     }
   ]},
 

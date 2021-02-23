@@ -63,6 +63,9 @@ import { AddDosimetriaComponent } from './dosimetria/add-dosimetria/add-dosimetr
 import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
 import { AddInsumoComponent } from './dosimetria/add-insumo/add-insumo.component';
 import { ResumenComponent } from './inventario/resumen/resumen.component';
+import { NotacreditoComponent } from './notacredito/notacredito.component';
+import { AddnotaComponent } from './notacredito/addnota/addnota.component';
+import { AdditemComponent } from './notacredito/addnota/additem/additem.component';
 
 
 
@@ -113,7 +116,9 @@ import { ResumenComponent } from './inventario/resumen/resumen.component';
     EditarVentaComponent,
   EditEmpresaComponent,
   AddDosimetriaComponent,
-  AddInsumoComponent],
+  AddInsumoComponent,
+  AddnotaComponent,
+  AdditemComponent],
   declarations: [
       AppComponent,
     PagoComponent,
@@ -150,7 +155,10 @@ import { ResumenComponent } from './inventario/resumen/resumen.component';
     AddDosimetriaComponent,
     MovimientoComponent,
     AddInsumoComponent,
-    ResumenComponent
+    ResumenComponent,
+    NotacreditoComponent,
+    AddnotaComponent,
+    AdditemComponent
     ],
   bootstrap: [AppComponent]
 })

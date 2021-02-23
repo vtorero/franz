@@ -8,11 +8,12 @@ import { Boleta } from '../modelos/Boleta/boleta';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
 import { Details } from '../modelos/Boleta/details';
+import { Nota } from '../modelos/Boleta/nota';
 import { DetalleVenta } from '../modelos/detalleVenta';
+import { NotaCredito } from '../modelos/notacredito';
 import { Venta } from '../modelos/ventas';
-import { AgregarventaComponent } from './agregarventa/agregarventa.component';
-import { EditarVentaComponent } from './editar-venta/editar-venta.component';
-
+import { AgregarventaComponent } from '../ventas/agregarventa/agregarventa.component';
+import { AddnotaComponent } from './addnota/addnota.component';
 
 function sendInvoice(data, nro,url) {
   fetch(url, {
@@ -34,11 +35,12 @@ function sendInvoice(data, nro,url) {
 
 
 @Component({
-  selector: 'app-ventas',
-  templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.css']
+  selector: 'app-notacredito',
+  templateUrl: './notacredito.component.html',
+  styleUrls: ['./notacredito.component.css']
 })
-export class VentasComponent implements OnInit {
+export class NotacreditoComponent implements OnInit {
+
   dataSource: any;
   dataDetalle: any;
   public boletacorrelativo:string;
@@ -54,6 +56,7 @@ export class VentasComponent implements OnInit {
   displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  filter: any;
   constructor(private api: ApiService,
     public dialog: MatDialog,
     public dialog2: MatDialog,
@@ -63,37 +66,10 @@ export class VentasComponent implements OnInit {
     dateTimeAdapter.setLocale('es-PE');
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
-  }
-
-
-  getID(){
-    this.api.getMaxId('facturas').subscribe(id=>{
-      this.boletacorrelativo=id[0].ultimo.toString();
-      console.log("boleee",this.boletacorrelativo);
-    });
-  }
-
-  renderDataTable() {
-    this.api.getApi('ventas').subscribe(x => {
-      this.dataSource = new MatTableDataSource();
-      this.dataSource.data = x;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    },
-      error => {
-        console.log('Error de conexion de datatable!' + error);
-      });
-  }
   ngOnInit() {
-    this.renderDataTable();
- }
-
-  agregarVenta() {
-    const dialogo1 = this.dialog.open(AgregarventaComponent, {
+  }
+  agregarNota() {
+    const dialogo1 = this.dialog.open(AddnotaComponent, {
       data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
     });
     dialogo1.afterClosed().subscribe(art => {
@@ -103,6 +79,21 @@ export class VentasComponent implements OnInit {
     });
   }
 
+
+
+    renderDataTable() {
+    this.api.getApi('notas').subscribe(x => {
+      this.dataSource = new MatTableDataSource();
+      this.dataSource.data = x;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    },
+      error => {
+        console.log('Error de conexion de datatable!' + error);
+      });
+  }
+
+
   replaceStr(str, find, replace) {
     for (var i = 0; i < find.length; i++) {
       str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
@@ -110,11 +101,12 @@ export class VentasComponent implements OnInit {
     return str;
   }
 
-  agregar(art: Venta) {
-    if (art.comprobante != 'Pendiente') {
+  agregar(art: NotaCredito) {
+    console.log(art);
+    if (art.comprobante) {
       let fec1;
       let fecha1;
-      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+      var boleta: Nota = new Nota('','','','','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -217,13 +209,10 @@ export class VentasComponent implements OnInit {
               this.toastr.error(art.comprobante + " no recibida");
             }
           });
-          
-        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'ttps://facturacion.apisperu.com/api/v1/invoice/send');
-        
         if (art.imprimir) {
-          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'ttps://facturacion.apisperu.com/api/v1/invoice/pdf');
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/note/send');
         }
-        
+
         if (art) {
           console.log("arrrt",art);
         this.api.GuardarVenta(art).subscribe(data => {
@@ -243,91 +232,4 @@ export class VentasComponent implements OnInit {
     }
 
 
-  abrirEditar(cod: Venta) {
-    console.log(cod);
-    const dialogo2 = this.dialog2.open(EditarVentaComponent, {
-      data: cod
-    });
-    dialogo2.afterClosed().subscribe(art => {
-      if (art != undefined)
-        this.editar(art);
-      //this.renderDataTable();
-    });
-  }
-
-  editar(art) {
-    console.log(art);
-    let fech;
-    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
-    fech=art.fecha+"T00:00:00-05:00"
-    boleta.fechaEmision = fech  ;
-    boleta.tipoMoneda = "PEN";
-    boleta.ublVersion = "2.1";
-
-    /**cliente*/
-    if (art.comprobante=='Boleta') {
-      boleta.tipoOperacion = "0101";
-      boleta.tipoDoc = "03";
-      boleta.serie = "B001";
-      boleta.correlativo = art.nro_comprobante.substring(4,10);
-      boleta.client.tipoDoc = "1";
-      boleta.client.rznSocial = art.cliente;
-    }
-    if (art.comprobante=='Factura') {
-      boleta.tipoOperacion = "1001";
-      boleta.tipoDoc = "01";
-      boleta.serie = "F001";
-      boleta.correlativo = art.nro_comprobante.substring(4,10);
-      boleta.client.tipoDoc = "6";
-      boleta.client.rznSocial = art.cliente;
-    }
-
-    boleta.client.numDoc = art.num_documento;
-    boleta.client.address.direccion = art.direccion;
-
-    /*company*/
-    boleta.company.ruc = "20605174095";
-    boleta.company.razonSocial = "VVIAN FOODS S.A.C";
-    boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
-    let total = 0;
-    art.detalleVenta.forEach(function (value: any) {
-      
-      let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-      detalleBoleta.codProducto = value.codigo;
-      detalleBoleta.descripcion = value.nombre;
-      detalleBoleta.mtoValorUnitario = Number(value.precio);
-      detalleBoleta.unidad = value.unidad_medida;
-     
-      detalleBoleta.cantidad = Number(value.cantidad);
-      detalleBoleta.mtoValorVenta = Number(value.precio) * Number(value.cantidad);
-      detalleBoleta.mtoBaseIgv = Number(value.precio);
-      detalleBoleta.igv = Number(value.precio) * Global.BASE_IGV;
-      detalleBoleta.totalImpuestos = Number(value.precio) * Global.BASE_IGV;
-      detalleBoleta.mtoPrecioUnitario = Number(value.precio) + (value.precio * Global.BASE_IGV);
-      detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
-      detalleBoleta.tipAfeIgv = 10;
-      boleta.details.push(detalleBoleta);
-    });
-
-    boleta.mtoOperGravadas = Number(art.valor_neto);
-    boleta.mtoIGV = Number(art.monto_igv);
-    boleta.totalImpuestos = Number(art.monto_igv);
-    boleta.valorVenta = Number(art.valor_total),
-      boleta.mtoImpVenta = Number(art.valor_total),
-      boleta.company = this.company;
-    this.api.getNumeroALetras(art.valor_total).subscribe(data => {
-      boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
-    });
-
-    setTimeout(() => {
-      console.log("boletaaaa",boleta);
-      sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
-    },2000);
-
-  }
-
-  cancelar() {
-    this.dialog.closeAll();
-    this.cancela = true;
-  }
 }

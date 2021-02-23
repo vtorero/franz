@@ -1,0 +1,33 @@
+<div>
+  <h1 mat-dialog-title>Agregar Item</h1>
+  <form #formItem2="ngForm">
+  <div mat-dialog-content>
+      <div style="display: flex;flex-direction: column; margin:1rem auto; width: 600px; padding: 1rem;">
+        <mat-form-field>
+          <mat-label>Producto</mat-label>
+          <mat-select  name="codProducto" #codProducto="ngModel" [(ngModel)]="data.codProducto" required>
+            <input class="buscador" (keyup)="onKey($event.target.value)" placeholder="Buscar..">
+            <mat-option  *ngFor="let pro of dataProducto" [value]="pro" (onSelectionChange)="changeprod($event,pro)" >{{pro.nombre}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Unidad Medida</mat-label>
+          <mat-select name="unidadmedida" #unidadmedida="ngModel" [(ngModel)]="data.unidadmedida" required>
+            <mat-option [value]="">Seleccionar</mat-option>
+            <mat-option *ngFor="let und of dataUnidades" (onSelectionChange)="changemedida($event,und)" [value]="und.id">{{und.tipo}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput name="mtoValorUnitario" #mtoValorUnitario="ngModel" [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
+            </mat-form-field>
+            </div>
+  </div>
+</form>
+  <div mat-dialog-actions>
+    <button  mat-button [mat-dialog-close]="false">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="!formItem2.form.valid" cdkFocusInitial>Confirmar</button>
+  </div>
+  </div>

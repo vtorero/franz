@@ -1,4 +1,4 @@
-<mk-box header="Resumen Chorizos" [isCollapsable]="true" [isRemovable]="false">
+<mk-box header="Resumen Chorizos" [isCollapsable]="false" [isRemovable]="false" >
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -25,22 +25,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotal[0].granel}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranel}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotal[0].merma}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmerma}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotal[0].cantidad}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidad}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotal[0].peso}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpeso}}</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">Chorizos</mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -50,7 +50,8 @@
   </div>
 </mk-box>
 
-<mk-box header="Resumen Salchichas" [isCollapsable]="true" [isRemovable]="false">
+
+<mk-box header="Resumen Salchichas" [isCollapsable]="false" [isRemovable]="false" *ngIf="dataSourceB">
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilterB($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -77,22 +78,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalB[0].granel}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelB}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalB[0].merma}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaB}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalB[0].cantidad}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadB}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalB[0].peso}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoB}}</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">Chorizos</mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -103,7 +104,7 @@
 </mk-box>
 
 
-<mk-box header="Resumen Especiales" [isCollapsable]="true" [isRemovable]="false">
+<mk-box header="Resumen Especiales" [isCollapsable]="false" [isRemovable]="false"  *ngIf="dataSourceC">
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilterB($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -130,22 +131,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalC[0].granel}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelC}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalC[0].merma}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaC}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalC[0].cantidad}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadC}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalC[0].peso}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoC}}</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -156,7 +157,7 @@
 </mk-box>
 
 
-<mk-box header="Resumen Jamones" [isCollapsable]="true" [isRemovable]="false">
+<mk-box header="Resumen Jamones" [isCollapsable]="false" [isRemovable]="false" *ngIf="dataSourceD">
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilterB($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -183,22 +184,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalD[0].granel}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelD}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalD[0].merma}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaD}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalD[0].cantidad}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadD}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{datatotalD[0].peso}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoD}}</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -207,4 +208,3 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]></mat-paginator>
   </div>
 </mk-box>
-

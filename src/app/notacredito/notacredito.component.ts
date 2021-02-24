@@ -12,7 +12,6 @@ import { Nota } from '../modelos/Boleta/nota';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { NotaCredito } from '../modelos/notacredito';
 import { Venta } from '../modelos/ventas';
-import { AgregarventaComponent } from '../ventas/agregarventa/agregarventa.component';
 import { AddnotaComponent } from './addnota/addnota.component';
 
 function sendInvoice(data, nro,url) {
@@ -66,7 +65,15 @@ export class NotacreditoComponent implements OnInit {
     dateTimeAdapter.setLocale('es-PE');
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
+
+
   ngOnInit() {
+    this.renderDataTable();
   }
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
@@ -78,8 +85,6 @@ export class NotacreditoComponent implements OnInit {
       this.renderDataTable();
     });
   }
-
-
 
     renderDataTable() {
     this.api.getApi('notas').subscribe(x => {
@@ -102,8 +107,8 @@ export class NotacreditoComponent implements OnInit {
   }
 
   agregar(art: NotaCredito) {
-    console.log(art);
-    if (art.comprobante) {
+    console.log("notaaa",art);
+    if (art) {
       let fec1;
       let fecha1;
       var boleta: Nota = new Nota('','','','','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
@@ -115,24 +120,26 @@ export class NotacreditoComponent implements OnInit {
       boleta.fechaEmision = fecha1;
       boleta.tipoMoneda = "PEN";
       boleta.ublVersion = "2.1";
-      boleta.tipoOperacion = "0101";
+      boleta.tipDocAfectado=art.tipDocAfectado;
+      boleta.tipoDoc=art.tipoDoc;
+      boleta.codMotivo=art.codMotivo;
+      boleta.desMotivo=art.desMotivo;
+      boleta.numDocfectado=art.numDocfectado;
       /**cliente*/
       if (art.cliente.nombre) {
-        boleta.tipoDoc = "03";
-        boleta.serie = "B001";
-        this.api.getMaxId('boletas').subscribe(id=>{
+        boleta.serie = "FF01";
+        this.api.getMaxId('notascredito').subscribe(id=>{
           boleta.correlativo=id[0].ultimo.toString();
-          art.nro_comprobante="B001"+id[0].ultimo.toString();
+          art.nro_comprobante="FF01"+id[0].ultimo.toString();
           });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
-        boleta.tipoDoc = "01";
-        boleta.serie = "F001";
-        this.api.getMaxId('facturas').subscribe(id=>{
+        boleta.serie = "FF01";
+        this.api.getMaxId('notascredito').subscribe(id=>{
         boleta.correlativo=id[0].ultimo.toString();
-        art.nro_comprobante="F001"+id[0].ultimo.toString();
+        art.nro_comprobante="FF01"+id[0].ultimo.toString();
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
@@ -149,8 +156,8 @@ export class NotacreditoComponent implements OnInit {
       art.detalleVenta.forEach(function (value: any) {
 
         let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        detalleBoleta.codProducto = value.codProductob.codigo;
-        detalleBoleta.descripcion = value.codProductob.nombre;
+        detalleBoleta.codProducto = value.codProducto.codigo;
+        detalleBoleta.descripcion = value.codProducto.nombre;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
 
         detalleBoleta.unidad = value.unidadmedida;
@@ -163,7 +170,6 @@ export class NotacreditoComponent implements OnInit {
         total = total + (value.cantidad * value.mtoValorUnitario);
         detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.tipAfeIgv = 10;
-        console.log("total", total);
         boleta.details.push(detalleBoleta);
       });
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).subscribe(data => {
@@ -178,51 +184,36 @@ export class NotacreditoComponent implements OnInit {
       boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
       boleta.company = this.company;
 
-
       setTimeout(() => {
-        
-        this.api.GuardarComprobante(boleta).subscribe(
-          data => {
-
-            if(art.cliente.razon_social){
-            this.api.GuardarFactura(data).subscribe(dat=>{
-              console.log("faccc",dat.max.ultimo_id);
+        console.log("bbbbolllettaaa",boleta);
+        this.api.sendNotaSunat(boleta).subscribe(data => {
+            if(art){
+            this.api.GuardarNota(data).subscribe(dat=>{
               console.log("dddd",dat['max'].ultimo_id)
               boleta.correlativo=dat['max'];
               art.nro_comprobante=dat.max.ultimo_id.toString();
           
           });
         }
-
-        if(art.cliente.nombre){
-          this.api.GuardarBoleta(data).subscribe(dat=>{
-            console.log("bollll",dat.max.ultimo_id);
-            boleta.correlativo=dat['max'];
-            art.nro_comprobante=dat.max.ultimo_id.toString();
-        
-        });
-      }
-
-            if (data.sunatResponse.success) {
+        if (data.sunatResponse.success) {
               this.toastr.success(data.sunatResponse.cdrResponse.description);
             } else {
               this.toastr.error(art.comprobante + " no recibida");
             }
           });
         if (art.imprimir) {
-          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/note/send');
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/note/pdf');
         }
-
+  
         if (art) {
-          console.log("arrrt",art);
-        this.api.GuardarVenta(art).subscribe(data => {
+         
+        this.api.GuardarNotaCredito(art).subscribe(data => {
           this.toastr.success(data['messaje']);
         },
           error => { console.log(error) }
         );
         this.renderDataTable();
         }
-        
       },6000);
       
 

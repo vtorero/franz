@@ -85,18 +85,34 @@ export class ApiService {
     return this._http.post(Global.BASE_API_URL + 'api.php/dosimetriamov',
       { json: json }, { headers: headers });
   }
-
-  public GuardarComprobante(Boleta):Observable<any>{
+/*api sunat*/  
+  
+public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
     return this._http.post('https://facturacion.apisperu.com/api/v1/invoice/send',JSON.stringify(Boleta),{ headers: headers });
   }
 
+
+  public sendNotaSunat(Boleta):Observable<any>{
+    let headers = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
+    return this._http.post('https://facturacion.apisperu.com/api/v1/note/send',JSON.stringify(Boleta), { headers: headers });
+  }
+
   public GuardarFactura(datos):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/factura',
+      { json: json }, { headers: headers });
+  }
+
+  public GuardarNota(datos):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/notacredito',
       { json: json }, { headers: headers });
   }
 
@@ -107,14 +123,13 @@ export class ApiService {
       { json: json }, { headers: headers });
   }
 
-/*
-  public GuardarComprobante(Boleta):Observable<any>{
+  public GuardarNotaCredito(datos):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    let json = JSON.stringify(Boleta);
-    return this._http.post(Global.BASE_API_URL + 'api.php/comprobante',
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/nota',
       { json: json }, { headers: headers });
   }
-*/
+
   public EliminarProducto(datos: Producto): Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);

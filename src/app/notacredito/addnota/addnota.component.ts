@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, NgModule, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatPaginatorModule, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { Nota } from 'src/app/modelos/Boleta/nota';
@@ -13,10 +14,15 @@ import { AdditemComponent } from './additem/additem.component';
   templateUrl: './addnota.component.html',
   styleUrls: ['./addnota.component.css']
 })
+
+@NgModule({
+  imports: [BrowserModule,MatPaginatorModule,MatDialog],
+})
 export class AddnotaComponent implements OnInit {
   displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
-  dataComprobantes = [{ id: 'debito', tipo: 'Nota de Debito' }, { id: 'Credito', tipo: 'Nota de Credito'}];
-  dataTipoDocumentos = [{ id: '07', tipo: 'Factura' }, { id: '08', tipo: 'Boleta' }];
+  dataComprobantes = [{ id: '07', tipo: 'Nota de Credito' }, { id: '08', tipo: 'Nota de Debito'}];
+  dataTipoDocumentos = [{ id: '01', tipo: 'Factura' }, { id: '03', tipo: 'Boleta' }];
+  dataMotivos = [{ id: '01', tipo: 'Anulación de la operación' }, { id: '02', tipo: 'Anulación por error en el RUC'},{id:'07',tipo:'Devolución por ítem'}];
   dataVendedores: any;
   dataClientes: any;
   dataClient: any;
@@ -28,6 +34,8 @@ export class AddnotaComponent implements OnInit {
   dataSource: any;
   selected: string;
   filter: any;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
     private api: ApiService,
     public dialog: MatDialog,
@@ -110,8 +118,15 @@ export class AddnotaComponent implements OnInit {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
+      this.dataSource.paginator = this.paginator;  
       console.log(this.data.detalleVenta)
     });
   }
+
+
+  cancelar() {
+    this.dialog.closeAll();
+  }
+
 
 }

@@ -50,7 +50,7 @@ $app->get("/productos",function() use($db,$app){
 
  $app->get("/movimientos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo order by m.id desc");  
+    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where cantidad>0 and m.codigo_insumo=d.codigo order by m.id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
@@ -318,7 +318,7 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
 
-            $sql = "UPDATE productos SET nombre='".$nombre."',peso=".$peso.",costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
+            $sql = "UPDATE productos SET codigo='".$codigo."', nombre='".$nombre."',peso=".$peso.",costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
             try { 
             $db->query($sql);
              $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
@@ -767,6 +767,31 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
         }
             echo  json_encode($result);   
      });
+
+     $app->post("/notacredito",function() use($db,$app){
+        header("Content-type: application/json; charset=utf-8");
+           $json = $app->request->getBody();
+           $j = json_decode($json,true);
+           $data = json_decode($j['json']);
+                  try { 
+           $sql="call p_notacredito('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $stmt = mysqli_prepare($db,$sql);
+           mysqli_stmt_execute($stmt);
+           $stmt->close();
+           $datos=$db->query("SELECT max(id) ultimo_id FROM notacredito");
+           $ultimo_id=array();
+           while ($d = $datos->fetch_object()) {
+            $ultimo_id=$d;
+            }
+               
+            $result = array("STATUS"=>true,"messaje"=>"Nota  registrada correctamente","max"=>$ultimo_id);
+            }
+             catch(PDOException $e) {
+                $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        }
+            echo  json_encode($result);   
+     });
+
 
      $app->post("/boleta",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");

@@ -58,5 +58,17 @@ export class AdditemComponent implements OnInit {
    this.getProductos();
   }
   
+  onKey(value) { 
+    this.dataArray= []; 
+    this.selectSearch(value);       
+  }
+  selectSearch(value:string){
+    this.api.getProductosSelect(value).subscribe(data => {
+      if(data) {
+        this.dataProducto = data;
+      }
+    } );
+    
+  }
 
 }

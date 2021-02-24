@@ -188,21 +188,17 @@ export class VentasComponent implements OnInit {
 
 
       setTimeout(() => {
-        
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
-
-            if(art.cliente.razon_social){
+        if(art.cliente.razon_social){
             this.api.GuardarFactura(data).subscribe(dat=>{
               console.log("faccc",dat.max.ultimo_id);
               console.log("dddd",dat['max'].ultimo_id)
               boleta.correlativo=dat['max'];
               art.nro_comprobante=dat.max.ultimo_id.toString();
-          
           });
         }
-
-        if(art.cliente.nombre){
+      if(art.cliente.nombre){
           this.api.GuardarBoleta(data).subscribe(dat=>{
             console.log("bollll",dat.max.ultimo_id);
             boleta.correlativo=dat['max'];
@@ -217,14 +213,11 @@ export class VentasComponent implements OnInit {
               this.toastr.error(art.comprobante + " no recibida");
             }
           });
-          
-        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'ttps://facturacion.apisperu.com/api/v1/invoice/send');
         
         if (art.imprimir) {
-          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'ttps://facturacion.apisperu.com/api/v1/invoice/pdf');
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
-        
-        if (art) {
+          if (art) {
           console.log("arrrt",art);
         this.api.GuardarVenta(art).subscribe(data => {
           this.toastr.success(data['messaje']);

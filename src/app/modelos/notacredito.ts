@@ -4,6 +4,7 @@ export class NotaCredito {
         public id:number,
         public tipDocAfectado:string,
         public numDocfectado:string,
+        public codMotivo:string,
         public desMotivo:string,
         public tipoDoc:string,
         public id_usuario:string,

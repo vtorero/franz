@@ -23,14 +23,19 @@
              </div>
           <div class="col-lg-4">
             <mat-form-field>
-                <input matInput name="cantidad" #cantidad="ngModel" (focusout)="onCantidad($event.target.value, data)" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
+              <mat-label>Unidad Medida</mat-label>
+              <mat-select name="unidad" #unidad="ngModel" [(ngModel)]="data.unidad" required>
+                <mat-option [value]="">Seleccionar</mat-option>
+                <mat-option *ngFor="let und of dataUnidades" [value]="und.id">{{und.tipo}}</mat-option>
+              </mat-select>
             </mat-form-field>
+            
             </div>
          
           <div class="col-lg-4">
             <mat-form-field>
-                <input matInput name="peso" #peso="ngModel" [(ngModel)]="data.peso" type="number" placeholder="Ingrese peso" required>
-            </mat-form-field>
+              <input matInput name="cantidad" #cantidad="ngModel" (focusout)="onCantidad($event.target.value, data)" [(ngModel)]="data.cantidad" type="number" placeholder="Ingrese unidades" required>
+          </mat-form-field>
                 </div>
           </div>
           <div class="row">

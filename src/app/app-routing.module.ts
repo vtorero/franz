@@ -20,6 +20,7 @@ import { DosimetriaComponent } from './dosimetria/dosimetria.component';
 import { MovimientoComponent } from './dosimetria/movimiento/movimiento.component';
 import { ResumenComponent } from './inventario/resumen/resumen.component';
 import { NotacreditoComponent } from './notacredito/notacredito.component';
+import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,11 @@ const routes: Routes = [
   {path:'inventario',children:[
     {path:'resumen',
     component:ResumenComponent
+    }
+  ]},
+  {path:'dosimetria',children:[
+    {path:'resumen',
+    component:ResumendComponent
     }
   ]},
   {path:'notas',children:[

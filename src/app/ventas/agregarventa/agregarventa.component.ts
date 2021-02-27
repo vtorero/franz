@@ -79,6 +79,14 @@ export class AgregarventaComponent implements OnInit {
 
   }
 
+  change(event)
+    {
+     console.log(event);
+    if(event.source){
+      this.data.cliente.push(event.source.value);  
+  }
+}
+
   onKeyVendedor(value) {
     this.dataArray = [];
     this.selectSearch(value);
@@ -139,8 +147,8 @@ export class AgregarventaComponent implements OnInit {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,'')
     });
     dialogo1.afterClosed().subscribe(art => {
-      console.log("art",art)
-      if (art)
+     console.log("art",art)
+       if (art)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;

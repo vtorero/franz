@@ -60,6 +60,18 @@ $app->get("/productos",function() use($db,$app){
         
 });
 
+$app->get("/movresumen",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)-SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo group by 1,2,3");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+         $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
+
 
  $app->delete("/dosimetria/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -522,7 +534,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,id_producto,DATE_FORMAT(fecha_produccion, '%Y-%m-%d') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') fecha_vencimiento,observacion,granel,cantidad, i.peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%Y-%m-%d') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -535,7 +547,7 @@ $app->get("/almacen",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,i.peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,i.peso/1000 peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -572,7 +584,7 @@ $app->get("/inventarios",function() use($db,$app){
            try { 
             $fecha=substr($data->fecha_produccion,0,10);
             $fecha2=substr($data->fecha_vencimiento,0,10);
-            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}',{$data->granel},{$data->cantidad},{$data->peso},{$data->merma},'{$fecha}','{$fecha2}','{$data->observacion}')";
+            $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->granel},{$data->cantidad},{$data->peso},{$data->merma},'{$fecha}','{$fecha2}','{$data->observacion}')";
             $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $result = array("STATUS"=>true,"messaje"=>"Inventario registrado correctamente","string"=>$fecha);
@@ -596,7 +608,7 @@ $app->get("/inventarios",function() use($db,$app){
                try { 
                 $fecha_prod=substr($data->fecha_produccion,0,10);
                 $fecha_venc=substr($data->fecha_vencimiento,0,10);
-                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad})";
+                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad},{$data->peso})";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
                 $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente");
@@ -725,7 +737,8 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
              //$proc="";
             
-             /*actualiza inventario*/   
+             /*actualiza inventario*/  
+      
             $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
@@ -945,7 +958,7 @@ $app->delete("/cliente/:dni",function($dni) use($db,$app){
 
 $app->get("/empresas/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social` FROM `empresas` where razon_social like '%".$criterio."%'");  
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` where razon_social like '%".$criterio."%'");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

@@ -17,7 +17,8 @@ export const adminLteConf = {
     ]},
     {label:'Dosimetria',iconClasses: 'fa fa-table',children:[
       {label:'Insumos',iconClasses: 'fa fa-table',route: 'general/dosimetria'},
-      {label:'Movimientos',iconClasses: 'fa fa-table',route: 'general/movimientos'}
+      {label:'Movimientos',iconClasses: 'fa fa-table',route: 'general/movimientos'},
+      {label:'Resumen',iconClasses: 'fa fa-table',route: 'dosimetria/resumen'}
     ]},  
     {label: 'Productos',iconClasses: 'fa fa-tasks',children:[
     {label: 'Listado', route: 'general/productos'},  

@@ -192,7 +192,6 @@ export class NotacreditoComponent implements OnInit {
               console.log("dddd",dat['max'].ultimo_id)
               boleta.correlativo=dat['max'];
               art.nro_comprobante=dat.max.ultimo_id.toString();
-          
           });
         }
         if (data.sunatResponse.success) {

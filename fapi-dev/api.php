@@ -50,7 +50,7 @@ $app->get("/productos",function() use($db,$app){
 
  $app->get("/movimientos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo order by m.id desc");  
+    $resultado = $db->query("SELECT d.descripcion,m.* FROM dosimetria_movimientos m, dosimetria d where cantidad>0 and m.codigo_insumo=d.codigo order by m.id desc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
@@ -60,6 +60,17 @@ $app->get("/productos",function() use($db,$app){
         
 });
 
+$app->get("/movresumen",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)-SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo group by 1,2,3");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+         $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+        
+});
 
  $app->delete("/dosimetria/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
@@ -596,7 +607,7 @@ $app->get("/inventarios",function() use($db,$app){
                try { 
                 $fecha_prod=substr($data->fecha_produccion,0,10);
                 $fecha_venc=substr($data->fecha_vencimiento,0,10);
-                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad})";
+                $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad},{$data->peso})";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
                 $result = array("STATUS"=>true,"messaje"=>"Inventario actualizado correctamente");
@@ -669,8 +680,19 @@ $app->get("/vendedores",function() use($db,$app){
              echo  json_encode($result);
         });
     
-/*ventas*/
+/*notas*/
+$app->get("/notas",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
+/*ventas*/
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
@@ -708,7 +730,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
           try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_nota('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$data->nro_comprobante}','{$fecha}',{$valor_total},{$data->igv})";
+            $sql="call p_nota('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->tipoDoc}','{$data->numDocfectado}','{$data->nro_comprobante}','{$fecha}',{$valor_total},{$data->igv})";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $datos=$db->query("SELECT max(id) ultimo_id FROM notas");
@@ -986,7 +1008,7 @@ $app->delete("/cliente/:dni",function($dni) use($db,$app){
 
 $app->get("/empresas/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social` FROM `empresas` where razon_social like '%".$criterio."%'");  
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` where razon_social like '%".$criterio."%'");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             

@@ -10,6 +10,7 @@ export class Inventario {
         public ciclo:number,
         public id_usuario:number,
         public presentacion:string,
+        public unidad:string,
         public observacion:string,
         public fecha_produccion:string,
         public fecha_vencimiento:string,

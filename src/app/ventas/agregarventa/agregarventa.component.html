@@ -22,7 +22,7 @@
         </div>-->
         <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente' && filter=='1')">
           <mat-label>Cliente con DNI</mat-label>
-          <mat-select name="cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
             <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
             <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let cli of dataClientes" [value]="cli">
@@ -32,10 +32,10 @@
         </mat-form-field>
         <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente' && filter=='2')">
           <mat-label>Cliente CON RUC</mat-label>
-          <mat-select name="cliente" [(ngModel)]="data.cliente" required>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
             <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli">
+            <mat-option *ngFor="let cli of dataEmpresas" (onSelectionChange)="change($event)" [value]="cli">
               {{cli.razon_social}}
             </mat-option>
           </mat-select>

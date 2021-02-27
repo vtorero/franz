@@ -66,6 +66,7 @@ import { ResumenComponent } from './inventario/resumen/resumen.component';
 import { NotacreditoComponent } from './notacredito/notacredito.component';
 import { AddnotaComponent } from './notacredito/addnota/addnota.component';
 import { AdditemComponent } from './notacredito/addnota/additem/additem.component';
+import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 
 
 
@@ -120,7 +121,7 @@ import { AdditemComponent } from './notacredito/addnota/additem/additem.componen
   AddnotaComponent,
   AdditemComponent],
   declarations: [
-      AppComponent,
+    AppComponent,
     PagoComponent,
     HomeComponent,
     GeneralComponent,
@@ -156,6 +157,7 @@ import { AdditemComponent } from './notacredito/addnota/additem/additem.componen
     MovimientoComponent,
     AddInsumoComponent,
     ResumenComponent,
+    ResumendComponent,
     NotacreditoComponent,
     AddnotaComponent,
     AdditemComponent

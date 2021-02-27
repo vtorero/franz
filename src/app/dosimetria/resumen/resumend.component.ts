@@ -7,18 +7,18 @@ import { Movimiento } from 'src/app/modelos/movimiento';
 import { AddDosimetriaComponent } from '../add-dosimetria/add-dosimetria.component';
 
 @Component({
-  selector: 'app-movimiento',
-  templateUrl: './movimiento.component.html',
-  styleUrls: ['./movimiento.component.css']
+  selector: 'app-resumen',
+  templateUrl: './resumen.component.html',
+  styleUrls: ['./resumen.component.css']
 })
-export class MovimientoComponent implements OnInit {
+export class ResumendComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id:'Boleta', tipo: 'Boleta' }];
   startDate: Date = new Date();
   
   cancela: boolean = false;
-  displayedColumns = ['codigo', 'descripcion', 'movimiento','unidad','cantidad_ingreso','cantidad_salida','cantidad','fecha_movimiento' ];
+  displayedColumns = ['codigo_insumo', 'descripcion','unidad','saldo'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -34,7 +34,7 @@ export class MovimientoComponent implements OnInit {
     this.dataSource.filter = filterValue;
 }
   renderDataTable() {
-    this.api.getApi('movimientos').subscribe(x => {
+    this.api.getApi('movresumen').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
       this.dataSource.sort = this.sort;
@@ -70,7 +70,8 @@ export class MovimientoComponent implements OnInit {
   }
 
   ngOnInit() {
-    this,this.renderDataTable();
+    this.renderDataTable();
+
   }
 
 }

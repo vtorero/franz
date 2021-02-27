@@ -35,7 +35,7 @@ export class InventarioComponent implements OnInit {
 
     abrirDialogo() {
       const dialogo1 = this.dialog.open(AddInventarioComponent, {
-        data: new Inventario(0,0,0,0,0,0,0,0,0,'','','','','')
+        data: new Inventario(0,0,0,0,0,0,0,0,0,'','','','','','')
       });
       dialogo1.afterClosed().subscribe(art => {
         if (art != undefined)

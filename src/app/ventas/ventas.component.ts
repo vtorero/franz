@@ -111,6 +111,7 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art: Venta) {
+    console.log("ventaaaa",art);
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -171,7 +172,6 @@ export class VentasComponent implements OnInit {
         total = total + (value.cantidad * value.mtoValorUnitario);
         detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
         detalleBoleta.tipAfeIgv = 10;
-        console.log("total", total);
         boleta.details.push(detalleBoleta);
       });
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).subscribe(data => {
@@ -192,15 +192,12 @@ export class VentasComponent implements OnInit {
           data => {
         if(art.cliente.razon_social){
             this.api.GuardarFactura(data).subscribe(dat=>{
-              console.log("faccc",dat.max.ultimo_id);
-              console.log("dddd",dat['max'].ultimo_id)
               boleta.correlativo=dat['max'];
               art.nro_comprobante=dat.max.ultimo_id.toString();
           });
         }
       if(art.cliente.nombre){
           this.api.GuardarBoleta(data).subscribe(dat=>{
-            console.log("bollll",dat.max.ultimo_id);
             boleta.correlativo=dat['max'];
             art.nro_comprobante=dat.max.ultimo_id.toString();
         
@@ -218,7 +215,6 @@ export class VentasComponent implements OnInit {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
           if (art) {
-          console.log("arrrt",art);
         this.api.GuardarVenta(art).subscribe(data => {
           this.toastr.success(data['messaje']);
         },
@@ -267,7 +263,7 @@ export class VentasComponent implements OnInit {
       boleta.client.rznSocial = art.cliente;
     }
     if (art.comprobante=='Factura') {
-      boleta.tipoOperacion = "1001";
+      boleta.tipoOperacion = "0101";
       boleta.tipoDoc = "01";
       boleta.serie = "F001";
       boleta.correlativo = art.nro_comprobante.substring(4,10);
@@ -287,17 +283,17 @@ export class VentasComponent implements OnInit {
       
       let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
       detalleBoleta.codProducto = value.codigo;
-      detalleBoleta.descripcion = value.nombre;
-      detalleBoleta.mtoValorUnitario = Number(value.precio);
       detalleBoleta.unidad = value.unidad_medida;
-     
+      detalleBoleta.descripcion = value.nombre;
       detalleBoleta.cantidad = Number(value.cantidad);
+      detalleBoleta.mtoValorUnitario = Number(value.precio);
       detalleBoleta.mtoValorVenta = Number(value.precio) * Number(value.cantidad);
-      detalleBoleta.mtoBaseIgv = Number(value.precio);
-      detalleBoleta.igv = Number(value.precio) * Global.BASE_IGV;
-      detalleBoleta.totalImpuestos = Number(value.precio) * Global.BASE_IGV;
+      detalleBoleta.mtoBaseIgv = Number(value.precio) * Number(value.cantidad);
+      detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100;
+      detalleBoleta.igv = (Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV;
+      detalleBoleta.totalImpuestos = (Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV;
       detalleBoleta.mtoPrecioUnitario = Number(value.precio) + (value.precio * Global.BASE_IGV);
-      detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
+      
       detalleBoleta.tipAfeIgv = 10;
       boleta.details.push(detalleBoleta);
     });
@@ -305,9 +301,9 @@ export class VentasComponent implements OnInit {
     boleta.mtoOperGravadas = Number(art.valor_neto);
     boleta.mtoIGV = Number(art.monto_igv);
     boleta.totalImpuestos = Number(art.monto_igv);
-    boleta.valorVenta = Number(art.valor_total),
-      boleta.mtoImpVenta = Number(art.valor_total),
-      boleta.company = this.company;
+    boleta.valorVenta = Number(art.valor_neto),
+    boleta.mtoImpVenta = Number(art.valor_total),
+    boleta.company = this.company;
     this.api.getNumeroALetras(art.valor_total).subscribe(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
     });
@@ -315,7 +311,7 @@ export class VentasComponent implements OnInit {
     setTimeout(() => {
       console.log("boletaaaa",boleta);
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
-    },2000);
+    },6000);
 
   }
 

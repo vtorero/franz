@@ -28,17 +28,21 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.unidad}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="cantidad_movimiento">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Movimiento</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.cantidad_movimiento}} </mat-cell>
+      <ng-container matColumnDef="cantidad_ingreso">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Ingreso</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad_ingreso}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="cantidad_salida">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Salida</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad_salida}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Saldo</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="fecha_registro">
+      <ng-container matColumnDef="fecha_movimiento">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Movimiento</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.fecha_registro}}</mat-cell>
+        <mat-cell *matCellDef="let row">{{row.fecha_movimiento}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="inventario_inicial">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Inventario inicial</span></mat-header-cell>

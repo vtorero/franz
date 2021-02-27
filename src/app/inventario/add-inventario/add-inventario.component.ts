@@ -14,6 +14,7 @@ export class AddInventarioComponent implements OnInit {
   dataProducto: any;
   dataArray;
   dataPeso: any;
+  dataUnidades = [{ id: 'NIU', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo'}];
   constructor(private api: ApiService,
     @Inject(MAT_DIALOG_DATA) public data: Inventario,
     public dialogRef: MatDialogRef<AddInventarioComponent>,
@@ -29,7 +30,7 @@ export class AddInventarioComponent implements OnInit {
   onCantidad(value,da) {
     this.getProdPeso(da.id_producto);
     setTimeout(() => {
-      this.data.peso = value * this.dataPeso[0].peso;
+      this.data.peso = (value * this.dataPeso[0].peso)/1000;
      },1500);
     
   }

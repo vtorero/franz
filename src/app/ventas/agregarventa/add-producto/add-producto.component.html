@@ -13,15 +13,16 @@
         <mat-form-field>
           <mat-label>Stock</mat-label>
           <mat-select name="codProductob" #codProductob="ngModel" [(ngModel)]="data.codProductob" required> 
-            <mat-option  *ngFor="let prob of dataExistencias" (onSelectionChange)="change($event)" [value]="prob">Producido el :{{prob.fecha_produccion}} | unidades disponibles:{{prob.cantidad}} | Peso disponible:{{prob.peso}}</mat-option>
+            <mat-option  *ngFor="let prob of dataExistencias" (onSelectionChange)="change($event)" [value]="prob">Producido el: {{prob.fecha_produccion}} | stock disp:{{prob.cantidad}} {{prob.unidad}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Unidad Medida</mat-label>
-          <mat-select name="unidadmedida" #unidadmedida="ngModel" [(ngModel)]="data.unidadmedida" required>
+          <input matInput name="unidadmedida" #unidadmedida="ngModel" [(ngModel)]="data.unidadmedida" type="text" [value]="data.unidadmedida" readonly>
+          <!--<mat-select name="unidadmedida" #unidadmedida="ngModel" [(ngModel)]="data.unidadmedida" readonly>
             <mat-option [value]="">Seleccionar</mat-option>
             <mat-option *ngFor="let und of dataUnidades" (onSelectionChange)="changemedida($event,und)" [value]="und.id">{{und.tipo}}</mat-option>
-          </mat-select>
+          </mat-select>-->
         </mat-form-field>
         <mat-form-field>
           <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>

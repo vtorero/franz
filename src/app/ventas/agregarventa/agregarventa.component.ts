@@ -1,5 +1,5 @@
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { MatDialog, MatPaginatorModule, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, NgModule, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatPaginatorModule, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
@@ -7,6 +7,7 @@ import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { Client } from 'src/app/modelos/Boleta/client';
+import { Global } from 'src/app/global';
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
   fullPickerInput: 'l LT',
@@ -42,6 +43,11 @@ export class AgregarventaComponent implements OnInit {
   dataSource: any;
   selected: string;
   filter: any;
+  valor_neto:number=0;
+  monto_igv:number=0;
+  valor_total:number=0;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
 
     private api: ApiService,
@@ -147,16 +153,25 @@ export class AgregarventaComponent implements OnInit {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,'')
     });
     dialogo1.afterClosed().subscribe(art => {
-     console.log("art",art)
+    console.log("art",art)
+    this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
+    this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
+    this.valor_total=this.valor_neto+this.monto_igv;
+     console.log(this.valor_neto);
        if (art)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 
   ngOnInit() {
+    this.valor_neto=0;
+    this.monto_igv=0;
+    this.valor_total=0;
     this.getVendedores();
     this.getclientes();
     this.getEmpresas();

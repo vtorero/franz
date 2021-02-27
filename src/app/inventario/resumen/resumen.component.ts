@@ -31,6 +31,12 @@ export class ResumenComponent implements OnInit {
   totalmermaD:any=0;
   totalcantidadD:any=0;
   totalpesoD:any=0;
+
+  dataSourceE:any;
+  totalgranelE:any=0;
+  totalmermaE:any=0;
+  totalcantidadE:any=0;
+  totalpesoE:any=0;
   
   displayedColumns = ['id','codigo','producto','granel','merma','cantidad','peso'];
   @ViewChild(MatSort) sort: MatSort;
@@ -57,6 +63,7 @@ export class ResumenComponent implements OnInit {
     this.renderDataTable2();
     this.renderDataTable3();
     this.renderDataTable4();
+    this.renderDataTable6();
   }
   renderDataTable() {
     this.api.getInventarios('inventario/1').subscribe(x => {
@@ -122,6 +129,24 @@ export class ResumenComponent implements OnInit {
       this.totalpesoD = x['total'][0].peso;
       this.dataSourceD.sort = this.sort;
       this.dataSourceD.paginator = this.paginator;
+      
+    },
+      error => {
+        console.log('Error de conexion de datatable!' + error);
+      });
+  }
+
+
+  renderDataTable6() {
+    this.api.getInventarios('inventario/6').subscribe(x => {
+      this.dataSourceE = new MatTableDataSource();
+      this.dataSourceE.data = x['data'];
+      this.totalgranelE = x['total'][0].granel;
+      this.totalmermaE = x['total'][0].merma;
+      this.totalcantidadE = x['total'][0].cantidad;
+      this.totalpesoE = x['total'][0].peso;
+      this.dataSourceE.sort = this.sort;
+      this.dataSourceE.paginator = this.paginator;
       
     },
       error => {

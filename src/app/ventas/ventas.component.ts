@@ -51,7 +51,7 @@ export class VentasComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -96,6 +96,7 @@ export class VentasComponent implements OnInit {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
       data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
     });
+    
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
         this.agregar(art);
@@ -190,22 +191,28 @@ export class VentasComponent implements OnInit {
       setTimeout(() => {
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
-        if(art.cliente.razon_social){
-            this.api.GuardarFactura(data).subscribe(dat=>{
-              boleta.correlativo=dat['max'];
-              art.nro_comprobante=dat.max.ultimo_id.toString();
-          });
-        }
-      if(art.cliente.nombre){
-          this.api.GuardarBoleta(data).subscribe(dat=>{
-            boleta.correlativo=dat['max'];
-            art.nro_comprobante=dat.max.ultimo_id.toString();
-        
-        });
-      }
-
             if (data.sunatResponse.success) {
               this.toastr.success(data.sunatResponse.cdrResponse.description);
+              
+              if(art.cliente.razon_social){
+                this.api.GuardarFactura(data).subscribe(dat=>{
+                  boleta.correlativo=dat['max'];
+                  art.nro_comprobante=dat.max.ultimo_id.toString();
+              });
+            }
+          if(art.cliente.nombre){
+              this.api.GuardarBoleta(data).subscribe(dat=>{
+                boleta.correlativo=dat['max'];
+                art.nro_comprobante=dat.max.ultimo_id.toString();
+            
+            });
+          }
+
+                this.api.GuardarVenta(art).subscribe(data => {
+                  this.toastr.success(data['messaje']);
+                },
+                  error => { console.log(error) }
+                );
             } else {
               this.toastr.error(art.comprobante + " no recibida");
             }
@@ -214,17 +221,9 @@ export class VentasComponent implements OnInit {
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
-          if (art) {
-        this.api.GuardarVenta(art).subscribe(data => {
-          this.toastr.success(data['messaje']);
-        },
-          error => { console.log(error) }
-        );
-        this.renderDataTable();
-        }
-        
+
       },6000);
-      
+      this.renderDataTable();
 
     }
 

@@ -208,3 +208,56 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]></mat-paginator>
   </div>
 </mk-box>
+
+
+<mk-box header="Resumen Quesos" [isCollapsable]="false" [isRemovable]="false" *ngIf="dataSourceD">
+  <div class="example-header mat-elevation-z8">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilterB($event.target.value)" placeholder="Escriba algo para filtrar">
+    </mat-form-field>
+  </div>
+  <div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSourceE" matSort>
+      <!--  Columna ID-->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>codigo Producto</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="producto">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.producto}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="granel">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelD}}</mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="merma">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaD}}</mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="cantidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadD}}</mat-footer-cell>
+      </ng-container>
+      <ng-container matColumnDef="peso">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoD}}</mat-footer-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-footer-row class="sticky-footer" *matFooterRowDef="displayedColumns"></mat-footer-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]></mat-paginator>
+  </div>
+</mk-box>

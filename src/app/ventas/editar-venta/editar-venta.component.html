@@ -95,7 +95,7 @@
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.cantidad}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.cantidad | number}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>

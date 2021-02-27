@@ -69,6 +69,7 @@ if(ev.source){
   {
     console.log(event.source.value);
     this.data.mtoPrecioUnitario=event.source.value.precio;
+    this.data.unidadmedida=event.source.value.unidad;
     if(event.source.selected){
       this.seleccionados.push(event.source.value);
       }else{
@@ -90,7 +91,7 @@ if(ev.source){
     }
   }
     if(this.data.unidadmedida=="KGM"){
-      if(Number(cantidad)> Number(this.stock[0].peso)){
+      if(Number(cantidad)> Number(this.stock[0].cantidad)){
         this.toastr.error("Inventario de " +this.stock[0].nombre+ " insuficiente");
          this.data.cantidad=null;
          cantidad;

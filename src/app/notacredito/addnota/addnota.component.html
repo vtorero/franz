@@ -136,7 +136,7 @@
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[3,6,9,12,15]" [pageSize]="3" [showFirstLastButtons]></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="3" [showFirstLastButtons]></mat-paginator>
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button (click)="cancelar()">Cancelar</button>

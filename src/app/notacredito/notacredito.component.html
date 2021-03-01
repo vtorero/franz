@@ -11,26 +11,22 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="usuario">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.usuario}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="vendedor">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Vendedor</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.vendedor}} </mat-cell>
-      </ng-container>
+        
       <ng-container matColumnDef="cliente">
             <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.cliente}} </mat-cell>
       </ng-container>
-      <!-- Columna Edad -->
-       <ng-container matColumnDef="estado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Estado</span></mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.estado}} </mat-cell>
+      <ng-container matColumnDef="tipoDoc">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Nota</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.tipoDoc}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="comprobante">
+       <ng-container matColumnDef="comprobante">
             <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Comprobante</span></mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.comprobante}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="nro_comprobante">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Nro Comprobante</span></mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.nro_comprobante}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha</span></mat-header-cell>

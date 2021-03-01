@@ -24,7 +24,7 @@ export class InventarioComponent implements OnInit {
     public dialogo: MatDialog,
     private toastr: ToastrService,
     dateTimeAdapter: DateTimeAdapter<any>) { 
-
+      dateTimeAdapter.setLocale('es-PE');
     }
 
     applyFilter(filterValue: string) {
@@ -58,6 +58,8 @@ export class InventarioComponent implements OnInit {
     }
     abrirEditar(cod:Inventario) {
       console.log(cod);
+      cod.fecha_produccion=new Date(cod.fecha_produccion+' 00:00');
+      cod.fecha_vencimiento=new Date(cod.fecha_vencimiento+' 00:00');
          const dialogo2 = this.dialog2.open(EditInventarioComponent, {
         data: cod
       });

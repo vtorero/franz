@@ -94,7 +94,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
+      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
     });
     
     dialogo1.afterClosed().subscribe(art => {
@@ -216,6 +216,7 @@ export class VentasComponent implements OnInit {
             } else {
               this.toastr.error(art.comprobante + " no recibida");
             }
+            this.renderDataTable();
           });
         
         if (art.imprimir) {
@@ -223,7 +224,7 @@ export class VentasComponent implements OnInit {
         }
 
       },6000);
-      this.renderDataTable();
+      
 
     }
 
@@ -232,7 +233,7 @@ export class VentasComponent implements OnInit {
 
 
   abrirEditar(cod: Venta) {
-    console.log(cod);
+   cod.fecha=new Date(cod.fecha +' 00:00');
     const dialogo2 = this.dialog2.open(EditarVentaComponent, {
       data: cod
     });

@@ -1,12 +1,11 @@
 import { Component, Inject, NgModule, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatPaginatorModule, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
+import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { Client } from 'src/app/modelos/Boleta/client';
 import { Global } from 'src/app/global';
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -26,7 +25,7 @@ export const MY_MOMENT_FORMATS = {
 
 
 @NgModule({
-  imports: [OwlDateTimeModule, OwlNativeDateTimeModule, BrowserModule, MatPaginatorModule],
+  imports: [BrowserModule,OwlDateTimeModule, OwlNativeDateTimeModule,MatPaginatorModule],
   providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
 export class AgregarventaComponent implements OnInit {
@@ -125,6 +124,7 @@ export class AgregarventaComponent implements OnInit {
     });
   }
   onKeyRuc(value) {
+    this.data.id_vendedor=0;
     this.dataArray = [];
     this.SearchRuc(value);
   }

@@ -12,8 +12,8 @@ export class Inventario {
         public presentacion:string,
         public unidad:string,
         public observacion:string,
-        public fecha_produccion:string,
-        public fecha_vencimiento:string,
+        public fecha_produccion:any,
+        public fecha_vencimiento:any,
         public nombre:string
         ){}
 }

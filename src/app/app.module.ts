@@ -33,7 +33,7 @@ import { DialogoarticuloComponent } from './productos/AddProducto/AddProducto.co
 import { MatDialogModule } from '@angular/material/dialog';
 import { CategoriaComponent } from './productos/categoria/categoria.component';
 import { ToastrModule } from 'ngx-toastr';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { AddProveedorComponent } from './proveedores/add-proveedor/add-proveedor.component';
@@ -54,7 +54,6 @@ import { AddProductoComponent } from './ventas/agregarventa/add-producto/add-pro
 import { ClientesComponent } from './clientes/personas/clientes.component';
 import { EmpresasComponent } from './clientes/empresas/empresas.component';
 import { AddEmpresaComponent } from './clientes/empresas/add-empresa/add-empresa.component';
-import { DropdownModule } from './+dropdown/dropdown.module';
 import { EditClienteComponent } from './clientes/personas/edit-cliente/edit-cliente.component';
 import { EditarVentaComponent } from './ventas/editar-venta/editar-venta.component';
 import { EditEmpresaComponent } from './clientes/empresas/edit-empresa/edit-empresa.component';

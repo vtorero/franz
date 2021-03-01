@@ -27,7 +27,7 @@ function sendInvoice(data, nro,url) {
     .then(blob => {
       var link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.download = "comprobante-" + nro + ".pdf";
+      link.download = "nota-" + nro + ".pdf";
       link.click();
     });
 }
@@ -52,7 +52,7 @@ export class NotacreditoComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'estado', 'comprobante', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['id','cliente','tipoDoc','comprobante','nro_comprobante' ,'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   filter: any;
@@ -127,10 +127,11 @@ export class NotacreditoComponent implements OnInit {
       boleta.numDocfectado=art.numDocfectado;
       /**cliente*/
       if (art.cliente.nombre) {
-        boleta.serie = "FF01";
+        boleta.serie = "BB01";
         this.api.getMaxId('notascredito').subscribe(id=>{
           boleta.correlativo=id[0].ultimo.toString();
-          art.nro_comprobante="FF01"+id[0].ultimo.toString();
+          art.nro_comprobante="BB01"+id[0].ultimo.toString();
+          art.comprobante='Boleta';
           });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
@@ -140,6 +141,7 @@ export class NotacreditoComponent implements OnInit {
         this.api.getMaxId('notascredito').subscribe(id=>{
         boleta.correlativo=id[0].ultimo.toString();
         art.nro_comprobante="FF01"+id[0].ultimo.toString();
+        art.comprobante='Factura';
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;

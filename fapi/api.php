@@ -534,7 +534,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%Y-%m-%d') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%m-%d-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%m-%d-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -781,6 +781,63 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             echo  json_encode($result);   
      });
 
+/*notas*/
+$app->get("/notas",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT v.id, v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, if(tipoDoc= '07','Nota Credito','Nota Debito') tipoDoc,comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,clientes c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id, v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado,if(tipoDoc= '07','Nota Credito','Nota Debito') tipoDoc ,comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,empresas c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
+
+
+$app->post("/nota",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+       $valor_total=0;
+       /*total de la venta*/
+       
+       foreach($data->detalleVenta as $value){
+            $valor_total+=$value->cantidad*$value->mtoValorUnitario;
+       }
+
+      try { 
+        $fecha=substr($data->fecha,0,10);
+        $sql="call p_nota('{$data->id_usuario}','{$data->cliente->id}','{$data->tipoDoc}','{$data->comprobante}','{$data->numDocfectado}','{$fecha}',{$valor_total},{$data->igv})";
+       $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $datos=$db->query("SELECT max(id) ultimo_id FROM notas");
+        $ultimo_id=array();
+        while ($d = $datos->fetch_object()) {
+         $ultimo_id=$d;
+         }
+        foreach($data->detalleVenta as $valor){
+        
+                     /*inserta detalle*/
+        $proc="call p_nota_detalle({$ultimo_id->ultimo_id},'{$valor->codProducto->codigo}','{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
+        $stmt = mysqli_prepare($db,$proc);
+        mysqli_stmt_execute($stmt);
+        $stmt->close();
+
+        }
+        $result = array("STATUS"=>true,"messaje"=>"Nota registrada correctamente con el nro:".$ultimo_id->ultimo_id);
+        
+        }
+         catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+        echo  json_encode($result);   
+});
+
+
      $app->post("/notacredito",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
            $json = $app->request->getBody();
@@ -791,7 +848,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
            $stmt->close();
-           $datos=$db->query("SELECT max(id) ultimo_id FROM notacredito");
+           $datos=$db->query("SELECT max(id) ultimo_id FROM notascredito");
            $ultimo_id=array();
            while ($d = $datos->fetch_object()) {
             $ultimo_id=$d;

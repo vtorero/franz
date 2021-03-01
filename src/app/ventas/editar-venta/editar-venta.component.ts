@@ -1,5 +1,5 @@
 import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginatorModule, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDatepickerModule, MatDialog, MatDialogRef, MatPaginatorModule, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
@@ -24,8 +24,10 @@ export const MY_MOMENT_FORMATS = {
 
 @NgModule({
   imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
-  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: {useUtc: true}}] 
 })
+
+
 export class EditarVentaComponent implements OnInit {
   displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];

@@ -730,7 +730,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
           try { 
             $fecha=substr($data->fecha,0,10);
-            $sql="call p_nota('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->tipoDoc}','{$data->numDocfectado}','{$data->nro_comprobante}','{$fecha}',{$valor_total},{$data->igv})";
+            $sql="call p_nota('{$data->id_usuario}','{$data->cliente->id}','{$data->tipoDoc}','{$data->numDocfectado}','{$data->nro_comprobante}','{$fecha}',{$valor_total},{$data->igv})";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
             $datos=$db->query("SELECT max(id) ultimo_id FROM notas");

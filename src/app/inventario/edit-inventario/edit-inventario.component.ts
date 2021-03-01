@@ -1,20 +1,27 @@
 import { Component, Inject, NgModule } from '@angular/core';
-import { MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
 import { Inventario } from 'src/app/modelos/inventario';
 
 
-export const MY_MOMENT_FORMATS = {
-  parseInput: 'l LT',
-  fullPickerInput: 'l LT',
-  datePickerInput: 'l',
-  timePickerInput: 'LT',
-  monthYearLabel: 'MM YYYY',
-  dateA11yLabel: 'LL',
-  monthYearA11yLabel: 'MM YYYY',
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
 };
+
+@NgModule({
+  imports: [BrowserModule,OwlDateTimeModule, OwlNativeDateTimeModule,MatDialog],
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_FORMATS},]
+})
 
 @Component({
   selector: 'app-edit-inventario',
@@ -23,10 +30,6 @@ export const MY_MOMENT_FORMATS = {
 })
 
 
-@NgModule({
-  imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
-  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS}]
-})
 export class EditInventarioComponent {
   dataProducto:any;
   dataArray:any;

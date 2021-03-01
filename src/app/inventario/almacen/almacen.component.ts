@@ -1,17 +1,37 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+
+import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { DateTimeAdapter } from 'ng-pick-datetime';
+import { BrowserModule } from '@angular/platform-browser';
+import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Inventario } from 'src/app/modelos/inventario';
 import { AddInventarioComponent } from '../add-inventario/add-inventario.component';
 import { EditInventarioComponent } from '../edit-inventario/edit-inventario.component';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
+@NgModule({
+  imports: [BrowserModule,OwlDateTimeModule, OwlNativeDateTimeModule,MatDialog],
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_FORMATS},]
+})
 
 @Component({
   selector: 'app-almacen',
   templateUrl: './almacen.component.html',
   styleUrls: ['./almacen.component.css']
 })
+
+
 export class AlmacenComponent implements OnInit {
 dataSource:any;
 cancela: boolean = false;
@@ -23,7 +43,8 @@ displayedColumns = ['id_producto','codigo', 'nombre','unidad', 'cantidad','fecha
     public dialogo: MatDialog,
     private toastr: ToastrService,
     public dialog2: MatDialog,
-    dateTimeAdapter: DateTimeAdapter<any>) { }
+    dateTimeAdapter: DateTimeAdapter<any>,
+  ) { }
 
     applyFilter(filterValue: string) {
       filterValue = filterValue.trim(); 
@@ -72,6 +93,8 @@ displayedColumns = ['id_producto','codigo', 'nombre','unidad', 'cantidad','fecha
 
   abrirEditar(cod:Inventario) {
     console.log(cod);
+    cod.fecha_produccion=new Date(cod.fecha_produccion+' 00:00')
+    cod.fecha_vencimiento=new Date(cod.fecha_vencimiento+' 00:00');
        const dialogo2 = this.dialog2.open(EditInventarioComponent, {
       data: cod
     });

@@ -132,7 +132,7 @@ export class VentasComponent implements OnInit {
         boleta.serie = "B001";
         this.api.getMaxId('boletas').subscribe(id=>{
           boleta.correlativo=id[0].ultimo.toString();
-          art.nro_comprobante="B001"+id[0].ultimo.toString();
+          art.nro_comprobante="B001-"+id[0].ultimo.toString();
           });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
@@ -142,7 +142,7 @@ export class VentasComponent implements OnInit {
         boleta.serie = "F001";
         this.api.getMaxId('facturas').subscribe(id=>{
         boleta.correlativo=id[0].ultimo.toString();
-        art.nro_comprobante="F001"+id[0].ultimo.toString();
+        art.nro_comprobante="F001-"+id[0].ultimo.toString();
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
@@ -203,8 +203,7 @@ export class VentasComponent implements OnInit {
           if(art.cliente.nombre){
               this.api.GuardarBoleta(data).subscribe(dat=>{
                 boleta.correlativo=dat['max'];
-                art.nro_comprobante=dat.max.ultimo_id.toString();
-            
+                art.nro_comprobante=dat.max.ultimo_id.toString(); 
             });
           }
 
@@ -233,7 +232,6 @@ export class VentasComponent implements OnInit {
 
 
   abrirEditar(cod: Venta) {
-   cod.fecha=new Date(cod.fecha +' 00:00');
     const dialogo2 = this.dialog2.open(EditarVentaComponent, {
       data: cod
     });

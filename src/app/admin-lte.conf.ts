@@ -41,13 +41,14 @@ export const adminLteConf = {
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'general/ventas'}
     ]},
-    {label: 'Notas',iconClasses: 'fa fa-files-o',children:[
-      {label: 'Credito/Debito', route: 'notas/credito'}
+    {label: 'Notas Credito/Debito',iconClasses: 'fa fa-files-o',children:[
+      {label: 'Listado', route: 'notas/credito'}
     ]},
+    /*
     {label: 'Reportes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Productos', route: 'dash/reportes'}
     ]},
-    /*
+    
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
    {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
     {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [

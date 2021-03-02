@@ -52,7 +52,7 @@ export class EditarVentaComponent implements OnInit {
     dateTimeAdapter: DateTimeAdapter<any>,
     private toastr: ToastrService
   ) { 
-    dateTimeAdapter.setLocale('es-PE');
+    
   }
 
   getVendedores(): void {

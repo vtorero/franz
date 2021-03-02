@@ -49,28 +49,29 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Fecha de Venta</mat-label>
-          <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha" readonly>
+          <input matInput name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" type="text" readonly>
+          <!--          <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha" readonly>
           <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
-          <mat-datepicker #myPicker></mat-datepicker>
+          <mat-datepicker #myPicker></mat-datepicker>-->
         </mat-form-field>
         <div class="row">
           <div class="col-lg-4">
             <mat-form-field>
-              <mat-label>Valor neto</mat-label>
+              <mat-label>Valor neto S/.</mat-label>
               <input matInput name="valor_neto" #valor_neto="ngModel" [(ngModel)]="data.valor_neto" type="number" readonly>
             </mat-form-field>
              </div>
           <div class="col-lg-4">
             <mat-form-field>
-              <mat-label>Monto IGV</mat-label>
+              <mat-label>Monto IGV S/.</mat-label>
                 <input matInput name="monto_igv" #monto_igv="ngModel" [(ngModel)]="data.monto_igv" type="number" readonly>
             </mat-form-field>
             </div>
          
           <div class="col-lg-4">
             <mat-form-field>
-              <mat-label>Monto Total</mat-label>
-                <input matInput name="valor_total" #valor_total="ngModel" [(ngModel)]="data.valor_total" type="number" readonly>
+              <mat-label>Monto Total S/.</mat-label>
+                <input  matInput name="valor_total" #valor_total="ngModel" [(ngModel)]="data.valor_total" type="number" readonly>
             </mat-form-field>
                 </div>
           </div>

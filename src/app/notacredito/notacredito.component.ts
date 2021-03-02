@@ -13,8 +13,9 @@ import { DetalleVenta } from '../modelos/detalleVenta';
 import { NotaCredito } from '../modelos/notacredito';
 import { Venta } from '../modelos/ventas';
 import { AddnotaComponent } from './addnota/addnota.component';
+import { VernotaComponent } from './vernota/vernota.component';
 
-function sendInvoice(data, nro,url) {
+function sendInvoice(data, nro, url) {
   fetch(url, {
     method: 'post',
     headers: {
@@ -42,7 +43,7 @@ export class NotacreditoComponent implements OnInit {
 
   dataSource: any;
   dataDetalle: any;
-  public boletacorrelativo:string;
+  public boletacorrelativo: string;
   public Moment = new Date();
   client: any;
   letras: any;
@@ -52,7 +53,7 @@ export class NotacreditoComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id','cliente','tipoDoc','comprobante','nro_comprobante' ,'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['id', 'cliente', 'tipoDoc', 'comprobante', 'nro_comprobante', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   filter: any;
@@ -75,18 +76,39 @@ export class NotacreditoComponent implements OnInit {
   ngOnInit() {
     this.renderDataTable();
   }
-  agregarNota() {
-    const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
+
+  abrirEditar(cod: NotaCredito) {
+    console.log(cod);
+    const dialogo2 = this.dialog2.open(VernotaComponent, {
+      data: cod
     });
-    dialogo1.afterClosed().subscribe(art => {
+    dialogo2.afterClosed().subscribe(art => {
       if (art != undefined)
-        this.agregar(art);
+        //this.editar(art);
       this.renderDataTable();
     });
   }
 
-    renderDataTable() {
+
+
+  agregarNota() {
+    const dialogo1 = this.dialog.open(AddnotaComponent, {
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, 0)
+    });
+    dialogo1.afterClosed().subscribe(art => {
+      console.log("notaaaa", art.detalleVenta.length);
+      if (art != undefined) {
+        if (art.detalleVenta.length==0) {
+          this.toastr.error("Debe indicar los Items de la nota");
+        } else {
+          this.agregar(art);
+          this.renderDataTable();
+        }
+      }
+    });
+  }
+
+  renderDataTable() {
     this.api.getApi('notas').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
@@ -107,11 +129,11 @@ export class NotacreditoComponent implements OnInit {
   }
 
   agregar(art: NotaCredito) {
-    console.log("notaaa",art);
+    console.log("notaaa", art);
     if (art) {
       let fec1;
       let fecha1;
-      var boleta: Nota = new Nota('','','','','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+      var boleta: Nota = new Nota('', '', '', '', '', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -120,28 +142,28 @@ export class NotacreditoComponent implements OnInit {
       boleta.fechaEmision = fecha1;
       boleta.tipoMoneda = "PEN";
       boleta.ublVersion = "2.1";
-      boleta.tipDocAfectado=art.tipDocAfectado;
-      boleta.tipoDoc=art.tipoDoc;
-      boleta.codMotivo=art.codMotivo;
-      boleta.desMotivo=art.desMotivo;
-      boleta.numDocfectado=art.numDocfectado;
+      boleta.tipDocAfectado = art.tipDocAfectado;
+      boleta.tipoDoc = art.tipoDoc;
+      boleta.codMotivo = art.codMotivo;
+      boleta.desMotivo = art.desMotivo;
+      boleta.numDocfectado = art.numDocfectado;
       /**cliente*/
       if (art.cliente.nombre) {
         boleta.serie = "BB01";
-        this.api.getMaxId('notascredito').subscribe(id=>{
-          boleta.correlativo=id[0].ultimo.toString();
-          art.nro_comprobante="BB01"+id[0].ultimo.toString();
-          art.comprobante='Boleta';
-          });
+        this.api.getMaxId('notascredito').subscribe(id => {
+          boleta.correlativo = id[0].ultimo.toString();
+          art.nro_comprobante = "BB01" + id[0].ultimo.toString();
+          art.comprobante = 'Boleta';
+        });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
         boleta.serie = "FF01";
-        this.api.getMaxId('notascredito').subscribe(id=>{
-        boleta.correlativo=id[0].ultimo.toString();
-        art.nro_comprobante="FF01"+id[0].ultimo.toString();
-        art.comprobante='Factura';
+        this.api.getMaxId('notascredito').subscribe(id => {
+          boleta.correlativo = id[0].ultimo.toString();
+          art.nro_comprobante = "FF01" + id[0].ultimo.toString();
+          art.comprobante = 'Factura';
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
@@ -174,54 +196,54 @@ export class NotacreditoComponent implements OnInit {
         detalleBoleta.tipAfeIgv = 10;
         boleta.details.push(detalleBoleta);
       });
-      this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).subscribe(data => {
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
       });
 
       boleta.mtoOperGravadas = total;
-      boleta.mtoOperExoneradas= 0,
-      boleta.mtoIGV = total * Global.BASE_IGV;
+      boleta.mtoOperExoneradas = 0,
+        boleta.mtoIGV = total * Global.BASE_IGV;
       boleta.totalImpuestos = total * Global.BASE_IGV;
       boleta.valorVenta = total,
-      boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
-      boleta.company = this.company;
+        boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
+        boleta.company = this.company;
 
       setTimeout(() => {
-        console.log("bbbbolllettaaa",boleta);
+        console.log("bbbbolllettaaa", boleta);
         this.api.sendNotaSunat(boleta).subscribe(data => {
-            if(art){
-            this.api.GuardarNota(data).subscribe(dat=>{
-              console.log("dddd",dat['max'].ultimo_id)
-              boleta.correlativo=dat['max'];
-              art.nro_comprobante=dat.max.ultimo_id.toString();
-          });
-        }
-        if (data.sunatResponse.success) {
-              this.toastr.success(data.sunatResponse.cdrResponse.description);
-            } else {
-              this.toastr.error(art.comprobante + " no recibida");
-            }
-          });
+          if (art) {
+            this.api.GuardarNota(data).subscribe(dat => {
+              console.log("dddd", dat['max'].ultimo_id)
+              boleta.correlativo = dat['max'];
+              art.nro_comprobante = dat.max.ultimo_id.toString();
+            });
+          }
+          if (data.sunatResponse.success) {
+            this.toastr.success(data.sunatResponse.cdrResponse.description);
+          } else {
+            this.toastr.error(art.comprobante + " no recibida");
+          }
+        });
         if (art.imprimir) {
-          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/note/pdf');
+          sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/note/pdf');
         }
-  
+
         if (art) {
-         
-        this.api.GuardarNotaCredito(art).subscribe(data => {
-          this.toastr.success(data['messaje']);
-        },
-          error => { console.log(error) }
-        );
-        this.renderDataTable();
+
+          this.api.GuardarNotaCredito(art).subscribe(data => {
+            this.toastr.success(data['messaje']);
+          },
+            error => { console.log(error) }
+          );
+          this.renderDataTable();
         }
-      },6000);
-      
-
-    }
+      }, 6000);
 
 
     }
+
+
+  }
 
 
 }

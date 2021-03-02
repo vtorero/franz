@@ -157,7 +157,7 @@ export class AgregarventaComponent implements OnInit {
     this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
     this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
     this.valor_total=this.valor_neto+this.monto_igv;
-     console.log(this.valor_neto);
+     
        if (art)
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();

@@ -51,14 +51,14 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4">
-            <mat-radio-group aria-label="Seleccione tipo" required>
+          <!--<div class="col-lg-4">
+            <mat-radio-group aria-label="Seleccione tipo" required >
               <mat-radio-button value="1" (change)="radioChange($event)">Cliente con DNI</mat-radio-button>&nbsp;&nbsp;
               <mat-radio-button value="2" (change)="radioChange($event)">Cliente con RUC</mat-radio-button>
             </mat-radio-group>
-          </div>
+          </div>-->
           <div class="col-lg-4">
-            <mat-form-field *ngIf="filter=='1'">
+            <mat-form-field *ngIf="data.tipDocAfectado=='03'">
               <mat-label>Cliente con DNI</mat-label>
               <mat-select name="cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
                 <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
@@ -68,7 +68,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="filter=='2'">
+            <mat-form-field *ngIf="data.tipDocAfectado=='01'">
               <mat-label>Cliente CON RUC</mat-label>
               <mat-select name="cliente" [(ngModel)]="data.cliente" required>
                 <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
@@ -89,6 +89,27 @@
             </mat-form-field>
           </div>
             </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <mat-form-field>
+                  <mat-label>Valor neto S/.</mat-label>
+                  <input matInput name="valor_neto" [value]="valor_neto | number" type="number" step=".01" readonly>
+                </mat-form-field>
+                 </div>
+              <div class="col-lg-4">
+                <mat-form-field>
+                  <mat-label>Monto IGV S/.</mat-label>
+                    <input matInput name="monto_igv" [value]="monto_igv | number" type="number" step=".01" readonly>
+                </mat-form-field>
+                </div>
+             
+              <div class="col-lg-4">
+                <mat-form-field>
+                  <mat-label>Monto Total S/.</mat-label>
+                    <input matInput name="valor_total" [value]="valor_total" type="number" step=".01" readonly>
+                </mat-form-field>
+                    </div>
+              </div>
         <!--<div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
           <input type="checkbox" (change)="clienteNuevo($event)"class="custom-control-input" id="customSwitch3">
           <label class="custom-control-label" for="customSwitch3">&nbsp;Cliente Nuevo</label>
@@ -138,6 +159,6 @@
     <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="3" [showFirstLastButtons]></mat-paginator>
   </div>
   <div mat-dialog-actions>
-    <button mat-raised-button (click)="cancelar()">Cancelar</button>
-    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Registrar</button>
+    <button mat-raised-button (click)="cancelar()" cdkFocusInitial>Cancelar</button>
+    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid">Registrar</button>
   </div>

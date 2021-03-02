@@ -3,6 +3,7 @@ import { MatDialog, MatPaginator, MatPaginatorModule, MatSort, MatTableDataSourc
 import { BrowserModule } from '@angular/platform-browser';
 import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
+import { Global } from 'src/app/global';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
 import { NotaCredito } from 'src/app/modelos/notacredito';
 import { AdditemComponent } from './additem/additem.component';
@@ -43,6 +44,9 @@ export class AddnotaComponent implements OnInit {
   dataSource: any;
   selected: string;
   filter: any;
+  valor_neto:number=0;
+  monto_igv:number=0;
+  valor_total:number=0;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
@@ -59,6 +63,7 @@ export class AddnotaComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("deta",this.data.detalleVenta.length);
     this.getEmpresas();
     this.getclientes();
   }
@@ -123,6 +128,9 @@ export class AddnotaComponent implements OnInit {
     dialogo1.afterClosed().subscribe(art => {
       console.log(art);
       if (art)
+      this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
+    this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
+    this.valor_total=this.valor_neto+this.monto_igv;
         this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;

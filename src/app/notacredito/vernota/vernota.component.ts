@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatSort, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { ApiService } from 'src/app/api.service';
 import { NotaCredito } from 'src/app/modelos/notacredito';
 
@@ -15,10 +15,12 @@ export class VernotaComponent implements OnInit {
   dataMotivos = [{ id: '01', tipo: 'Anulación de la operación' }, { id: '02', tipo: 'Anulación por error en el RUC'},{id:'07',tipo:'Devolución por ítem'}];
   dataVendedores: any;
   dataClientes: any;
+  dataDetalle:any;
   dataClient: any;
+  exampleArray:any;
   dataEmpresas: any;
   dataProductos: any;
-  exampleArray: any[] = [];
+  //exampleArray: any[] = [];
   dataProveedor: any;
   dataArray;
   dataSource: any;
@@ -37,6 +39,16 @@ export class VernotaComponent implements OnInit {
 
 
   ngOnInit() {
+    this.api.GetDetalleVenta(this.data.id).subscribe(x => {  
+      console.log(x)
+      this.dataDetalle = new MatTableDataSource();
+      this.exampleArray=x;
+      
+      this.dataDetalle=this.exampleArray
+      this.data.detalleVenta=this.exampleArray; 
+  
+      });
+
     this.getEmpresas();
  this.getclientes();
 }

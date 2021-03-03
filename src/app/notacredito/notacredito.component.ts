@@ -53,7 +53,7 @@ export class NotacreditoComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id', 'cliente', 'tipoDoc', 'comprobante', 'nro_comprobante', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['id', 'cliente', 'tipDocAfectado','NombreDoc','numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   filter: any;
@@ -88,8 +88,6 @@ export class NotacreditoComponent implements OnInit {
       this.renderDataTable();
     });
   }
-
-
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
@@ -241,9 +239,6 @@ export class NotacreditoComponent implements OnInit {
 
 
     }
-
-
   }
-
 
 }

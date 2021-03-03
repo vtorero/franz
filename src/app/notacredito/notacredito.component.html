@@ -16,24 +16,25 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
             <mat-cell *matCellDef="let row">{{row.cliente}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="tipoDoc">
+      <ng-container matColumnDef="NombreDoc">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo de Nota</mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.tipoDoc}} </mat-cell>
+            <mat-cell *matCellDef="let row">{{row.NombreDoc}} </mat-cell>
       </ng-container>
-       <ng-container matColumnDef="comprobante">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Comprobante</span></mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.comprobante}} </mat-cell>
+      <ng-container matColumnDef="tipDocAfectado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Documento Afectado</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.tipDocAfectado}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="nro_comprobante">
+      
+     <ng-container matColumnDef="numDocfectado">
             <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Nro Comprobante</span></mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row.nro_comprobante}} </mat-cell>
+            <mat-cell *matCellDef="let row">{{row.numDocfectado}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha}} </mat-cell>
   </ng-container>
   <ng-container matColumnDef="valor_total">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Total</span></mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Importe Total</span></mat-header-cell>
     <mat-cell *matCellDef="let row">{{row.valor_total}} </mat-cell>
 </ng-container>
   <ng-container matColumnDef="opciones">

@@ -106,7 +106,7 @@
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Monto Total S/.</mat-label>
-                    <input matInput name="valor_total" [value]="valor_total" type="number" step=".01" readonly>
+                    <input matInput name="valor_total" [value]="valor_total | number" type="number" step=".01" readonly>
                 </mat-form-field>
                     </div>
               </div>

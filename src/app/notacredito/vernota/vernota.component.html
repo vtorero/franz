@@ -114,21 +114,19 @@
     </div>
   </div>
 </form>
-<button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar
-  Items</button>
 <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
-  <mat-table [dataSource]="dataSource" matSort>
+  <mat-table [dataSource]="dataDetalle" matSort>
     <ng-container matColumnDef="id_producto">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.codProducto.codigo}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="nombre">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.codProducto.nombre}} </mat-cell>
+      <mat-cell *matCellDef="let row">{{row.nombre}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="cantidad">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
+      <mat-cell *matCellDef="let row">{{row.unidad_medida}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="peso">
       <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
@@ -136,11 +134,11 @@
     </ng-container>
     <ng-container matColumnDef="precio">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
-      <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario | number }} </mat-cell>
+      <mat-cell *matCellDef="let row">S/. {{row.precio | number }} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="subtotal">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
-      <mat-cell *matCellDef="let row">S/.{{ row.mtoValorUnitario*row.cantidad | number }}
+      <mat-cell *matCellDef="let row">S/.{{ row.precio*row.cantidad | number }}
       </mat-cell>
     </ng-container>
     <ng-container matColumnDef="borrar">
@@ -156,5 +154,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="cancelar()" cdkFocusInitial>Cancelar</button>
-  <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid">Registrar</button>
+  <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid">Ver Nota</button>
 </div>

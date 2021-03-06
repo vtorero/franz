@@ -43,6 +43,7 @@ export class VentasComponent implements OnInit {
   dataDetalle: any;
   public boletacorrelativo:string;
   public Moment = new Date();
+  cargando:boolean=false;
   client: any;
   letras: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
@@ -51,7 +52,7 @@ export class VentasComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id', 'usuario', 'vendedor', 'cliente', 'comprobante', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['nro_comprobante','comprobante','cliente', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -99,10 +100,16 @@ export class VentasComponent implements OnInit {
     
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
+      if (art.detalleVenta.length==0) {
+        this.toastr.warning("Debe agregar el detalle del comprobante","Aviso");
+      } else {
         this.agregar(art);
-      this.renderDataTable();
+        this.renderDataTable();
+      }
     });
   }
+
+
 
   replaceStr(str, find, replace) {
     for (var i = 0; i < find.length; i++) {
@@ -113,6 +120,7 @@ export class VentasComponent implements OnInit {
 
   agregar(art: Venta) {
     console.log("ventaaaa",art);
+    this.cargando=true;
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -176,7 +184,7 @@ export class VentasComponent implements OnInit {
         boleta.details.push(detalleBoleta);
       });
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).subscribe(data => {
-        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
       });
 
       boleta.mtoOperGravadas = total;
@@ -192,7 +200,7 @@ export class VentasComponent implements OnInit {
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
             if (data.sunatResponse.success) {
-              this.toastr.success(data.sunatResponse.cdrResponse.description);
+              this.toastr.info(data.sunatResponse.cdrResponse.description,"Mensaje Sunat");
               
               if(art.cliente.razon_social){
                 this.api.GuardarFactura(data).subscribe(dat=>{
@@ -221,9 +229,9 @@ export class VentasComponent implements OnInit {
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
+        this.cargando=false;
+      },6500);
 
-      },6000);
-      
 
     }
 
@@ -237,13 +245,15 @@ export class VentasComponent implements OnInit {
     });
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined)
+      console.log("cargans",this.cargando);
+      
+      this.cargando=true;
         this.editar(art);
       //this.renderDataTable();
     });
   }
 
   editar(art) {
-    console.log(art);
     let fech;
     let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
     fech=art.fecha+"T00:00:00-05:00"
@@ -307,10 +317,10 @@ export class VentasComponent implements OnInit {
     });
 
     setTimeout(() => {
-      console.log("boletaaaa",boleta);
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
-    },6000);
-
+      this.cargando=false;
+    },6500);
+    
   }
 
   cancelar() {

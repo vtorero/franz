@@ -745,7 +745,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             $stmtb->close();
             }
            
-            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string"=>$valor->codProductob->id.'-'.$valor->cantidad.'-'.$valor->peso.'-'.$valor->codProducto);
+            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente");
             
             }
              catch(PDOException $e) {
@@ -819,7 +819,7 @@ $app->post("/nota",function() use($db,$app){
         foreach($data->detalleVenta as $valor){
         
                      /*inserta detalle*/
-        $proc="call p_nota_detalle({$ultimo_id->ultimo_id},'{$valor->codProducto->codigo}','{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
+        $proc="call p_nota_detalle({$ultimo_id->ultimo_id},'{$valor->codProducto->id}','{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
         $stmt = mysqli_prepare($db,$proc);
         mysqli_stmt_execute($stmt);
         $stmt->close();
@@ -837,6 +837,16 @@ $app->post("/nota",function() use($db,$app){
         echo  json_encode($result);   
 });
 
+$app->get("/nota/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad`,v.`peso` ,`precio`, `subtotal` FROM `nota_detalle` v ,productos p where v.id_producto=p.id and id_venta={$id}");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
 
      $app->post("/notacredito",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");

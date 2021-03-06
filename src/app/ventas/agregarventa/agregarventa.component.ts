@@ -157,9 +157,8 @@ export class AgregarventaComponent implements OnInit {
     this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
     this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
     this.valor_total=this.valor_neto+this.monto_igv;
-     
-       if (art)
-        this.exampleArray.push(art)
+      if (art)
+       this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
@@ -176,12 +175,18 @@ export class AgregarventaComponent implements OnInit {
     this.getclientes();
     this.getEmpresas();
   }
-  deleteTicket(rowid: number) {
+  deleteTicket(rowid,obj) {
+    console.log(obj)
     if (rowid > -1) {
+      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
+      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
+      this.valor_total=this.valor_neto+this.monto_igv;
+
       this.data.detalleVenta.splice(rowid, 1);
       this.dataSource = new MatTableDataSource(this.data.detalleVenta);
     }
   }
+
 
   cancelar() {
     this.dialog.closeAll();

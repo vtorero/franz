@@ -13,3 +13,10 @@
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
 }
+
+.cargando{
+    position: fixed;
+    top: 15%;
+    z-index: 1000;
+    left: 44%;
+}

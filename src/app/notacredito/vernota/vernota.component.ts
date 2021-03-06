@@ -39,7 +39,7 @@ export class VernotaComponent implements OnInit {
 
 
   ngOnInit() {
-    this.api.GetDetalleVenta(this.data.id).subscribe(x => {  
+    this.api.GetDetalleNota(this.data.id).subscribe(x => {  
       console.log(x)
       this.dataDetalle = new MatTableDataSource();
       this.exampleArray=x;

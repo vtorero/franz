@@ -35,7 +35,7 @@ export const MY_FORMATS = {
 export class AlmacenComponent implements OnInit {
 dataSource:any;
 cancela: boolean = false;
-displayedColumns = ['id_producto','codigo', 'nombre','unidad', 'cantidad','fecha_produccion','fecha_vencimiento','operaciones'];
+displayedColumns = ['id_producto', 'nombre','unidad', 'cantidad','fecha_vencimiento','operaciones'];
 @ViewChild(MatSort) sort: MatSort;
 @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,

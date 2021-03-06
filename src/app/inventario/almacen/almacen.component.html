@@ -12,17 +12,9 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>id</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.id_producto}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="codigo">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>codigo</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
-  </ng-container>
       <ng-container matColumnDef="nombre">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Producto</mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
-      </ng-container>
-      <ng-container matColumnDef="fecha_produccion">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de producción</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.fecha_produccion}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="fecha_vencimiento">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de vencimiento</mat-header-cell>

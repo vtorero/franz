@@ -217,7 +217,7 @@ export class NotacreditoComponent implements OnInit {
             });
           }
           if (data.sunatResponse.success) {
-            this.toastr.success(data.sunatResponse.cdrResponse.description);
+            this.toastr.info(data.sunatResponse.cdrResponse.description,"Mensaje Sunat");
           } else {
             this.toastr.error(art.comprobante + " no recibida");
           }

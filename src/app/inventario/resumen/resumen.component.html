@@ -39,8 +39,8 @@
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalpeso}}</mat-footer-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} KGM</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpeso}} KGM</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">Chorizos</mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -92,8 +92,8 @@
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalpesoB}}</mat-footer-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} KGM</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoB}} KGM</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">Chorizos</mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -131,22 +131,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalgranelC}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelC | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalmermaC}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaC | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalcantidadC}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadC | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalpesoC}}</mat-footer-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} KGM</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoC | number}} KGM</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -184,22 +184,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalgranelD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelD | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalmermaD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaD | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalcantidadD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadD | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalpesoD}}</mat-footer-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} KGM</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoD | number}} KGM</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -237,22 +237,22 @@
       <ng-container matColumnDef="granel">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Granel</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.granel}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalgranelD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalgranelD | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="merma">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Merma</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.merma}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalmermaD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalmermaE | number}}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.cantidad}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalcantidadD}}</mat-footer-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalcantidadE | number }}</mat-footer-cell>
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.peso}} </mat-cell>
-        <mat-footer-cell *matFooterCellDef>{{totalpesoD}}</mat-footer-cell>
+        <mat-cell *matCellDef="let row">{{row.peso}} KGM</mat-cell>
+        <mat-footer-cell *matFooterCellDef>{{totalpesoE | number}} KGM</mat-footer-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

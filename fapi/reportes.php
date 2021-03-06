@@ -24,13 +24,13 @@ if (mysqli_connect_errno()) {
 
 $app->get("/inventario/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-  $resultado = $db->query("SELECT p.id,p.codigo,s.nombre categoria,p.nombre producto,sum(i.granel) granel,sum(i.merma) merma,sum(i.cantidad) cantidad,sum(i.peso/1000) peso FROM frdash.inventario i, productos p,categorias c,sub_categorias s WHERE p.id_subcategoria={$id} and p.id_categoria=c.id and p.id_subcategoria=s.id and p.id_categoria=c.id and i.id_producto=p.id group by 1,2,3,4");  
+  $resultado = $db->query("SELECT p.id,p.peso,p.codigo,s.nombre categoria,p.nombre producto,sum(i.granel) granel,sum(i.merma) merma,sum(i.cantidad) cantidad,format(sum(p.peso*.i.cantidad)/1000,2) peso FROM frdash.inventario i, productos p,categorias c,sub_categorias s WHERE p.id_subcategoria={$id} and p.id_categoria=c.id and p.id_subcategoria=s.id and p.id_categoria=c.id and i.id_producto=p.id and i.cantidad>0 group by 1,2,3,4;");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
       }
 
-    $totales = $db->query("SELECT p.id_subcategoria,sum(i.granel) granel,sum(i.merma) merma,sum(i.cantidad) cantidad,sum(i.peso/1000)peso FROM frdash.inventario i, productos p where p.id_subcategoria={$id} and i.id_producto=p.id group by 1;");  
+    $totales = $db->query("SELECT p.id_subcategoria,sum(i.granel) granel,sum(i.merma) merma,sum(i.cantidad) cantidad,format(sum(p.peso*.i.cantidad)/1000,2) peso  FROM inventario i, productos p where p.id_subcategoria={$id} and i.id_producto=p.id");  
     $tot=array();
         while ($fila = $totales->fetch_array()) {
             $tot[]=$fila;

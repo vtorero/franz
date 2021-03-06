@@ -313,11 +313,6 @@ public GuardarComprobante(Boleta):Observable<any>{
 
 /* Facturacion*/
 
-enviaFactura(id): Observable<any> {
-  return this._http.post(Global.BASE_API_SUNAT + 'api/compacto/',{headers: {Authorization:"Bearer "+ Global.TOKEN_API_PERU_BEARER}});
-}
-
-
   GetDetalleCompra(id: any) {
     return this._http.get(Global.BASE_API_URL + 'api.php/compra/' + id,
       { headers: this.headers }
@@ -329,6 +324,13 @@ enviaFactura(id): Observable<any> {
       { headers: this.headers }
     ).pipe(map(result => result));
   }
+
+  GetDetalleNota(id: any) {
+    return this._http.get(Global.BASE_API_URL + 'api.php/nota/' + id,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
 
   getReportes(inicio: string, final: string, empresa: string) {
     const url = Global.BASE_API_URL + 'api.php/reporte';

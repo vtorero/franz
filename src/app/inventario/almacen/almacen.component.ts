@@ -66,7 +66,8 @@ displayedColumns = ['id_producto', 'nombre','unidad', 'cantidad','fecha_vencimie
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddInventarioComponent, {
-      data: new Inventario(0,0,0,0,0,0,0,0,0,'','','','','','')
+      data: new Inventario(0,0,0,0,0,0,0,0,0,'','','','','',''),
+      disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -96,7 +97,8 @@ displayedColumns = ['id_producto', 'nombre','unidad', 'cantidad','fecha_vencimie
     cod.fecha_produccion=new Date(cod.fecha_produccion+' 00:00')
     cod.fecha_vencimiento=new Date(cod.fecha_vencimiento+' 00:00');
        const dialogo2 = this.dialog2.open(EditInventarioComponent, {
-      data: cod
+      data: cod,
+      disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
       console.log(art);
@@ -118,7 +120,8 @@ displayedColumns = ['id_producto', 'nombre','unidad', 'cantidad','fecha_vencimie
   }
   abrirDialog(templateRef,cod) {
     let dialogRef = this.dialogo.open(templateRef, {
-   width: '500px' });
+   width: '500px',
+   disableClose: true });
 
  dialogRef.afterClosed().subscribe(result => {
  if(!this.cancela){
@@ -135,6 +138,13 @@ displayedColumns = ['id_producto', 'nombre','unidad', 'cantidad','fecha_vencimie
  }
 
 });
+}
+
+cancelar(){
+  this.cancela=true;
+   this.dialog.closeAll();
+   this.renderDataTable();
+  
 }
 
 }

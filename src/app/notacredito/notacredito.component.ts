@@ -194,8 +194,12 @@ export class NotacreditoComponent implements OnInit {
         detalleBoleta.tipAfeIgv = 10;
         boleta.details.push(detalleBoleta);
       });
-      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).subscribe(data => {
-        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV))
+      .then(data =>
+        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }]
+        )
+      .catch(err => { console.log ('error');
+      
       });
 
       boleta.mtoOperGravadas = total;

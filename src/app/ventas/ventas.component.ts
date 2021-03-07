@@ -95,16 +95,16 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0)
+      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0),
+      disableClose: true
     });
     
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
-      if (art.detalleVenta.length==0) {
+      if (art.detalleVenta.length==0 && this.cancela) {
         this.toastr.warning("Debe agregar el detalle del comprobante","Aviso");
       } else {
         this.agregar(art);
-        this.renderDataTable();
       }
     });
   }
@@ -160,7 +160,7 @@ export class VentasComponent implements OnInit {
       boleta.client.address.direccion = art.cliente.direccion;
 
       /*company*/
-      boleta.company.ruc = "20605174095";
+      boleta.company.ruc =  Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
@@ -183,9 +183,6 @@ export class VentasComponent implements OnInit {
         detalleBoleta.tipAfeIgv = 10;
         boleta.details.push(detalleBoleta);
       });
-      this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).subscribe(data => {
-         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
-      });
 
       boleta.mtoOperGravadas = total;
       boleta.mtoOperExoneradas= 0,
@@ -195,8 +192,10 @@ export class VentasComponent implements OnInit {
       boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
       boleta.company = this.company;
 
+      this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(data => {
+        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
 
-      setTimeout(() => {
+      //setTimeout(() => {
         this.api.GuardarComprobante(boleta).subscribe(
           data => {
             if (data.sunatResponse.success) {
@@ -223,25 +222,34 @@ export class VentasComponent implements OnInit {
             } else {
               this.toastr.error(art.comprobante + " no recibida");
             }
-            this.renderDataTable();
+            
           });
         
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
         this.cargando=false;
-      },6500);
-
-
+        this.renderDataTable();
+     // },6500);
+    });
+    
+    }else{
+      this.api.GuardarVenta(art).subscribe(data => {
+        this.toastr.success(data['messaje']);
+      },
+        error => { console.log(error) }
+      );
+      this.cargando=false;
     }
-
+    this.renderDataTable();
 
     }
 
 
   abrirEditar(cod: Venta) {
     const dialogo2 = this.dialog2.open(EditarVentaComponent, {
-      data: cod
+      data: cod,
+      disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -283,7 +291,7 @@ export class VentasComponent implements OnInit {
     boleta.client.address.direccion = art.direccion;
 
     /*company*/
-    boleta.company.ruc = "20605174095";
+    boleta.company.ruc = Global.RUC_EMPRESA;
     boleta.company.razonSocial = "VVIAN FOODS S.A.C";
     boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
     let total = 0;
@@ -312,14 +320,14 @@ export class VentasComponent implements OnInit {
     boleta.valorVenta = Number(art.valor_neto),
     boleta.mtoImpVenta = Number(art.valor_total),
     boleta.company = this.company;
-    this.api.getNumeroALetras(art.valor_total).subscribe(data => {
+    this.api.getNumeroALetras(art.valor_total).then(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
     });
 
-    setTimeout(() => {
+  //  setTimeout(() => {
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
       this.cargando=false;
-    },6500);
+   // },1000);
     
   }
 

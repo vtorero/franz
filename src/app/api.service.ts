@@ -384,10 +384,10 @@ public GuardarComprobante(Boleta):Observable<any>{
   }
 
 
-  getNumeroALetras(cantidad:number) {
-    return this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,
+  public async getNumeroALetras(cantidad:number) {
+    return await  this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,
     { headers: this.headers }
-  ).pipe(map(result => result));
+  ).toPromise().then(result => result);
   }
 
   public GuardarDataBanco(datos: Databanco): Observable<any> {

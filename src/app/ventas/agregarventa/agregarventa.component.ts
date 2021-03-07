@@ -150,10 +150,12 @@ export class AgregarventaComponent implements OnInit {
 
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
-      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,'')
+      data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,''),
+      disableClose:true
     });
     dialogo1.afterClosed().subscribe(art => {
     console.log("art",art)
+    console.log(art.cantidad*art.mtoValorUnitario)
     this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
     this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
     this.valor_total=this.valor_neto+this.monto_igv;

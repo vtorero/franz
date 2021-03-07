@@ -46,7 +46,8 @@ export class EmpresasComponent implements OnInit {
 
   abrirDialog(templateRef, cod) {
     let dialogRef = this.dialogo.open(templateRef, {
-      width: '550px'
+      width: '550px',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -77,7 +78,9 @@ export class EmpresasComponent implements OnInit {
   
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddEmpresaComponent, {
-      data: new Proveedor('', '','', '','','','','','')
+      data: new Proveedor('', '','', '','','','','',''),
+      disableClose: true
+
     });
      dialogo1.afterClosed().subscribe(art => {
        if (art!= undefined)
@@ -101,7 +104,8 @@ export class EmpresasComponent implements OnInit {
 abrirEditar(cod: Proveedor) {
   console.log("compra",cod)
   const dialogo2 = this.dialog2.open(EditEmpresaComponent, {
-    data: cod
+   data: cod,
+  disableClose: true
   });
   dialogo2.afterClosed().subscribe(art => {
     console.log(art);

@@ -78,7 +78,7 @@ export class SubcategoriaComponent implements OnInit {
   abrirDialog(templateRef,cod) {
     console.log("dataaa",cod)
     let dialogRef = this.dialog.open(templateRef, {
-        width: '600px' });
+        width: '600px',  disableClose: true });
   
     dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){

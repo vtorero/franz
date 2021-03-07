@@ -63,7 +63,8 @@ export class VendedoresComponent implements OnInit {
   abrirDialog(templateRef, cod) {
     console.log("data", cod)
     let dialogRef = this.dialog.open(templateRef, {
-      width: '500px'
+      width: '500px',
+      disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
       if (!this.cancela) {

@@ -66,7 +66,8 @@ export class ProductosComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(DialogoarticuloComponent, {
-      data: new Producto(0,'', '',0, '',0,0,0,0,0,this.usuario)
+      data: new Producto(0,'', '',0, '',0,0,0,0,0,this.usuario),
+      disableClose: true
     });
 
      dialogo1.afterClosed().subscribe(art => {
@@ -79,7 +80,8 @@ export class ProductosComponent implements OnInit {
     console.log("edit",cod);
     cod.usuario=this.usuario;
     const dialogo2 = this.dialog2.open(EditarProductoComponent, {
-      data: cod
+      data: cod,
+      disableClose: true
     });
 
      dialogo2.afterClosed().subscribe(art => {
@@ -101,7 +103,7 @@ export class ProductosComponent implements OnInit {
 
   abrirDialog(templateRef,cod) {
          let dialogRef = this.dialogo.open(templateRef, {
-        width: '500px' });
+        width: '500px',  disableClose: true });
     
       dialogRef.afterClosed().subscribe(result => {
       if(!this.cancela){

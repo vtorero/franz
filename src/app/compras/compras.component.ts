@@ -66,7 +66,8 @@ export class ComprasComponent implements OnInit {
 
   abrirDialogo() {
     const dialogo1 = this.dialog.open(AddCompraComponent, {
-      data: new Compra(0, '', '', '', '', '', '', '', [],0)
+      data: new Compra(0, '', '', '', '', '', '', '', [],0),
+      disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
@@ -103,7 +104,8 @@ export class ComprasComponent implements OnInit {
   abrirEditar(cod: Compra) {
     console.log("compra",cod)
     const dialogo2 = this.dialog2.open(EditCompraComponent, {
-      data: cod
+      data: cod,
+      disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
       console.log(art);

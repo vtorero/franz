@@ -383,8 +383,12 @@ public GuardarComprobante(Boleta):Observable<any>{
     ).pipe(map(result => result));
   }
 
+ /* getNumeroALetras(cantidad:number): Observable<any> {
+    return this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,{ headers: this.headers}).pipe(map(result => result));
+  }*/
 
-  public async getNumeroALetras(cantidad:number) {
+
+  async getNumeroALetras(cantidad:number) {
     return await  this._http.get(Global.BASE_API_URL+ 'api.php/numeroletras/'+ cantidad,
     { headers: this.headers }
   ).toPromise().then(result => result);

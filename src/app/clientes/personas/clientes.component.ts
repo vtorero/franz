@@ -94,7 +94,7 @@ eliminarCliente(cod){
 
   abrirDialog(templateRef,cod:Clientes) {
      let dialogRef = this.dialog.open(templateRef, {
-        width: '600px'});
+        width: '600px',    disableClose: true});
       dialogRef.afterClosed().subscribe(result => {
         if (!this.cancela) {
           this.renderDataTable();
@@ -108,7 +108,8 @@ eliminarCliente(cod){
     //cod.usuario=this.usuario;
     const dialogo2 = this.dialog2.open(EditClienteComponent, {
       width: '600px',
-      data: cod
+      data: cod,
+      disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
       if(!this.cancela){

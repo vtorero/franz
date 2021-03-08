@@ -192,6 +192,7 @@ export class AgregarventaComponent implements OnInit {
 
   cancelar() {
     this.dialog.closeAll();
+
   }
 
 

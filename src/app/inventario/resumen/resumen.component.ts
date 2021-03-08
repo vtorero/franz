@@ -37,6 +37,12 @@ export class ResumenComponent implements OnInit {
   totalmermaE:any=0;
   totalcantidadE:any=0;
   totalpesoE:any=0;
+
+  dataSourceF:any;
+  totalgranelF:any=0;
+  totalmermaF:any=0;
+  totalcantidadF:any=0;
+  totalpesoF:any=0;
   
   displayedColumns = ['id','codigo','producto','granel','merma','cantidad','peso'];
   @ViewChild(MatSort) sort: MatSort;

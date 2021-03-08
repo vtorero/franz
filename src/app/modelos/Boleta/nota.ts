@@ -8,7 +8,6 @@ export class Nota {
         public codMotivo: string,
         public desMotivo:string,
         public tipoDoc:string,
-        public tipoOperacion:string,
         public serie:string,
         public correlativo:string,
         public fechaEmision:Date,

@@ -15,17 +15,14 @@
         <div class="col-lg-4">
           <mat-form-field>
             <mat-label>Tipo Documento Afectado</mat-label>
-            <mat-select name="tipDocAfectado" #tipDocAfectado="ngModel" [(ngModel)]="data.tipDocAfectado" required>
-              <mat-option [value]="">Seleccionar</mat-option>
-              <mat-option *ngFor="let doc of dataTipoDocumentos" [value]="doc.id">{{doc.tipo}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <input matInput name="tipDocAfectado" #tipDocAfectado="ngModel" [(ngModel)]="data.tipDocAfectado" type="text"  readonly>
+             </mat-form-field>
         </div>
         <div class="col-lg-4">
           <mat-form-field>
             <mat-label>Documento Afectado</mat-label>
             <input matInput name="numDocfectado" #numDocfectado="ngModel" [(ngModel)]="data.numDocfectado" type="text" placeholder="Ingrese nro Documento"
-              required>
+              readonly>
           </mat-form-field>
         </div>
       </div>

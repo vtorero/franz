@@ -14,7 +14,7 @@ import { AgregarventaComponent } from './agregarventa/agregarventa.component';
 import { EditarVentaComponent } from './editar-venta/editar-venta.component';
 
 
-function sendInvoice(data, nro,url) {
+function sendInvoice(data,nro,url) {
   fetch(url, {
     method: 'post',
     headers: {
@@ -52,7 +52,7 @@ export class VentasComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['nro_comprobante','comprobante','cliente', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -77,18 +77,6 @@ export class VentasComponent implements OnInit {
       console.log("boleee",this.boletacorrelativo);
     });
   }
-
-  renderDataTable() {
-    this.api.getApi('ventas').subscribe(x => {
-      this.dataSource = new MatTableDataSource();
-      this.dataSource.data = x;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    },
-      error => {
-        console.log('Error de conexion de datatable!' + error);
-      });
-  }
   ngOnInit() {
     this.renderDataTable();
  }
@@ -96,7 +84,8 @@ export class VentasComponent implements OnInit {
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
       data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0),
-      disableClose: true
+      disableClose: true,
+      
     });
     
     dialogo1.afterClosed().subscribe(art => {
@@ -105,7 +94,7 @@ export class VentasComponent implements OnInit {
         this.toastr.warning("Debe agregar el detalle del comprobante","Aviso");
       } else {
         this.agregar(art);
-      }
+       }
     });
   }
 
@@ -229,10 +218,8 @@ export class VentasComponent implements OnInit {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
         this.cargando=false;
-        this.renderDataTable();
      // },6500);
     });
-    
     }else{
       this.api.GuardarVenta(art).subscribe(data => {
         this.toastr.success(data['messaje']);
@@ -241,7 +228,12 @@ export class VentasComponent implements OnInit {
       );
       this.cargando=false;
     }
-    this.renderDataTable();
+
+
+      setTimeout(() => {
+        console.log("redeeeee");
+      this.renderDataTable();
+      },3000);
 
     }
 
@@ -254,10 +246,8 @@ export class VentasComponent implements OnInit {
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined)
       console.log("cargans",this.cargando);
-      
-      this.cargando=true;
-        this.editar(art);
-      //this.renderDataTable();
+      this.cargando=false;
+       this.editar(art);
     });
   }
 
@@ -322,17 +312,31 @@ export class VentasComponent implements OnInit {
     boleta.company = this.company;
     this.api.getNumeroALetras(art.valor_total).then(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
-    });
+   
 
   //  setTimeout(() => {
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
       this.cargando=false;
    // },1000);
-    
+  });
   }
 
   cancelar() {
     this.dialog.closeAll();
-    this.cancela = true;
+    this.cancela = false;
   }
+  renderDataTable() {
+    console.log("redner");
+    this.api.getApi('ventas').subscribe(x => {
+      this.dataSource = new MatTableDataSource();
+      this.dataSource.data = x;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      console.log("render");
+    },
+      error => {
+        console.log('Error de conexion de datatable!' + error);
+      });
+  }
+
 }

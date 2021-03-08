@@ -1,4 +1,4 @@
-<div class="cargando" *ngIf="cargando"><img src="assets/img/spinner.gif" /></div>
+<div class="cargando" *ngIf="cargando"><img src="assets/img/spinner.gif"/></div>
 <mk-box header="Registro de Ventas" [isCollapsable]="false" [isRemovable]="false">
 
   <div class="example-header mat-elevation-z8">
@@ -48,7 +48,7 @@
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="6" [showFirstLastButtons]></mat-paginator>
   </div>
   <ng-container>
   </ng-container>

@@ -20,7 +20,7 @@ function sendInvoice(data, nro, url) {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + Global.TOKEN_FACTURACION
+      'Authorization': 'Bearer '+ Global.TOKEN_FACTURACION
     },
     body: data
   })
@@ -80,18 +80,21 @@ export class NotacreditoComponent implements OnInit {
   abrirEditar(cod: NotaCredito) {
     console.log(cod);
     const dialogo2 = this.dialog2.open(VernotaComponent, {
-      data: cod
+      data: cod,
+      disableClose: true,
     });
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined)
-        //this.editar(art);
+      console.log(art)
+        this.editar(art);
       this.renderDataTable();
     });
   }
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, 0)
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, 0),
+      disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {
       console.log("notaaaa", art.detalleVenta.length);
@@ -127,11 +130,11 @@ export class NotacreditoComponent implements OnInit {
   }
 
   agregar(art: NotaCredito) {
-    console.log("notaaa", art);
+    console.log("nota", art);
     if (art) {
       let fec1;
       let fecha1;
-      var boleta: Nota = new Nota('', '', '', '', '', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
+      var boleta: Nota = new Nota('', '', '','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0,  0, '', [], [{ code: '', value: '' }]);
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -194,19 +197,16 @@ export class NotacreditoComponent implements OnInit {
         detalleBoleta.tipAfeIgv = 10;
         boleta.details.push(detalleBoleta);
       });
-      this.api.getNumeroALetras(total + (total * Global.BASE_IGV))
-      .then(data =>
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).then(data =>
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }]
-        )
-      .catch(err => { console.log ('error');
-      
-      });
+      );
+    
 
       boleta.mtoOperGravadas = total;
       boleta.mtoOperExoneradas = 0,
         boleta.mtoIGV = total * Global.BASE_IGV;
       boleta.totalImpuestos = total * Global.BASE_IGV;
-      boleta.valorVenta = total,
+      //boleta.valorVenta = total,
         boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
         boleta.company = this.company;
 
@@ -244,5 +244,88 @@ export class NotacreditoComponent implements OnInit {
 
     }
   }
+
+
+
+  editar(art: NotaCredito) {
+    console.log("nota",art);
+    if (art) {
+      let fech;
+      var boleta: Nota = new Nota('', '','', '', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0,0, 0, '', [], [{ code: '', value: '' }]);
+      fech=art.fecha+"T00:00:00-05:00";
+      boleta.fechaEmision = fech;
+      boleta.tipoMoneda = "PEN";
+      boleta.ublVersion = "2.1";
+      boleta.tipDocAfectado = art.tipoDoc;
+      boleta.tipoDoc = art.tipoDoc;
+      boleta.codMotivo = art.codMotivo;
+      boleta.desMotivo = art.desMotivo;
+      boleta.numDocfectado = art.numDocfectado;
+      /**cliente*/
+      if (art.tipDocAfectado=='Boleta') {
+        boleta.serie = "BB01";
+        boleta.correlativo = art.nro_nota.substring(5,10);
+        art.comprobante = 'Boleta';
+        boleta.client.tipoDoc = "1";
+        boleta.client.rznSocial = art.cliente;
+      }
+
+      if (art.tipDocAfectado=='factura') {
+        boleta.serie = "FF01";
+        boleta.correlativo = art.nro_nota.substring(5,10);
+        boleta.client.tipoDoc = "6";
+        boleta.client.rznSocial = art.cliente.razon_social;
+      }
+
+      boleta.client.numDoc = art.num_documento;
+      boleta.client.address.direccion = art.direccion;
+
+      /*company*/
+      boleta.company.ruc = "20605174095";
+      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
+      let total = 0;
+      art.detalleVenta.forEach(function (value: any) {
+
+        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        detalleBoleta.codProducto = value.codigo;
+        detalleBoleta.descripcion = value.nombre;
+        detalleBoleta.mtoValorUnitario = value.precio;
+
+        detalleBoleta.unidad = value.unidadmedida;
+        detalleBoleta.cantidad = value.cantidad;
+        detalleBoleta.mtoValorVenta = value.cantidad * value.precio;
+        detalleBoleta.mtoBaseIgv = value.cantidad * value.precio;
+        detalleBoleta.igv = (value.cantidad * value.precio) * Global.BASE_IGV;
+        detalleBoleta.totalImpuestos = (value.cantidad * value.precio) * Global.BASE_IGV;
+        detalleBoleta.mtoPrecioUnitario = value.precio + detalleBoleta.totalImpuestos;
+        total = total + (value.cantidad * value.precio);
+        detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100
+        detalleBoleta.tipAfeIgv = 10;
+        boleta.details.push(detalleBoleta);
+      });
+      this.api.getNumeroALetras(art.valor_total).then(data =>{
+      boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+      boleta.mtoOperGravadas = total;
+      boleta.mtoOperExoneradas = 0,
+      boleta.mtoIGV = total * Global.BASE_IGV;
+      boleta.totalImpuestos = total * Global.BASE_IGV;
+      boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
+      boleta.company = this.company;
+
+      console.log("boleta",boleta);
+      sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/note/pdf');
+
+    });
+    
+
+      
+
+
+
+
+    }
+  }
+
 
 }

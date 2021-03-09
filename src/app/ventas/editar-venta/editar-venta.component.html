@@ -92,6 +92,15 @@
             </mat-form-field>
                 </div>
           </div>
+          <div class="row">
+            <div class="col-lg-9">
+            <mat-form-field style="width:70%;">
+              <mat-label>Observación</mat-label>
+              <textarea matInput name="observacion" name="observacion" #observacion="ngModel" rows="1" [(ngModel)]="data.observacion" readonly></textarea>
+            </mat-form-field>
+          </div>
+          
+        </div>
   </div>
       </div>
   </form>

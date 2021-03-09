@@ -52,7 +52,7 @@ export class VentasComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -83,7 +83,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0),
+      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0,''),
       disableClose: true,
       
     });
@@ -311,7 +311,7 @@ export class VentasComponent implements OnInit {
     boleta.mtoImpVenta = Number(art.valor_total),
     boleta.company = this.company;
     this.api.getNumeroALetras(art.valor_total).then(data => {
-      boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+      boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" + "<hr>Observación: "+art.observacion }];
    
 
   //  setTimeout(() => {

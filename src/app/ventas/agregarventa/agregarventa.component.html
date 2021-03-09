@@ -1,5 +1,4 @@
-
-  <form #formGeneral="ngForm">
+<form #formGeneral="ngForm">
     <div mat-dialog-content>
       <h3>Registro de Venta</h3>
       <!--<span style="color:red" *ngIf="id_vendedor.touched && !id_vendedor.valid">Seleccionar el vendedor</span>-->
@@ -31,7 +30,6 @@
         </div>-->
         <div class="row">
           <div class="col-lg-4">
-                   
         <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente' && filter=='1')">
           <mat-label>Cliente con DNI</mat-label>
           <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
@@ -83,20 +81,28 @@
               <mat-label>Valor neto S/.</mat-label>
               <input matInput name="valor_neto" [value]="valor_neto | number" type="text" readonly>
             </mat-form-field>
-             </div>
+          </div>
           <div class="col-lg-4">
             <mat-form-field>
               <mat-label>Monto IGV S/.</mat-label>
                 <input matInput name="monto_igv" [value]="monto_igv | number" type="text"  readonly>
             </mat-form-field>
-            </div>
-         
+          </div>
           <div class="col-lg-4">
             <mat-form-field>
               <mat-label>Monto Total S/.</mat-label>
                 <input matInput name="valor_total" [value]="valor_total | number" type="text" readonly>
             </mat-form-field>
-                </div>
+        </div>
+     
+          </div>
+          <div class="row">
+              <mat-form-field style="width: 100%;">
+                <mat-label>Observación</mat-label>
+                <textarea matInput name="observacion" name="observacion" #observacion="ngModel" [(ngModel)]="data.observacion"></textarea>
+              </mat-form-field>
+              
+            
           </div>
   </div>
       </div>

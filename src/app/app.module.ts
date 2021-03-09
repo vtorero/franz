@@ -67,6 +67,7 @@ import { AddnotaComponent } from './notacredito/addnota/addnota.component';
 import { AdditemComponent } from './notacredito/addnota/additem/additem.component';
 import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 import { VernotaComponent } from './notacredito/vernota/vernota.component';
+import { RemisionComponent } from './remision/remision.component';
 
 
 
@@ -162,7 +163,8 @@ VernotaComponent],
     NotacreditoComponent,
     AddnotaComponent,
     AdditemComponent,
-    VernotaComponent
+    VernotaComponent,
+    RemisionComponent
     ],
   bootstrap: [AppComponent]
 })

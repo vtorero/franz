@@ -44,6 +44,7 @@ export class AddnotaComponent implements OnInit {
   dataSource: any;
   selected: string;
   filter: any;
+  cancelarItem:boolean=false;
   valor_neto:number=0;
   monto_igv:number=0;
   valor_total:number=0;
@@ -127,8 +128,9 @@ export class AddnotaComponent implements OnInit {
     });
     dialogo1.afterClosed().subscribe(art => {
       console.log(art);
-      if (art)
-      this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
+      if (art && !this.cancelarItem){
+        console.log("artttt")
+    this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
     this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
     this.valor_total=this.valor_neto+this.monto_igv;
         this.exampleArray.push(art)
@@ -136,12 +138,23 @@ export class AddnotaComponent implements OnInit {
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
       this.dataSource.paginator = this.paginator;  
-      console.log(this.data.detalleVenta)
+      }
     });
   }
+  deleteTicket(rowid,obj) {
+    console.log(obj)
+    if (rowid > -1) {
+      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
+      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
+      this.valor_total=this.valor_neto+this.monto_igv;
 
+      this.data.detalleVenta.splice(rowid, 1);
+      this.dataSource = new MatTableDataSource(this.data.detalleVenta);
+    }
+  }
 
   cancelar() {
+    this.cancelarItem=true;
     this.dialog.closeAll();
   }
 

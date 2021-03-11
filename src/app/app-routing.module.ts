@@ -21,6 +21,8 @@ import { MovimientoComponent } from './dosimetria/movimiento/movimiento.componen
 import { ResumenComponent } from './inventario/resumen/resumen.component';
 import { NotacreditoComponent } from './notacredito/notacredito.component';
 import { ResumendComponent } from './dosimetria/resumen/resumend.component';
+import { RemisionComponent } from './remision/remision.component';
+import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
 
 
 const routes: Routes = [
@@ -46,6 +48,11 @@ const routes: Routes = [
   {path:'notas',children:[
     {path:'credito',
     component:NotacreditoComponent
+    }
+  ]},
+  {path:'remision',children:[
+    {path:'listado',
+    component:RemisionComponent
     }
   ]},
 
@@ -108,6 +115,8 @@ const routes: Routes = [
       component:  VentasComponent
     
     },
+    {path:'agregarventa',
+    component:AgregarventaComponent}
     
   ]
   },

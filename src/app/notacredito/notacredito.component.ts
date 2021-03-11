@@ -4,7 +4,6 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
 import { Global } from '../global';
-import { Boleta } from '../modelos/Boleta/boleta';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
 import { Details } from '../modelos/Boleta/details';
@@ -40,7 +39,7 @@ function sendInvoice(data, nro, url) {
   styleUrls: ['./notacredito.component.css']
 })
 export class NotacreditoComponent implements OnInit {
-
+  cargando:boolean=false;
   dataSource: any;
   dataDetalle: any;
   public boletacorrelativo: string;
@@ -81,13 +80,15 @@ export class NotacreditoComponent implements OnInit {
     console.log(cod);
     const dialogo2 = this.dialog2.open(VernotaComponent, {
       data: cod,
-      disableClose: true,
+      disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
-      if (art != undefined)
+      if (art && !this.cancela){
       console.log(art)
         this.editar(art);
       this.renderDataTable();
+    }
+    this.cancela=false
     });
   }
 
@@ -174,7 +175,7 @@ export class NotacreditoComponent implements OnInit {
       boleta.client.address.direccion = art.cliente.direccion;
 
       /*company*/
-      boleta.company.ruc = "20605174095";
+      boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
@@ -197,9 +198,9 @@ export class NotacreditoComponent implements OnInit {
         detalleBoleta.tipAfeIgv = 10;
         boleta.details.push(detalleBoleta);
       });
-      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).then(data =>
+      this.api.getNumeroALetras(total + (total * Global.BASE_IGV)).then(data =>{
         boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }]
-      );
+
     
 
       boleta.mtoOperGravadas = total;
@@ -210,8 +211,6 @@ export class NotacreditoComponent implements OnInit {
         boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
         boleta.company = this.company;
 
-      setTimeout(() => {
-        console.log("bbbbolllettaaa", boleta);
         this.api.sendNotaSunat(boleta).subscribe(data => {
           if (art) {
             this.api.GuardarNota(data).subscribe(dat => {
@@ -239,7 +238,8 @@ export class NotacreditoComponent implements OnInit {
           );
           this.renderDataTable();
         }
-      }, 6000);
+//      }, 6000);
+      });
 
 
     }
@@ -248,7 +248,7 @@ export class NotacreditoComponent implements OnInit {
 
 
   editar(art: NotaCredito) {
-    console.log("nota",art);
+    this.cargando=true;
     if (art) {
       let fech;
       var boleta: Nota = new Nota('', '','', '', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0,0, 0, '', [], [{ code: '', value: '' }]);
@@ -281,7 +281,7 @@ export class NotacreditoComponent implements OnInit {
       boleta.client.address.direccion = art.direccion;
 
       /*company*/
-      boleta.company.ruc = "20605174095";
+      boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
@@ -315,15 +315,9 @@ export class NotacreditoComponent implements OnInit {
 
       console.log("boleta",boleta);
       sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/note/pdf');
-
+        this.cargando=false;
     });
     
-
-      
-
-
-
-
     }
   }
 

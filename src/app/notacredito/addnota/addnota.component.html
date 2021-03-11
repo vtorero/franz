@@ -93,20 +93,20 @@
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Valor neto S/.</mat-label>
-                  <input matInput name="valor_neto" [value]="valor_neto | number" type="number" step=".01" readonly>
+                  <input matInput name="valor_neto" [value]="valor_neto | number" type="text" readonly>
                 </mat-form-field>
                  </div>
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Monto IGV S/.</mat-label>
-                    <input matInput name="monto_igv" [value]="monto_igv | number" type="number" step=".01" readonly>
+                    <input matInput name="monto_igv" [value]="monto_igv | number" type="text"  readonly>
                 </mat-form-field>
                 </div>
              
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Monto Total S/.</mat-label>
-                    <input matInput name="valor_total" [value]="valor_total | number" type="number" step=".01" readonly>
+                    <input matInput name="valor_total" [value]="valor_total | number" type="text"  readonly>
                 </mat-form-field>
                     </div>
               </div>
@@ -150,7 +150,7 @@
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let row ;let j = index;">
-          <button class="btn btn-primary" (click)="deleteTicket(j)">Eliminar</button>
+          <button class="btn btn-primary" (click)="deleteTicket(j,row)">Eliminar</button>
         </td>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>

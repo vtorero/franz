@@ -31,7 +31,7 @@
         <div class="row">
           <div class="col-lg-4">
                    
-            <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente' && filter=='1')">
+            <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente')">
               <mat-label>Cliente con DNI</mat-label>
               <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente"  (ngModelChange)="selectCliente(data.cliente)" readonly>
                 <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
@@ -41,7 +41,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente' && filter=='2')">
+            <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente')">
               <mat-label>Cliente CON RUC</mat-label>
               <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente" readonly>
                 <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">

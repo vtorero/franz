@@ -1,7 +1,6 @@
 import { Client } from "./client";
 import { Company } from "./company";
 import { Details } from "./details";
-import { Legends } from "./legends";
 export class Boleta {
     constructor(
         public tipoOperacion:string,

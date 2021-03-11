@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DateTimeAdapter } from 'ng-pick-datetime';
@@ -85,7 +86,7 @@ export class VentasComponent implements OnInit {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
       data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0,''),
       disableClose: true,
-      
+      height: '80%'
     });
     
     dialogo1.afterClosed().subscribe(art => {
@@ -108,8 +109,7 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art: Venta) {
-    console.log("ventaaaa",art);
-    this.cargando=true;
+       this.cargando=true;
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -182,7 +182,7 @@ export class VentasComponent implements OnInit {
       boleta.company = this.company;
 
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(data => {
-        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" }];
+        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES"+ "<hr>Observación: "+art.observacion }];
 
       //setTimeout(() => {
         this.api.GuardarComprobante(boleta).subscribe(
@@ -244,14 +244,15 @@ export class VentasComponent implements OnInit {
       disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
-      if (art != undefined)
+      if (art != undefined){
       console.log("cargans",this.cargando);
-      this.cargando=false;
        this.editar(art);
+      }
     });
   }
 
   editar(art) {
+    this.cargando=true;
     let fech;
     let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
     fech=art.fecha+"T00:00:00-05:00"

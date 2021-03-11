@@ -44,7 +44,11 @@ export const adminLteConf = {
     {label: 'Notas Credito/Debito',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'notas/credito'}
     ]},
-    /*
+     
+    {label: 'Guías de Remision',iconClasses: 'fa fa-files-o',children:[
+      {label: 'Listado', route: 'remision/listado'}
+    ]},
+   /*
     {label: 'Reportes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Productos', route: 'dash/reportes'}
     ]},

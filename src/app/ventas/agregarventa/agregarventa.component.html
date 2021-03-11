@@ -107,8 +107,13 @@
   </div>
       </div>
   </form>
-   <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
-  <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
+  <div style="text-align: right;margin-bottom: 3px;">
+    <button mat-raised-button (click)="cancelar()">Cancelar</button>
+    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
+  </div>
+   
+  <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:5px;">
+    <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
@@ -146,7 +151,4 @@
     </mat-table>
     <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="1" [showFirstLastButtons]></mat-paginator>
   </div>
-  <div mat-dialog-actions>
-    <button mat-raised-button (click)="cancelar()">Cancelar</button>
-    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
-  </div>
+ 

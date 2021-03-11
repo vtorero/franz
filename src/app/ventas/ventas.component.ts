@@ -86,7 +86,7 @@ export class VentasComponent implements OnInit {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
       data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,0,''),
       disableClose: true,
-      height: '80%'
+      
     });
     
     dialogo1.afterClosed().subscribe(art => {

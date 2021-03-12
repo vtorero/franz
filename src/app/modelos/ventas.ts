@@ -14,6 +14,7 @@ export class Venta {
         public valor_total:number,
         public detalleVenta:Array<DetalleVenta>,
         public imprimir:boolean,
+        public tipoDoc:string,
         public valor_neto:number,
         public observacion:string
         ){}

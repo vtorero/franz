@@ -23,6 +23,7 @@ import { NotacreditoComponent } from './notacredito/notacredito.component';
 import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 import { RemisionComponent } from './remision/remision.component';
 import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
+import { PendientesComponent } from './ventas/pendientes/pendientes.component';
 
 
 const routes: Routes = [
@@ -59,6 +60,11 @@ const routes: Routes = [
   {path:'general',
   
     children: [
+      {
+        path:'pendientes',
+        component:PendientesComponent
+      },
+
       {
         path:'inventario',
         component:InventarioComponent

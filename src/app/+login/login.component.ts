@@ -43,7 +43,7 @@ constructor(private router:Router,private login:LoginService) {
               localStorage.setItem("currentAvatar",data['data'][0]['avatar']);
               localStorage.setItem("currentEmpresa",data['data'][0]['nombre']);
               sessionStorage.setItem("hashsession",data['data'][0]['hash']);
-              this.router.navigate(['general/productos']);
+              this.router.navigate(['general/almacen']);
 
             }else{
               this.error_user = true;

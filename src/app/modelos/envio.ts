@@ -11,11 +11,15 @@ export class Envio {
     public pesoTotal:number,
     public undPesoTotal:string,
     public numBultos :number,
-    public ubigueo_partida:string,
-    public direccion_partida:string,
-    public ubigueo_llegada:string,
-    public direccion_llegada:string,
-    public transportista:Transportista
+    public partida:{
+            ubigueo:string,
+            direccion: string,
+    },
+    public llegada:{
+        ubigueo:string,
+        direccion: string,
+},
+ public transportista:Transportista
 
     ){}
 }

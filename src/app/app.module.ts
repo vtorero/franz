@@ -69,6 +69,7 @@ import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 import { VernotaComponent } from './notacredito/vernota/vernota.component';
 import { RemisionComponent } from './remision/remision.component';
 import { AddGuiaComponent } from './remision/add-guia/add-guia.component';
+import { PendientesComponent } from './ventas/pendientes/pendientes.component';
 
 
 
@@ -167,7 +168,8 @@ AddGuiaComponent],
     AdditemComponent,
     VernotaComponent,
     RemisionComponent,
-    AddGuiaComponent
+    AddGuiaComponent,
+    PendientesComponent
     ],
   bootstrap: [AppComponent]
 })

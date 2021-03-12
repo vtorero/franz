@@ -11,6 +11,7 @@ import { Destinatario } from '../modelos/destinatario';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Envio } from '../modelos/envio';
 import { Guia } from '../modelos/guia';
+import { Guiadetalle } from '../modelos/guiadetalle';
 import { Remision } from '../modelos/remision';
 import { Transportista } from '../modelos/transportista';
 import { AddGuiaComponent } from './add-guia/add-guia.component';
@@ -54,7 +55,7 @@ export class RemisionComponent implements OnInit {
   cliente: Client = new Client('', '', '', { direccion: '' });
   destinatario: Destinatario= new Destinatario('','','',{direccion:''});
   transportista= new Transportista('','','','','','');
-  envio : Envio= new Envio('','','','','','',0,'',0,'','','','',this.transportista);
+  envio : Envio= new Envio('','','','','','',0,'',0,{ubigueo:'',direccion:''},{ubigueo:'',direccion:''},this.transportista);
   cancela: boolean = false;
   displayedColumns = ['nro_comprobante', 'comprobante', 'cliente', 'fecha', 'observacion', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -88,7 +89,7 @@ export class RemisionComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AddGuiaComponent, {
-      data: new Guia(localStorage.getItem("currentUser"),0,"","","","","",0,"","","",0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
+      data: new Guia(localStorage.getItem("currentUser"),'',[],"","","","",0,"","","",0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
       disableClose: true,
     });
     dialogo1.afterClosed().subscribe(art => {
@@ -109,12 +110,12 @@ export class RemisionComponent implements OnInit {
   }
 
   agregar(art: Guia) {
-    console.log("Guia",art);
+    
     this.cargando = true;
       let fec1;
       let fecha1;
      //var boleta:any;
-      var boleta: Remision = new Remision('','','',this.destinatario,'','','','','',this.company,0,0,this.envio,[],"");
+      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"");
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -134,59 +135,65 @@ export class RemisionComponent implements OnInit {
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       
       /*Destinatario*/
-      boleta.destinatario.tipoDoc='1'
-      boleta.destinatario.numDoc= art.nro_documento;
-      boleta.destinatario.rznSocial=art.name_destinatario;
+      boleta.destinatario.tipoDoc=art.tipo_destinatario;
+      if(art.tipo_destinatario=='1'){
+      boleta.destinatario.numDoc=art.destinatario.num_documento;
+      boleta.destinatario.rznSocial=art.destinatario.nombre;
+      }
+
+      if(art.tipo_destinatario=='6'){
+        boleta.destinatario.numDoc=art.destinatario.num_documento;
+        boleta.destinatario.rznSocial=art.destinatario.razon_social;
+        }
+
       boleta.destinatario.address.direccion=art.llegada;
-      boleta.observacion="NOTA OBSERVACIONES";
+      boleta.observacion=art.observacion;
 
-
-      
       boleta.envio.modTraslado="01";
       boleta.envio.codTraslado= "01"
       boleta.envio.desTraslado="VENTA"
       boleta.envio.fecTraslado= fecha1;
       boleta.envio.codPuerto= "123";
-      boleta.envio.pesoTotal= 12.6;
+      boleta.envio.pesoTotal= art.peso_bruto;
       boleta.envio.undPesoTotal='KGM';
-      boleta.envio.numBultos= 3;
-      
-      boleta.envio.ubigueo_llegada= "201121";
-      boleta.envio.direccion_llegada= "AV LIMA";
-      boleta.envio.ubigueo_partida="150203";
-      boleta.envio.direccion_llegada= "AV ITALIA";
+      boleta.envio.numBultos= art.nro_bultos;
+      boleta.envio.transportista.tipoDoc="6"
+      boleta.envio.transportista.numDoc= ""
+      boleta.envio.transportista.rznSocial= ""
+      boleta.envio.transportista.placa= art.nro_placa;
+      boleta.envio.transportista.choferTipoDoc= "1";
+      boleta.envio.transportista.choferDoc=art.nombre_transportista;
+      boleta.envio.llegada.ubigueo= art.ubigeo_llegada;
+      boleta.envio.llegada.direccion= art.llegada;
+      boleta.envio.partida.ubigueo="150108"
+      boleta.envio.partida.direccion= "AV.LAS GAVIOTAS 925";
         
       
-      boleta.envio.transportista.tipoDoc="6"
-      boleta.envio.transportista.numDoc= "20521048825"
-      boleta.envio.transportista.rznSocial= "TRANSPORTES"
-      boleta.envio.transportista.placa= "ABI-453";
-      boleta.envio.transportista.choferTipoDoc= "1";
-      boleta.envio.transportista.choferDoc="40003344";
-      
       art.detalleVenta.forEach(function (value: any) {
-      let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        detalleBoleta.codProducto = value.codProductob.codigo;
+      let detalleBoleta: Guiadetalle = new Guiadetalle('','', '', '',0);
+        detalleBoleta.id = value.codProductob.id;  
+        detalleBoleta.codigo = value.codProductob.codigo;
         detalleBoleta.descripcion = value.codProductob.nombre;
-        detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
-         detalleBoleta.unidad = value.unidadmedida;
+        detalleBoleta.unidad = value.unidadmedida;
         detalleBoleta.cantidad = value.cantidad;
         boleta.details.push(detalleBoleta);
       });
 
-     /*
-      this.api.GuardarVenta(art).subscribe(data => {
+     
+      this.api.GuardarGuia(boleta).subscribe(data => {
         this.toastr.success(data['messaje']);
       },
         error => { console.log(error) }
-      );*/
+      );
       console.log("Guiaaaa",boleta);
     if (art.imprimir) {
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
       }
 
     setTimeout(() => {
+      this.cargando=false;
       this.renderDataTable();
+      
     }, 3000);
 
   }

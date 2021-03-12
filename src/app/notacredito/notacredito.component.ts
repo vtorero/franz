@@ -94,7 +94,7 @@ export class NotacreditoComponent implements OnInit {
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, 0,''),
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false,'', 0,''),
       disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {

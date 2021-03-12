@@ -21,6 +21,9 @@ import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
 import { Client } from './modelos/Boleta/client';
 import { Dosimetria } from './modelos/dosimetria';
+import { Boleta } from './modelos/Boleta/boleta';
+import { RemisionComponent } from './remision/remision.component';
+import { Remision } from './modelos/remision';
 
 
 
@@ -286,6 +289,14 @@ public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     let json = JSON.stringify(datos);
     return this._http.post(Global.BASE_API_URL + 'api.php/venta',
+      { json: json }, { headers: headers });
+  }
+
+
+  GuardarGuia(datos:Remision): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    let json = JSON.stringify(datos);
+    return this._http.post(Global.BASE_API_URL + 'api.php/guia',
       { json: json }, { headers: headers });
   }
 

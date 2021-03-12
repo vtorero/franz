@@ -1,18 +1,17 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
-import { ApiService } from '../api.service';
-import { Global } from '../global';
-import { Boleta } from '../modelos/Boleta/boleta';
-import { Client } from '../modelos/Boleta/client';
-import { Company } from '../modelos/Boleta/company';
-import { Details } from '../modelos/Boleta/details';
-import { DetalleVenta } from '../modelos/detalleVenta';
-import { Venta } from '../modelos/ventas';
-import { AgregarventaComponent } from './agregarventa/agregarventa.component';
-import { EditarVentaComponent } from './editar-venta/editar-venta.component';
+import { ApiService } from '../../api.service';
+import { Global } from '../../global';
+import { Boleta } from '../../modelos/Boleta/boleta';
+import { Client } from '../../modelos/Boleta/client';
+import { Company } from '../../modelos/Boleta/company';
+import { Details } from '../../modelos/Boleta/details';
+import { DetalleVenta } from '../../modelos/detalleVenta';
+import { Venta } from '../../modelos/ventas';
+import { AgregarventaComponent } from '../agregarventa/agregarventa.component';
+import { EditarVentaComponent } from '..//editar-venta/editar-venta.component';
 
 
 function sendInvoice(data,nro,url) {
@@ -35,11 +34,11 @@ function sendInvoice(data,nro,url) {
 
 
 @Component({
-  selector: 'app-ventas',
-  templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.css']
+  selector: 'app-pendientes',
+  templateUrl: './pendientes.component.html',
+  styleUrls: ['./pendientes.component.css']
 })
-export class VentasComponent implements OnInit {
+export class PendientesComponent implements OnInit {
   dataSource: any;
   dataDetalle: any;
   public boletacorrelativo:string;
@@ -84,7 +83,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,''),
+      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,''),
       disableClose: true,
       
     });
@@ -328,7 +327,7 @@ export class VentasComponent implements OnInit {
   }
   renderDataTable() {
     console.log("redner");
-    this.api.getApi('ventas').subscribe(x => {
+    this.api.getApi('pendientes').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
       this.dataSource.sort = this.sort;

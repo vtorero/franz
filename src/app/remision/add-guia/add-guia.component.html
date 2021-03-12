@@ -17,17 +17,17 @@
         <div class="col-lg-4">
             <mat-form-field *ngIf="!data.tipo_destinatario">
                 <mat-label>Destinatario</mat-label>
-            <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)">
+            <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente">
                 <mat-option [value]="">Seleccionar</mat-option>
                 </mat-select>
             </mat-form-field>
 
             <mat-form-field *ngIf="data.tipo_destinatario=='1'">
                 <mat-label>Destinatario con DNI</mat-label>
-                <mat-select name="destinatario" #destinatario="ngModel" [(ngModel)]="data.destinatario" (ngModelChange)="selectCliente(data.cliente)" required>
+                <mat-select name="destinatario" #destinatario="ngModel" [(ngModel)]="data.destinatario" required>
                   <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
                   <mat-option [value]="">Seleccionar</mat-option>
-                  <mat-option *ngFor="let cli of dataClientes" [value]="cli">
+                  <mat-option *ngFor="let cli of dataClientes" (onSelectionChange)="change($event)" [value]="cli">
                     {{cli.nombre}} {{cli.apellido}}
                   </mat-option>
                   </mat-select>

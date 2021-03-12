@@ -39,7 +39,8 @@ export const adminLteConf = {
       {label: 'Empresas (RUC)', route: 'general/empresas'}
     ]},
     {label: 'Ventas',iconClasses: 'fa fa-files-o',children:[
-      {label: 'Listado', route: 'general/ventas'}
+      {label: 'Listado', route: 'general/ventas'},
+      {label: 'Pendientes', route: 'general/pendientes'}
     ]},
     {label: 'Notas Credito/Debito',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'notas/credito'}

@@ -92,6 +92,14 @@ export class AddGuiaComponent implements OnInit {
     });
   }
 
+  change(event)
+  {
+   console.log(event);
+  if(event.source){
+    this.data.destinatario.push(event.source.value);  
+}
+}
+
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,''),

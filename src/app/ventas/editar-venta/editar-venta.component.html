@@ -18,7 +18,7 @@
         
         </div>
         <div class="col-lg-4">
-          <mat-radio-group aria-label="Seleccione tipo" required *ngIf="data.comprobante=='Pendiente'">
+          <mat-radio-group aria-label="Seleccione tipo" name="tipoDoc" #tipoDoc="ngModel" [(ngModel)]="data.tipoDoc"  *ngIf="data.comprobante=='Pendiente'">
             <mat-radio-button value="1" (change)="radioChange($event)">Con DNI</mat-radio-button>&nbsp;
             <mat-radio-button value="2" (change)="radioChange($event)">Con RUC</mat-radio-button>
           </mat-radio-group>
@@ -31,7 +31,7 @@
         <div class="row">
           <div class="col-lg-4">
                    
-            <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente')">
+            <mat-form-field *ngIf="data.tipoDoc=='1'">
               <mat-label>Cliente con DNI</mat-label>
               <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente"  (ngModelChange)="selectCliente(data.cliente)" readonly>
                 <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
@@ -41,7 +41,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente')">
+            <mat-form-field *ngIf="data.tipoDoc=='2'">
               <mat-label>Cliente CON RUC</mat-label>
               <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente" readonly>
                 <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">

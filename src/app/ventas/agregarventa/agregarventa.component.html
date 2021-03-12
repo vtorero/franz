@@ -18,7 +18,7 @@
         <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
         </div>
         <div class="col-lg-4">
-          <mat-radio-group aria-label="Seleccione tipo" required *ngIf="data.comprobante=='Pendiente'">
+          <mat-radio-group aria-label="Seleccione tipo" name="tipoDoc" #tipoDoc="ngModel" [(ngModel)]="data.tipoDoc"  required *ngIf="data.comprobante=='Pendiente'">
             <mat-radio-button value="1" (change)="radioChange($event)">Con DNI</mat-radio-button>&nbsp;
             <mat-radio-button value="2" (change)="radioChange($event)">Con RUC</mat-radio-button>
           </mat-radio-group>
@@ -43,10 +43,10 @@
         </mat-form-field>
         <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente' && filter=='2')">
           <mat-label>Cliente CON RUC</mat-label>
-          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" required>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (onSelectionChange)="change($event)" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
             <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option *ngFor="let cli of dataEmpresas" (onSelectionChange)="change($event)" [value]="cli">
+            <mat-option *ngFor="let cli of dataEmpresas" [value]="cli">
               {{cli.razon_social}}
             </mat-option>
           </mat-select>

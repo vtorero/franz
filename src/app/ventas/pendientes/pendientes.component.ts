@@ -52,7 +52,7 @@ export class PendientesComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
+  displayedColumns=['comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,

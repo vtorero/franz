@@ -13,7 +13,8 @@ export class Remision {
         public company:Company,
         public envio:Envio,
         public details:Array<Guiadetalle>,
-        public observacion:string
+        public observacion:string,
+        public usuario :string
         ){}
 }
 

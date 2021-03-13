@@ -8,13 +8,8 @@
   </div>
   <div class="example-container mat-elevation-z8">
     <mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="nro_comprobante">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Nro Comprobante</span>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.nro_comprobante}} </mat-cell>
-      </ng-container>
       <ng-container matColumnDef="comprobante">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Comprobante</span>
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Estado</span>
         </mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.comprobante}} </mat-cell>
       </ng-container>

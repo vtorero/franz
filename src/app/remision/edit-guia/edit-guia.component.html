@@ -1,0 +1,173 @@
+<form #formGeneral="ngForm">
+  <div mat-dialog-content>
+    <h3>Registro de Guía de Remisión</h3>
+    <!--<span style="color:red" *ngIf="id_vendedor.touched && !id_vendedor.valid">Seleccionar el vendedor</span>-->
+    <div style="display: flex;flex-direction:column; margin:0.5rem auto; width: 800px; padding: 1rem;">
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+              <mat-label>Tipo Doc. Destinatario</mat-label>
+              <mat-select name="tipo_destinatario" #tipo_destinatario="ngModel" [(ngModel)]="data.tipo_destinatario" required>
+                <mat-option [value]="">Seleccionar</mat-option>
+                <mat-option *ngFor="let doc of dataTipoDocumentos" [value]="doc.id">{{doc.tipo}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="tipo_destinatario.hasError('required')">Seleccionar</mat-error>
+            </mat-form-field>
+      </div>
+      <div class="col-lg-4">
+          <mat-form-field *ngIf="!data.tipo_destinatario">
+              <mat-label>Destinatario</mat-label>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente">
+              <mat-option [value]="">Seleccionar</mat-option>
+              </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="data.tipo_destinatario=='1'">
+              <mat-label>Destinatario con DNI</mat-label>
+              <mat-select name="destinatario" #destinatario="ngModel" [(ngModel)]="data.destinatario" required>
+                <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
+                <mat-option [value]="">Seleccionar</mat-option>
+                <mat-option *ngFor="let cli of dataClientes" (onSelectionChange)="change($event)" [value]="data.destinatario">
+                  {{cli.nombre}} {{cli.apellido}}
+                </mat-option>
+                </mat-select>
+                <mat-error *ngIf="destinatario.hasError('required')">Seleccionar</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field *ngIf="data.tipo_destinatario=='6'">
+              <mat-label>Destinatario CON RUC</mat-label>
+              <mat-select name="destinatario" #destinatario="ngModel" [(ngModel)]="data.destinatario" required>
+                <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
+                <mat-option [value]="">Seleccionar</mat-option>
+                <mat-option *ngFor="let cli of dataEmpresas" (onSelectionChange)="change($event)" [value]="data.destinatario">
+                  {{cli.razon_social}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="destinatario.hasError('required')">Seleccionar</mat-error>
+            </mat-form-field>
+
+      </div>
+      <div class="col-lg-4">
+          
+       <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Descargar Guía</mat-checkbox>
+       
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+              <mat-label>Nro Doc Transportista</mat-label>
+          <input matInput name="nro_transportista" #nro_transportista="ngModel" [(ngModel)]="data.nro_transportista" type="text" placeholder="Nro Doc. Transportista" required>
+          </mat-form-field>
+ 
+      </div>
+      <div class="col-lg-4">
+          <mat-form-field style="width: 100%;">
+              <mat-label>Nombre Conductor</mat-label>
+          <input matInput name="nombre_transportista" #nombre_transportista="ngModel" [(ngModel)]="data.nombre_transportista" type="text" placeholder="Nombre conductor">
+          </mat-form-field>
+   </div>
+   <div class="col-lg-4">
+      <mat-form-field style="width: 100%;">
+          <mat-label>Placa Vehículo</mat-label>
+      <input matInput name="nro_placa" #nro_placa="ngModel" [(ngModel)]="data.nro_placa" type="text" placeholder="Placa Vehículo">
+      </mat-form-field>
+</div>
+      </div>
+  <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+              <mat-label>Fecha de Envio</mat-label>
+              <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha" required>
+              <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
+              <mat-datepicker #myPicker></mat-datepicker>
+            </mat-form-field>
+ 
+      </div>
+      <div class="col-lg-4">
+          <mat-form-field>
+              <mat-label>Nro de Bultos</mat-label>
+          <input matInput  name="nro_bultos" #nro_bultos="ngModel" [(ngModel)]="data.nro_bultos" type="text" placeholder="Nro de bultos">
+          </mat-form-field>
+   </div>
+   <div class="col-lg-4">
+      <mat-form-field>
+          <mat-label>Peso Bruto</mat-label>
+      <input matInput name="peso_bruto" #peso_bruto="ngModel" [(ngModel)]="data.peso_bruto" type="text" placeholder="Peso">
+      </mat-form-field>
+</div>
+      </div>
+      <div class="row">
+      <div class="col-lg-4">
+          <mat-form-field>
+              <mat-label>Ubigeo Partida</mat-label>
+          <input matInput name="ubigeo_partida" #ubigeo_partida="ngModel" [(ngModel)]="data.ubigeo_partida" type="text" placeholder="Ubigeo Partida">
+          </mat-form-field>
+      </div>
+      <div class="col-lg-8">
+          <mat-form-field style="width: 100%;">
+          <mat-label>Direccion Partida</mat-label>
+          <input matInput  name="partida" #partida="ngModel" [(ngModel)]="data.partida" value="AV.LAS GAVIOTAS 925" type="text" placeholder="Direccion Partida">
+          </mat-form-field>
+      </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-4">
+              <mat-form-field>
+              <mat-label>Ubigeo Llegada</mat-label>
+              <input matInput name="ubigeo_llegada" #ubigeo_llegada="ngModel" [(ngModel)]="data.ubigeo_llegada" type="text" placeholder="Ubigeo Llegada">
+              </mat-form-field>
+          </div>
+          <div class="col-lg-8">
+              <mat-form-field style="width: 100%;">
+                  <mat-label>Direccion Llegada</mat-label>
+              <input matInput  name="llegada" #llegada="ngModel" [(ngModel)]="data.llegada" type="text" placeholder="Direccion Llegada">
+              </mat-form-field>
+          </div>
+          </div>
+        <div class="row">
+            <mat-form-field style="width: 100%;">
+              <mat-label>Observación Nota</mat-label>
+              <textarea matInput name="observacion" name="observacion" #observacion="ngModel" [(ngModel)]="data.observacion" placeholder="Observación Nota"></textarea>
+            </mat-form-field>               
+        </div>
+</div>
+    </div>
+</form>
+ <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
+<div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="id_producto">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.codProductob.codigo}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.codProductob.nombre}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="cantidad">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="peso">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.cantidad | number }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="borrar">
+      <th mat-header-cell *matHeaderCellDef> Opciones </th>
+      <td mat-cell *matCellDef="let row ;let j = index;">
+        <button class="btn btn-primary" (click)="deleteTicket(j,row)">Eliminar</button>
+      </td>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="2" [showFirstLastButtons]></mat-paginator>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
+</div>
+

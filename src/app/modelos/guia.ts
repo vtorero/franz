@@ -2,6 +2,7 @@ import { Destinatario } from "./destinatario";
 import { DetalleVenta } from "./detalleVenta";
 export class Guia {
     constructor(
+        public id:number,
         public id_usuario:string,
         public tipo_destinatario:string,
         public destinatario:any,

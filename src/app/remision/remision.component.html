@@ -8,15 +8,15 @@
   </div>
   <div class="example-container mat-elevation-z8">
     <mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="nro_comprobante">
+      <ng-container matColumnDef="numero">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Nro Comprobante</span>
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.nro_comprobante}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.numero}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="comprobante">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Comprobante</span>
+      <ng-container matColumnDef="doc">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Tipo Doc</span>
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.comprobante}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.doc}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="cliente">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
@@ -24,17 +24,21 @@
       </ng-container>
 
 
-      <ng-container matColumnDef="fecha">
+      <ng-container matColumnDef="fechaemision">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha de emisión</span></mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.fecha}} </mat-cell>
+        <mat-cell *matCellDef="let row">{{row.fechaemision}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="observacion">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Observación</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.observacion}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="valor_total">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Monto Total</span></mat-header-cell>
-        <mat-cell *matCellDef="let row">S/.{{row.valor_total}} </mat-cell>
+      <ng-container matColumnDef="transp_nombre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Transportista</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.transp_nombre}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="nro_placa">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Placa vehículo</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.nro_placa}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="opciones">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>

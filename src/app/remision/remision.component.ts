@@ -15,6 +15,7 @@ import { Guiadetalle } from '../modelos/guiadetalle';
 import { Remision } from '../modelos/remision';
 import { Transportista } from '../modelos/transportista';
 import { AddGuiaComponent } from './add-guia/add-guia.component';
+import { EditGuiaComponent } from './edit-guia/edit-guia.component';
 
 
 function sendInvoice(data, nro, url) {
@@ -53,11 +54,11 @@ export class RemisionComponent implements OnInit {
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
-  destinatario: Destinatario= new Destinatario('','','',{direccion:''});
+  destinatario: Destinatario= new Destinatario(0,'','','',{direccion:''});
   transportista= new Transportista('','','','','','');
   envio : Envio= new Envio('','','','','','',0,'',0,{ubigueo:'',direccion:''},{ubigueo:'',direccion:''},this.transportista);
   cancela: boolean = false;
-  displayedColumns = ['nro_comprobante', 'comprobante', 'cliente', 'fecha', 'observacion', 'valor_total', 'opciones'];
+  displayedColumns = ['numero', 'doc', 'cliente', 'fechaemision', 'observacion', 'transp_nombre','nro_placa' ,'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -89,7 +90,7 @@ export class RemisionComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AddGuiaComponent, {
-      data: new Guia(localStorage.getItem("currentUser"),'',[],"","","","",0,"","","",0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
+      data: new Guia(0,localStorage.getItem("currentUser"),'',[],"","","","",0,"","","",0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
       disableClose: true,
     });
     dialogo1.afterClosed().subscribe(art => {
@@ -99,6 +100,20 @@ export class RemisionComponent implements OnInit {
         } else {
           this.agregar(art);
         }
+    });
+  }
+
+  abrirEditar(cod: Guia) {
+    console.log(cod);
+    const dialogo2 = this.dialog2.open(EditGuiaComponent, {
+      data: cod,
+      disableClose: true
+    });
+    dialogo2.afterClosed().subscribe(art => {
+      if (art != undefined){
+      console.log("cargans",this.cargando);
+       //this.editar(art);
+      }
     });
   }
 
@@ -115,7 +130,7 @@ export class RemisionComponent implements OnInit {
       let fec1;
       let fecha1;
      //var boleta:any;
-      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"");
+      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"",localStorage.getItem("currentUser"));
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -125,16 +140,16 @@ export class RemisionComponent implements OnInit {
       /*cabecera*/
       boleta.tipoDoc = "09";
       boleta.serie = "T001";
-      /*this.api.getMaxId('guiaremision').subscribe(id => {
+      this.api.getMaxId('guias').subscribe(id => {
       boleta.correlativo = id[0].ultimo.toString();
-      art.nro_guia = "T001-" + id[0].ultimo.toString()});*/
-      boleta.correlativo="1";
+      });
       boleta.fechaEmision = fecha1;
       boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       
       /*Destinatario*/
+      boleta.destinatario.id=art.destinatario.id;
       boleta.destinatario.tipoDoc=art.tipo_destinatario;
       if(art.tipo_destinatario=='1'){
       boleta.destinatario.numDoc=art.destinatario.num_documento;
@@ -158,11 +173,11 @@ export class RemisionComponent implements OnInit {
       boleta.envio.undPesoTotal='KGM';
       boleta.envio.numBultos= art.nro_bultos;
       boleta.envio.transportista.tipoDoc="6"
-      boleta.envio.transportista.numDoc= ""
-      boleta.envio.transportista.rznSocial= ""
+      boleta.envio.transportista.numDoc= "";
+      boleta.envio.transportista.rznSocial=art.nombre_transportista; 
       boleta.envio.transportista.placa= art.nro_placa;
       boleta.envio.transportista.choferTipoDoc= "1";
-      boleta.envio.transportista.choferDoc=art.nombre_transportista;
+      boleta.envio.transportista.choferDoc=art.nro_transportista
       boleta.envio.llegada.ubigueo= art.ubigeo_llegada;
       boleta.envio.llegada.direccion= art.llegada;
       boleta.envio.partida.ubigueo="150108"
@@ -185,16 +200,15 @@ export class RemisionComponent implements OnInit {
       },
         error => { console.log(error) }
       );
-      console.log("Guiaaaa",boleta);
+      
     if (art.imprimir) {
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
       }
-
     setTimeout(() => {
       this.cargando=false;
       this.renderDataTable();
       
-    }, 3000);
+    }, 1000);
 
   }
 

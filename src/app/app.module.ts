@@ -70,6 +70,7 @@ import { VernotaComponent } from './notacredito/vernota/vernota.component';
 import { RemisionComponent } from './remision/remision.component';
 import { AddGuiaComponent } from './remision/add-guia/add-guia.component';
 import { PendientesComponent } from './ventas/pendientes/pendientes.component';
+import { EditGuiaComponent } from './remision/edit-guia/edit-guia.component';
 
 
 
@@ -124,7 +125,8 @@ import { PendientesComponent } from './ventas/pendientes/pendientes.component';
   AddnotaComponent,
   AdditemComponent,
 VernotaComponent,
-AddGuiaComponent],
+AddGuiaComponent,
+EditGuiaComponent],
   declarations: [
     AppComponent,
     PagoComponent,
@@ -169,7 +171,8 @@ AddGuiaComponent],
     VernotaComponent,
     RemisionComponent,
     AddGuiaComponent,
-    PendientesComponent
+    PendientesComponent,
+    EditGuiaComponent
     ],
   bootstrap: [AppComponent]
 })

@@ -25,16 +25,17 @@
           </mat-select>-->
         </mat-form-field>
         <mat-form-field>
-          <input matInput (focusout)="verificaCantidad($event.target.value)" name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <input matInput (focusout)="verificaCantidad($event.target.value)" autocomplete="off"  name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <mat-error *ngIf="cantidad.hasError('required')">Cantidad Superior al Inventario</mat-error>
           </mat-form-field>
           <mat-form-field>
-            <input matInput name="mtoValorUnitario" #mtoValorUnitario="ngModel" [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
+            <input matInput name="mtoValorUnitario" autocomplete="off"  #mtoValorUnitario="ngModel" [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
             </mat-form-field>
             </div>
   </div>
 </form>
   <div mat-dialog-actions>
-    <button  mat-button [mat-dialog-close]="false">Cancelar</button>
+    <button  mat-button [mat-dialog-close]="false">Cerrar</button>
     <button mat-button [mat-dialog-close]="data" [disabled]="!formItem2.form.valid" cdkFocusInitial>Confirmar</button>
   </div>
   </div>

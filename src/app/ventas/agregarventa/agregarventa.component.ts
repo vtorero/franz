@@ -45,6 +45,7 @@ export class AgregarventaComponent implements OnInit {
   valor_neto:number=0;
   monto_igv:number=0;
   valor_total:number=0;
+  cancela:boolean=false;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
@@ -148,24 +149,35 @@ export class AgregarventaComponent implements OnInit {
 
   }
 
+  cancelar() {
+    this.cancela=true;
+    console.log("botoncancelar",this.cancela);
+    this.dialog.closeAll();
+    this.cancela=true;
+  }
+
+
   abrirDialog() {
     const dialogo1 = this.dialog.open(AddProductoComponent, {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,''),
       disableClose:true
     });
     dialogo1.afterClosed().subscribe(art => {
-    console.log("art",art)
-    console.log(art.cantidad*art.mtoValorUnitario)
-    this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
-    this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
-    this.valor_total=this.valor_neto+this.monto_igv;
-      if (art)
+      if (art){
+      console.log("cancelar",this.cancela)
+      console.log("art",art)
+      console.log(art.cantidad*art.mtoValorUnitario)
+      this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
+      this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
+      this.valor_total=this.valor_neto+this.monto_igv;
+      
        this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+    }
     });
   }
 
@@ -188,12 +200,5 @@ export class AgregarventaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data.detalleVenta);
     }
   }
-
-
-  cancelar() {
-    this.dialog.closeAll();
-
-  }
-
 
 }

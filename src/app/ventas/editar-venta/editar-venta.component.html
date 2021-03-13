@@ -18,9 +18,9 @@
         
         </div>
         <div class="col-lg-4">
-          <mat-radio-group aria-label="Seleccione tipo" name="tipoDoc" #tipoDoc="ngModel" [(ngModel)]="data.tipoDoc"  *ngIf="data.comprobante=='Pendiente'">
-            <mat-radio-button value="1" (change)="radioChange($event)">Con DNI</mat-radio-button>&nbsp;
-            <mat-radio-button value="2" (change)="radioChange($event)">Con RUC</mat-radio-button>
+          <mat-radio-group aria-label="Seleccione tipo" name="tipoDoc" #tipoDoc="ngModel" [(ngModel)]="data.tipoDoc" disabled="disabled">
+            <mat-radio-button value="1">Con DNI</mat-radio-button>&nbsp;
+            <mat-radio-button value="2">Con RUC</mat-radio-button>
           </mat-radio-group>
         </div>
         </div>

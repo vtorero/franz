@@ -797,7 +797,18 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
 $app->get("/guias",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT id,concat('T001-',`id`) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso`, `bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `transp_numDoc`, `transp_nombre`, `nro_placa`, `observacion`,`tipo_destinatario`,`destinatario`, `fecha_registro`, `usuario` FROM `guias` order by id desc");
+    $resultado = $db->query("SELECT id,concat('T001-',`id`) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`,`destinatario`, `fecha_registro`, `usuario` FROM `guias` order by id desc");
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
+
+$app->get("/guia/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad` FROM `guia_detalle` v ,productos p where v.id_producto=p.codigo and id_guia={$id}");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;

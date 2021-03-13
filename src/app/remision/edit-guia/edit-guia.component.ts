@@ -1,7 +1,29 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatPaginator, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ApiService } from 'src/app/api.service';
+import { Global } from 'src/app/global';
 import { Guia } from 'src/app/modelos/guia';
+
+
+function sendInvoice(data,nro,url) {
+  fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + Global.TOKEN_FACTURACION
+    },
+    body: data
+  })
+    .then(response => response.blob())
+    .then(blob => {
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "comprobante-" + nro + ".pdf";
+      link.click();
+    });
+}
+
 
 @Component({
   selector: 'app-edit-guia',
@@ -30,7 +52,10 @@ export class EditGuiaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(@Inject(MAT_DIALOG_DATA) public data: Guia,
-  private api: ApiService,) { }
+  public dialogRef: MatDialogRef<EditGuiaComponent>,
+  private api: ApiService, dateTimeAdapter: DateTimeAdapter<any>) {
+    dateTimeAdapter.setLocale('es-PE');
+   }
 
   getclientes(): void {
     this.api.getApi('clientes').subscribe(data => {
@@ -52,11 +77,15 @@ export class EditGuiaComponent implements OnInit {
   ngOnInit() {
     this.getEmpresas();
     this.getclientes()
-    this.api.getApi('guia_detalle/'+this.data.id).subscribe(x => {  
+    this.api.getApi('guia/'+this.data.id).subscribe(x => {  
       this.dataDetalle = new MatTableDataSource();
       this.exampleArray=x;
       this.dataDetalle=this.exampleArray
       this.data.detalleVenta=this.exampleArray; 
   });
+  }
+
+  cancelar() {
+    this.dialogRef.close();
   }
 }

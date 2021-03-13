@@ -58,7 +58,7 @@ export class RemisionComponent implements OnInit {
   transportista= new Transportista('','','','','','');
   envio : Envio= new Envio('','','','','','',0,'',0,{ubigueo:'',direccion:''},{ubigueo:'',direccion:''},this.transportista);
   cancela: boolean = false;
-  displayedColumns = ['numero', 'doc', 'cliente', 'fechaemision', 'observacion', 'transp_nombre','nro_placa' ,'opciones'];
+  displayedColumns = ['numero', 'doc', 'cliente', 'fechaemision', 'observacion', 'nombre_transportista','nro_placa' ,'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -112,7 +112,7 @@ export class RemisionComponent implements OnInit {
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined){
       console.log("cargans",this.cargando);
-       //this.editar(art);
+       this.editar(art);
       }
     });
   }
@@ -131,7 +131,7 @@ export class RemisionComponent implements OnInit {
       let fecha1;
      //var boleta:any;
       var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"",localStorage.getItem("currentUser"));
-      fec1 = art.fecha.toDateString().split(" ", 4);
+      fec1 = art.fechaemision.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
@@ -143,7 +143,7 @@ export class RemisionComponent implements OnInit {
       this.api.getMaxId('guias').subscribe(id => {
       boleta.correlativo = id[0].ultimo.toString();
       });
-      boleta.fechaEmision = fecha1;
+      boleta.fechaemision = fecha1;
       boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
@@ -210,6 +210,85 @@ export class RemisionComponent implements OnInit {
       
     }, 1000);
 
+  }
+
+
+  editar(art: Guia) {
+    
+    this.cargando = true;
+      let fec1;
+      let fecha1;
+     //var boleta:any;
+      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"",localStorage.getItem("currentUser"));
+      /* var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
+      /*Instancia Guia*/
+
+      /*cabecera*/
+      boleta.tipoDoc = "09";
+      boleta.serie = "T001";
+      boleta.correlativo = art.id;
+      boleta.fechaemision = art.fechaemision+"T00:00:00-05:00";
+      boleta.company.ruc = Global.RUC_EMPRESA;
+      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
+      
+      /*Destinatario*/
+      boleta.destinatario.id=art.destinatario.id;
+      boleta.destinatario.tipoDoc=art.tipo_destinatario;
+      if(art.tipo_destinatario=='1'){
+      boleta.destinatario.numDoc=art.destinatario.num_documento;
+      boleta.destinatario.rznSocial=art.destinatario.nombre;
+      }
+
+      if(art.tipo_destinatario=='6'){
+        boleta.destinatario.numDoc=art.destinatario.num_documento;
+        boleta.destinatario.rznSocial=art.destinatario.razon_social;
+        }
+
+      boleta.destinatario.address.direccion=art.llegada;
+      boleta.observacion=art.observacion;
+
+      boleta.envio.modTraslado="01";
+      boleta.envio.codTraslado= "01"
+      boleta.envio.desTraslado="VENTA"
+      boleta.envio.fecTraslado= fecha1;
+      boleta.envio.codPuerto= "123";
+      boleta.envio.pesoTotal= art.peso_bruto;
+      boleta.envio.undPesoTotal='KGM';
+      boleta.envio.numBultos= art.nro_bultos;
+      boleta.envio.transportista.tipoDoc="6"
+      boleta.envio.transportista.numDoc= "";
+      boleta.envio.transportista.rznSocial=art.nombre_transportista; 
+      boleta.envio.transportista.placa= art.nro_placa;
+      boleta.envio.transportista.choferTipoDoc= "1";
+      boleta.envio.transportista.choferDoc=art.nro_transportista
+      boleta.envio.llegada.ubigueo= art.ubigeo_llegada;
+      boleta.envio.llegada.direccion= art.llegada;
+      boleta.envio.partida.ubigueo="150108"
+      boleta.envio.partida.direccion= "AV.LAS GAVIOTAS 925";
+        
+      
+      art.detalleVenta.forEach(function (value: any) {
+      let detalleBoleta: Guiadetalle = new Guiadetalle('','', '', '',0);
+        detalleBoleta.id = value.id;  
+        detalleBoleta.codigo = value.codigo;
+        detalleBoleta.descripcion = value.nombre;
+        detalleBoleta.unidad = value.unidad;
+        detalleBoleta.cantidad = value.cantidad;
+        boleta.details.push(detalleBoleta);
+      });
+
+     
+      /*this.api.GuardarGuia(boleta).subscribe(data => {
+        this.toastr.success(data['messaje']);
+      },
+        error => { console.log(error) }
+      );*/
+        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
+    
+    
   }
 
   cancelar() {

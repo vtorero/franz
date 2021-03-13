@@ -13,7 +13,7 @@ export class Guia {
         public estado:number,
         public nro_documento:string,
         public nro_guia:string,
-        public fecha:any,
+        public fechaemision:any,
         public nro_bultos:number,
         public peso_bruto:number,
         public valor_total:number,

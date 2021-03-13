@@ -336,6 +336,12 @@ public GuardarComprobante(Boleta):Observable<any>{
     ).pipe(map(result => result));
   }
 
+  GetDetalleGuia(id: any) {
+    return this._http.get(Global.BASE_API_URL + 'api.php/guia/' + id,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
   GetDetalleNota(id: any) {
     return this._http.get(Global.BASE_API_URL + 'api.php/nota/' + id,
       { headers: this.headers }

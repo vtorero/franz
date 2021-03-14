@@ -156,6 +156,7 @@ export class NotacreditoComponent implements OnInit {
           boleta.correlativo = id[0].ultimo.toString();
           art.nro_comprobante = "BB01" + id[0].ultimo.toString();
           art.comprobante = 'Boleta';
+          art.nro_nota=boleta.serie+'-'+boleta.correlativo;
         });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
@@ -166,12 +167,13 @@ export class NotacreditoComponent implements OnInit {
           boleta.correlativo = id[0].ultimo.toString();
           art.nro_comprobante = "FF01" + id[0].ultimo.toString();
           art.comprobante = 'Factura';
+          art.nro_nota=boleta.serie+'-'+boleta.correlativo;
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
       }
-
-      boleta.client.numDoc = art.cliente.num_documento;
+      
+        boleta.client.numDoc = art.cliente.num_documento;
       boleta.client.address.direccion = art.cliente.direccion;
 
       /*company*/
@@ -233,14 +235,18 @@ export class NotacreditoComponent implements OnInit {
 
           this.api.GuardarNotaCredito(art).subscribe(data => {
             this.toastr.success(data['messaje']);
-          },
+                    },
             error => { console.log(error) }
           );
-          this.renderDataTable();
+   
         }
 //      }, 6000);
       });
-
+      setTimeout(() => {
+        this.cargando=false;
+        console.log("rendeeeee");
+      this.renderDataTable();
+      },3000);
 
     }
   }

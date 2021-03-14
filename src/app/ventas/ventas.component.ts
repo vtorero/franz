@@ -108,7 +108,7 @@ export class VentasComponent implements OnInit {
   }
 
   agregar(art: Venta) {
-       this.cargando=true;
+    this.cargando=true;
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
@@ -132,6 +132,7 @@ export class VentasComponent implements OnInit {
           });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
+        art.tipoDoc="1"
       }
       if (art.cliente.razon_social) {
         boleta.tipoDoc = "01";
@@ -142,8 +143,9 @@ export class VentasComponent implements OnInit {
         });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
+        art.tipoDoc="2";
       }
-
+      
       boleta.client.numDoc = art.cliente.num_documento;
       boleta.client.address.direccion = art.cliente.direccion;
 
@@ -180,44 +182,46 @@ export class VentasComponent implements OnInit {
       boleta.mtoImpVenta = total + (total * Global.BASE_IGV),
       boleta.company = this.company;
 
-      this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(data => {
-        boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES"+ "<hr>Observación: "+art.observacion }];
+      this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(letra => {
+        boleta.legends = [{ code: "1000", value: "SON " + letra + " SOLES"+ "<hr>Observación: "+art.observacion }];
 
       //setTimeout(() => {
         this.api.GuardarComprobante(boleta).subscribe(
-          data => {
-            if (data.sunatResponse.success) {
-              this.toastr.info(data.sunatResponse.cdrResponse.description,"Mensaje Sunat");
+          fact => {
+            if (fact.sunatResponse.success) {
+              this.toastr.info(fact.sunatResponse.cdrResponse.description,"Mensaje Sunat");
               
               if(art.cliente.razon_social){
-                this.api.GuardarFactura(data).subscribe(dat=>{
+                this.api.GuardarFactura(fact).subscribe(dat=>{
                   boleta.correlativo=dat['max'];
                   art.nro_comprobante=dat.max.ultimo_id.toString();
               });
             }
-          if(art.cliente.nombre){
-              this.api.GuardarBoleta(data).subscribe(dat=>{
+            if(art.cliente.nombre){
+              this.api.GuardarBoleta(fact).subscribe(dat=>{
                 boleta.correlativo=dat['max'];
                 art.nro_comprobante=dat.max.ultimo_id.toString(); 
             });
           }
 
-                this.api.GuardarVenta(art).subscribe(data => {
+            }
+            else {
+              this.toastr.error("Factura/Boleta no recibida");
+            }
+            });
+            this.api.GuardarVenta(art).subscribe(data => {
                   this.toastr.success(data['messaje']);
                 },
                   error => { console.log(error) }
-                );
-            } else {
-              this.toastr.error(art.comprobante + " no recibida");
-            }
+            );
             
-          });
+         
         
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
         this.cargando=false;
-     // },6500);
+    
     });
     }else{
       this.api.GuardarVenta(art).subscribe(data => {
@@ -225,11 +229,11 @@ export class VentasComponent implements OnInit {
       },
         error => { console.log(error) }
       );
-      this.cargando=false;
     }
 
 
       setTimeout(() => {
+        this.cargando=false;
         console.log("redeeeee");
       this.renderDataTable();
       },3000);

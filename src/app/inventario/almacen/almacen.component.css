@@ -1,4 +1,6 @@
+
 .mat-cell{
+    text-transform: uppercase  !important;
     justify-content: center;
 }
 .mat-header-cell{
@@ -9,6 +11,7 @@
 .mat-cell,.mat-header-cell {
     text-align: center !important;
     justify-content: center !important;
+    
 }
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;

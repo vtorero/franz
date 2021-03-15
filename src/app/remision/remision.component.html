@@ -18,9 +18,9 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.doc}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="cliente">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.cliente}} </mat-cell>
+      <ng-container matColumnDef="destinatario">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Destinatario</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.destinatario}} </mat-cell>
       </ng-container>
 
 
@@ -61,4 +61,4 @@
   <ng-container>
   </ng-container>
 </mk-box>
-<button mat-raised-button (click)="agregarVenta()">Agregar Guía</button>
+<button mat-raised-button (click)="agregarGuia()">Agregar Guía</button>

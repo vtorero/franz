@@ -9,7 +9,7 @@ export class Remision {
         public serie:string,
         public correlativo:any,
         public destinatario:Destinatario,
-        public fechaemision:any,
+        public fechaemision:Date,
         public company:Company,
         public envio:Envio,
         public details:Array<Guiadetalle>,

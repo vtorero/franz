@@ -6,7 +6,6 @@ import { ApiService } from '../api.service';
 import { Global } from '../global';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
-import { Details } from '../modelos/Boleta/details';
 import { Destinatario } from '../modelos/destinatario';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Envio } from '../modelos/envio';
@@ -58,7 +57,7 @@ export class RemisionComponent implements OnInit {
   transportista= new Transportista('','','','','','');
   envio : Envio= new Envio('','','','','','',0,'',0,{ubigueo:'',direccion:''},{ubigueo:'',direccion:''},this.transportista);
   cancela: boolean = false;
-  displayedColumns = ['numero', 'doc', 'cliente', 'fechaemision', 'observacion', 'nombre_transportista','nro_placa' ,'opciones'];
+  displayedColumns = ['numero', 'doc', 'destinatario', 'fechaemision', 'observacion', 'nombre_transportista','nro_placa' ,'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -88,9 +87,9 @@ export class RemisionComponent implements OnInit {
     this.renderDataTable();
   }
 
-  agregarVenta() {
+  agregarGuia() {
     const dialogo1 = this.dialog.open(AddGuiaComponent, {
-      data: new Guia(0,localStorage.getItem("currentUser"),'',[],"","","","",0,"","","",0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
+      data: new Guia(0,localStorage.getItem("currentUser"),'',[],"","","","","",0,"","",this.Moment,0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
       disableClose: true,
     });
     dialogo1.afterClosed().subscribe(art => {
@@ -111,7 +110,6 @@ export class RemisionComponent implements OnInit {
     });
     dialogo2.afterClosed().subscribe(art => {
       if (art != undefined){
-      console.log("cargans",this.cargando);
        this.editar(art);
       }
     });
@@ -124,16 +122,17 @@ export class RemisionComponent implements OnInit {
     return str;
   }
 
+
   agregar(art: Guia) {
-    
     this.cargando = true;
       let fec1;
       let fecha1;
      //var boleta:any;
-      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"",localStorage.getItem("currentUser"));
+      var boleta: Remision = new Remision('','','',this.destinatario,this.Moment,this.company,this.envio,[],"",localStorage.getItem("currentUser"));
       fec1 = art.fechaemision.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
       /*Instancia Guia*/
 
@@ -153,7 +152,7 @@ export class RemisionComponent implements OnInit {
       boleta.destinatario.tipoDoc=art.tipo_destinatario;
       if(art.tipo_destinatario=='1'){
       boleta.destinatario.numDoc=art.destinatario.num_documento;
-      boleta.destinatario.rznSocial=art.destinatario.nombre;
+      boleta.destinatario.rznSocial=art.destinatario.nombre +' '+ art.destinatario.apellido;
       }
 
       if(art.tipo_destinatario=='6'){
@@ -194,42 +193,41 @@ export class RemisionComponent implements OnInit {
         boleta.details.push(detalleBoleta);
       });
 
-     
       this.api.GuardarGuia(boleta).subscribe(data => {
         this.toastr.success(data['messaje']);
       },
-        error => { console.log(error) }
-      );
+        error => { console.log(error)});
       
     if (art.imprimir) {
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
       }
+
     setTimeout(() => {
       this.cargando=false;
       this.renderDataTable();
       
-    }, 1000);
+    }, 3000);
 
   }
 
 
   editar(art: Guia) {
-    
+    console.log(art);
     this.cargando = true;
       let fec1;
       let fecha1;
      //var boleta:any;
-      var boleta: Remision = new Remision('','','',this.destinatario,'',this.company,this.envio,[],"",localStorage.getItem("currentUser"));
+      var boleta: Remision = new Remision('','','',this.destinatario,this.Moment,this.company,this.envio,[],"",localStorage.getItem("currentUser"));
       /* var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
       /*Instancia Guia*/
-
+      fec1=boleta.fechaemision+"T00:00:00-05:00"
       /*cabecera*/
       boleta.tipoDoc = "09";
       boleta.serie = "T001";
       boleta.correlativo = art.id;
-      boleta.fechaemision = art.fechaemision+"T00:00:00-05:00";
+      boleta.fechaemision = fec1;
       boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
@@ -238,13 +236,13 @@ export class RemisionComponent implements OnInit {
       boleta.destinatario.id=art.destinatario.id;
       boleta.destinatario.tipoDoc=art.tipo_destinatario;
       if(art.tipo_destinatario=='1'){
-      boleta.destinatario.numDoc=art.destinatario.num_documento;
-      boleta.destinatario.rznSocial=art.destinatario.nombre;
+      boleta.destinatario.numDoc=art.num_documento;
+      boleta.destinatario.rznSocial=art.destinatario;
       }
 
       if(art.tipo_destinatario=='6'){
-        boleta.destinatario.numDoc=art.destinatario.num_documento;
-        boleta.destinatario.rznSocial=art.destinatario.razon_social;
+        boleta.destinatario.numDoc=art.num_documento;
+        boleta.destinatario.rznSocial=art.destinatario;
         }
 
       boleta.destinatario.address.direccion=art.llegada;
@@ -280,15 +278,9 @@ export class RemisionComponent implements OnInit {
         boleta.details.push(detalleBoleta);
       });
 
-     
-      /*this.api.GuardarGuia(boleta).subscribe(data => {
-        this.toastr.success(data['messaje']);
-      },
-        error => { console.log(error) }
-      );*/
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
     
-    
+    this.cargando=false;
   }
 
   cancelar() {

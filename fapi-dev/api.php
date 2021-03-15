@@ -800,7 +800,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
 $app->get("/guias",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT id,concat('T001-',`id`) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`,`destinatario`, `fecha_registro`, `usuario` FROM `guias` order by id desc");
+    $resultado = $db->query("SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, concat(c.nombre,' ',c.apellido) destinatario, g.`fecha_registro`, `usuario`  FROM `guias` g, `clientes` c where g.destinatario=c.id and g.tipo_destinatario='1' union all SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, (c.razon_social) destinatario, g.`fecha_registro`, `usuario`  FROM `guias` g, `empresas` c where g.destinatario=c.id and g.tipo_destinatario='6' order by id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -827,10 +827,9 @@ $app->post("/guia",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-    
-      try { 
-        $fecha=substr($data->fechaEmision,0,10);
-        $sql="call p_guia('{$data->tipoDoc}','{$data->destinatario->id}','{$fecha}','{$data->envio->pesoTotal}','{$data->envio->numBultos}','{$data->envio->partida->ubigueo}', '{$data->envio->partida->direccion}','{$data->envio->llegada->ubigueo}','{$data->envio->llegada->direccion}','{$data->envio->transportista->tipoDoc}','{$data->envio->transportista->choferDoc}','{$data->envio->transportista->rznSocial}','{$data->envio->transportista->placa}','{$data->observacion}','{$data->usuario}')";
+       try { 
+        $fecha=substr($data->fechaemision,0,10);
+        $sql="call p_guia('{$data->tipoDoc}','{$data->destinatario->tipoDoc}','{$data->destinatario->id}','{$fecha}','{$data->envio->pesoTotal}','{$data->envio->numBultos}','{$data->envio->partida->ubigueo}', '{$data->envio->partida->direccion}','{$data->envio->llegada->ubigueo}','{$data->envio->llegada->direccion}','{$data->envio->transportista->tipoDoc}','{$data->envio->transportista->choferDoc}','{$data->envio->transportista->rznSocial}','{$data->envio->transportista->placa}','{$data->observacion}','{$data->usuario}')";
        $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);
         $datos=$db->query("SELECT max(id) ultimo_id FROM guias");
@@ -850,7 +849,7 @@ $app->post("/guia",function() use($db,$app){
             mysqli_stmt_execute($stmtb);
             $stmtb->close();
         }
-        $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id);
+        $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string-actualiza"=>$actualiza);
         
         }
          catch(PDOException $e) {

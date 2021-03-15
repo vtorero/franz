@@ -64,14 +64,14 @@
         </div>
         <div class="col-lg-4">
             <mat-form-field style="width: 100%;">
-                <mat-label>Nombre Conductor</mat-label>
-            <input matInput name="nombre_transportista" #nombre_transportista="ngModel" [(ngModel)]="data.nombre_transportista" type="text" placeholder="Nombre conductor">
+         <mat-label>Nombre Conductor</mat-label>
+            <input matInput name="nombre_transportista" #nombre_transportista="ngModel" [(ngModel)]="data.nombre_transportista" type="text" placeholder="Nombre conductor" required>
             </mat-form-field>
      </div>
      <div class="col-lg-4">
         <mat-form-field style="width: 100%;">
             <mat-label>Placa Vehículo</mat-label>
-        <input matInput name="nro_placa" #nro_placa="ngModel" [(ngModel)]="data.nro_placa" type="text" placeholder="Placa Vehículo">
+        <input matInput name="nro_placa" #nro_placa="ngModel" [(ngModel)]="data.nro_placa" type="text" placeholder="Placa Vehículo" required>
         </mat-form-field>
  </div>
         </div>
@@ -79,7 +79,7 @@
           <div class="col-lg-4">
             <mat-form-field>
                 <mat-label>Fecha de Envio</mat-label>
-                <input matInput [matDatepicker]="myPicker" name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" placeholder="Fecha" required>
+                <input matInput [matDatepicker]="myPicker" name="fechaemision" #fechaemision="ngModel" [(ngModel)]="data.fechaemision" placeholder="Fecha" required>
                 <mat-datepicker-toggle matSuffix [for]="myPicker"></mat-datepicker-toggle>
                 <mat-datepicker #myPicker></mat-datepicker>
               </mat-form-field>
@@ -102,13 +102,13 @@
         <div class="col-lg-4">
             <mat-form-field>
                 <mat-label>Ubigeo Partida</mat-label>
-            <input matInput name="ubigeo_partida" #ubigeo_partida="ngModel" [(ngModel)]="data.ubigeo_partida" type="text" placeholder="Ubigeo Partida">
+            <input matInput name="ubigeo_partida" #ubigeo_partida="ngModel" [(ngModel)]="data.ubigeo_partida" type="text" placeholder="Ubigeo Partida" required>
             </mat-form-field>
         </div>
         <div class="col-lg-8">
             <mat-form-field style="width: 100%;">
             <mat-label>Direccion Partida</mat-label>
-            <input matInput  name="partida" #partida="ngModel" [(ngModel)]="data.partida" value="AV.LAS GAVIOTAS 925" type="text" placeholder="Direccion Partida">
+            <input matInput  name="partida" #partida="ngModel" [(ngModel)]="data.partida" value="AV.LAS GAVIOTAS 925" type="text" placeholder="Direccion Partida" required>
             </mat-form-field>
         </div>
         </div>
@@ -116,13 +116,13 @@
             <div class="col-lg-4">
                 <mat-form-field>
                 <mat-label>Ubigeo Llegada</mat-label>
-                <input matInput name="ubigeo_llegada" #ubigeo_llegada="ngModel" [(ngModel)]="data.ubigeo_llegada" type="text" placeholder="Ubigeo Llegada">
+                <input matInput name="ubigeo_llegada" #ubigeo_llegada="ngModel" [(ngModel)]="data.ubigeo_llegada" type="text" placeholder="Ubigeo Llegada" required>
                 </mat-form-field>
             </div>
             <div class="col-lg-8">
                 <mat-form-field style="width: 100%;">
                     <mat-label>Direccion Llegada</mat-label>
-                <input matInput  name="llegada" #llegada="ngModel" [(ngModel)]="data.llegada" type="text" placeholder="Direccion Llegada">
+                <input matInput  name="llegada" #llegada="ngModel" [(ngModel)]="data.llegada" type="text" placeholder="Direccion Llegada" required>
                 </mat-form-field>
             </div>
             </div>

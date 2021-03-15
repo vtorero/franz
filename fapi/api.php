@@ -794,6 +794,73 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             echo  json_encode($result);   
      });
 
+     /*guia remision*/
+
+$app->get("/guias",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, concat(c.nombre,' ',c.apellido) destinatario,c.num_documento ,g.`fecha_registro`, `usuario`  FROM `guias` g, `clientes` c where g.destinatario=c.id and g.tipo_destinatario='1' union all SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, (c.razon_social) destinatario, c.num_documento, g.`fecha_registro`, `usuario`  FROM `guias` g, `empresas` c where g.destinatario=c.id and g.tipo_destinatario='6' order by id desc;");
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
+
+$app->get("/guia/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad` FROM `guia_detalle` v ,productos p where v.id_producto=p.codigo and id_guia={$id}");  
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;    
+});
+
+
+$app->post("/guia",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+
+       try { 
+        $fecha=substr($data->fechaemision,0,10);
+        $sql="call p_guia('{$data->tipoDoc}','{$data->destinatario->tipoDoc}','{$data->destinatario->id}','{$fecha}','{$data->envio->pesoTotal}','{$data->envio->numBultos}','{$data->envio->partida->ubigueo}', '{$data->envio->partida->direccion}','{$data->envio->llegada->ubigueo}','{$data->envio->llegada->direccion}','{$data->envio->transportista->tipoDoc}','{$data->envio->transportista->choferDoc}','{$data->envio->transportista->rznSocial}','{$data->envio->transportista->placa}','{$data->observacion}','{$data->usuario}')";
+       $stmt = mysqli_prepare($db,$sql);
+        mysqli_stmt_execute($stmt);
+        $datos=$db->query("SELECT max(id) ultimo_id FROM guias");
+        $ultimo_id=array();
+        while ($d = $datos->fetch_object()) {
+         $ultimo_id=$d;
+         }
+        foreach($data->details as $valor){
+         /*inserta detalle*/
+        $proc="call p_guia_detalle({$ultimo_id->ultimo_id},'{$valor->codigo}','{$valor->id}','{$valor->unidad}',{$valor->cantidad})";
+        $stmt1 = mysqli_prepare($db,$proc);
+        mysqli_stmt_execute($stmt1);
+        $stmt->close();
+
+        $actualiza="call p_actualiza_inventario({$valor->id},'{$valor->codigo}',{$valor->cantidad},{$valor->cantidad},'{$valor->unidad}')";
+            $stmtb = mysqli_prepare($db,$actualiza);
+            mysqli_stmt_execute($stmtb);
+            $stmtb->close();
+        }
+        $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string-actualiza"=>$actualiza);
+        
+        }
+         catch(PDOException $e) {
+
+        $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+        
+    }
+    
+        echo  json_encode($result);   
+});
+
+
+
 /*notas*/
 $app->get("/notas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");

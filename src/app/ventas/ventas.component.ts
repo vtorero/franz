@@ -190,7 +190,7 @@ export class VentasComponent implements OnInit {
           fact => {
             if (fact.sunatResponse.success) {
               this.toastr.info(fact.sunatResponse.cdrResponse.description,"Mensaje Sunat");
-              /*
+              
               if(art.cliente.razon_social){
                 this.api.GuardarFactura(fact).subscribe(dat=>{
                   boleta.correlativo=dat['max'];
@@ -202,7 +202,7 @@ export class VentasComponent implements OnInit {
                 boleta.correlativo=dat['max'];
                 art.nro_comprobante=dat.max.ultimo_id.toString(); 
             });
-          }*/
+          }
 
             }
             else {

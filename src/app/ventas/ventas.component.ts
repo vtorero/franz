@@ -206,15 +206,16 @@ export class VentasComponent implements OnInit {
 
             }
             else {
+              /*guarda error*/
               this.toastr.error("Factura/Boleta no recibida");
             }
             });
+            
             this.api.GuardarVenta(art).subscribe(data => {
                   this.toastr.success(data['messaje']);
                 },
                   error => { console.log(error) }
             );
-            
          
         
         if (art.imprimir) {

@@ -780,7 +780,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
            $stmt->close();
-           $datos=$db->query("SELECT max(id) ultimo_id FROM facturas");
+           $datos=$db->query("SELECT max(id)+1 ultimo_id FROM facturas");
            $ultimo_id=array();
            while ($d = $datos->fetch_object()) {
             $ultimo_id=$d;
@@ -840,12 +840,12 @@ $app->post("/guia",function() use($db,$app){
         $proc="call p_guia_detalle({$ultimo_id->ultimo_id},'{$valor->codigo}','{$valor->id}','{$valor->unidad}',{$valor->cantidad})";
         $stmt1 = mysqli_prepare($db,$proc);
         mysqli_stmt_execute($stmt1);
-        $stmt->close();
+        
 
         $actualiza="call p_actualiza_inventario({$valor->id},'{$valor->codigo}',{$valor->cantidad},{$valor->cantidad},'{$valor->unidad}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
-            $stmtb->close();
+            
         }
         $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string-actualiza"=>$actualiza);
         

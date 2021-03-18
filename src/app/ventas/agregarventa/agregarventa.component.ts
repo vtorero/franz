@@ -29,7 +29,7 @@ export const MY_MOMENT_FORMATS = {
   providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
 export class AgregarventaComponent implements OnInit {
-  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
+  displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataClientes: any;
@@ -49,9 +49,8 @@ export class AgregarventaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
-
-    private api: ApiService,
-    public dialog: MatDialog,
+     private api: ApiService,
+      public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
     dateTimeAdapter: DateTimeAdapter<any>
   ) { dateTimeAdapter.setLocale('es-PE'); }
@@ -164,21 +163,41 @@ export class AgregarventaComponent implements OnInit {
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art){
-      console.log("cancelar",this.cancela)
-      console.log("art",art)
-      console.log(art.cantidad*art.mtoValorUnitario)
+      this.exampleArray.push(art)
       this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
       this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
       this.valor_total=this.valor_neto+this.monto_igv;
-      
-       this.exampleArray.push(art)
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      //this.dataSource.sort = this.sort;
+      //this.dataSource.paginator = this.paginator;
     }
     });
+  }
+
+/*
+  deleteTicket(rowid: number){
+    if (rowid > -1) {
+      this.data.detalleVenta.splice(rowid, 1);
+      this.dataSource = new MatTableDataSource(this.data.detalleVenta);
+  }
+  }*/
+
+
+  deleteTicket(obj,i) {
+    console.log("rowid",i);
+    if (i > -1) {
+      console.log("datasoruce",this.dataSource);
+      this.data.detalleVenta.splice(i,1);
+      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
+      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
+      this.valor_total=this.valor_neto+this.monto_igv;
+      this.dataSource = new MatTableDataSource(this.data.detalleVenta);
+      //this.dataSource.sort = this.sort;
+      //this.dataSource.paginator = this.paginator;
+      
+    }
   }
 
   ngOnInit() {
@@ -189,17 +208,6 @@ export class AgregarventaComponent implements OnInit {
     this.getclientes();
     this.getEmpresas();
   }
-  deleteTicket(rowid,obj) {
-    console.log(obj)
-    if (rowid > -1) {
-      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
-      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
-      this.valor_total=this.valor_neto+this.monto_igv;
-      this.data.detalleVenta.splice(rowid,1);
-      this.dataSource = new MatTableDataSource(this.data.detalleVenta);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
-  }
+
 
 }

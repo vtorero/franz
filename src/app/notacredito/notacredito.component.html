@@ -8,9 +8,9 @@
     </div>
   <div class="example-container mat-elevation-z8">
   <mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+      <ng-container matColumnDef="nro_nota">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Nro Nota</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.nro_nota}} </mat-cell>
       </ng-container>
         
       <ng-container matColumnDef="cliente">
@@ -54,7 +54,7 @@
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="6" [showFirstLastButtons]></mat-paginator>
   </div>
   <ng-container>
   </ng-container>

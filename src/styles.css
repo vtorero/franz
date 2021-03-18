@@ -17,6 +17,7 @@
 
 .mat-cell{
   justify-content: center;
+  font-size: 12px;
 }
 .mat-header-cell{
   justify-content: center;

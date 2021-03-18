@@ -2,7 +2,6 @@ import { Component, Inject, Input, NgModule } from '@angular/core';
 import {  MatPaginatorModule, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS } from 'ng-pick-datetime';
-import { MY_MOMENT_FORMATS } from 'src/app/home/home.component';
 import { DetalleCompra } from 'src/app/modelos/detalleCompra';
 
 

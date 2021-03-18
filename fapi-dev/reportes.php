@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app = new Slim\Slim();
-$db = new mysqli("localhost","marife","libido16","frdashdev");
+$db = new mysqli("localhost","marife","libido16","franzdev");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 //mysqli_set_charset($db, 'utf8');

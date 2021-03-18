@@ -842,16 +842,16 @@ $app->post("/guia",function() use($db,$app){
         $proc="call p_guia_detalle({$ultimo_id->ultimo_id},'{$valor->codigo}','{$valor->id}','{$valor->unidad}',{$valor->cantidad})";
         $stmt1 = mysqli_prepare($db,$proc);
         mysqli_stmt_execute($stmt1);
-        $stmt->close();
-
+        
         $actualiza="call p_actualiza_inventario({$valor->id},'{$valor->codigo}',{$valor->cantidad},{$valor->cantidad},'{$valor->unidad}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
-            $stmtb->close();
+            
         }
         $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string-actualiza"=>$actualiza);
         
         }
+
          catch(PDOException $e) {
 
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
@@ -982,15 +982,18 @@ $app->get("/nota/:id",function($id) use($db,$app){
 
     $app->get("/correlativo/:tabla",function($tabla) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");  
+        $resultado = $db->query("SELECT `AUTO_INCREMENT` ultimo FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'franzdev' AND TABLE_NAME   = '{$tabla}'");  
 
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
-                if($fila["ultimo"]==NULL){
+                
+                /*
+                if($fila["AUTO_INCREMENT"]==NULL){
                 $prods[]=array(0=>1,"ultimo"=>1);
                 }else{
+                }*/
                 $prods[]=$fila;
-                }
+                
             }
             $respuesta=json_encode($prods);
             echo  $respuesta;    

@@ -1,6 +1,7 @@
 .mat-cell,.mat-header-cell {
     text-align: center !important;
     justify-content: center !important;
+    font-size: 12px;
 }
 td.mat-cell,th.mat-header-cell{
     border-bottom-style: unset !important;
@@ -16,7 +17,7 @@ mat-radio-group,.custom-switch{
 }
 mat-radio-button{
 color: #555;
-font-size: 13px;
+font-size: 12px;
 }
 
 .buscador{
@@ -29,4 +30,10 @@ font-size: 13px;
 
 label{
 font-weight:300;
+}
+
+.addproducto{
+    margin-top: 7px;
+    margin-left: 8px;
+    font-size: 12px;
 }

@@ -78,10 +78,13 @@ export class EditGuiaComponent implements OnInit {
     this.getEmpresas();
     this.getclientes()
     this.api.getApi('guia/'+this.data.id).subscribe(x => {  
-      this.dataDetalle = new MatTableDataSource();
       this.exampleArray=x;
       this.dataDetalle=this.exampleArray
-      this.data.detalleVenta=this.exampleArray; 
+      this.dataDetalle = new MatTableDataSource();
+      this.dataDetalle.data = this.exampleArray;
+      this.data.detalleVenta = this.exampleArray;
+      this.dataDetalle.paginator = this.paginator;  
+
   });
   }
 

@@ -1,3 +1,4 @@
+<div style="height: 490px;overflow-y:auto;overflow-x:hidden;padding-left: 10px;">
 <form #formGeneral="ngForm">
     <div mat-dialog-content>
       <h3>Registro de Venta</h3>
@@ -30,6 +31,14 @@
         </div>-->
         <div class="row">
           <div class="col-lg-4">
+
+            <mat-form-field *ngIf="!data.comprobante">
+              <mat-label>Cliente</mat-label>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente">
+              <mat-option [value]="">Seleccionar</mat-option>
+              </mat-select>
+          </mat-form-field>
+
         <mat-form-field *ngIf="data.comprobante=='Boleta' || (data.comprobante=='Pendiente' && filter=='1')">
           <mat-label>Cliente con DNI</mat-label>
           <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
@@ -97,7 +106,7 @@
      
           </div>
           <div class="row">
-              <mat-form-field style="width: 100%;">
+              <mat-form-field style="width:97%;">
                 <mat-label>Observación</mat-label>
                 <textarea matInput name="observacion" name="observacion" #observacion="ngModel" [(ngModel)]="data.observacion" rows="1"></textarea>
               </mat-form-field>
@@ -107,17 +116,21 @@
   </div>
       </div>
   </form>
-  <div style="text-align: right;margin-bottom: 3px;">
+  <div style="text-align:right;margin-bottom:-48px;padding-right:23px;">
     <button mat-raised-button (click)="cancelar()">Cancelar</button>
     <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
   </div>
    
   <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:5px;">
-    <button mat-raised-button class="btn btn-success" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
+    <button mat-raised-button class="btn btn-success addproducto" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
     <mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
+        <mat-cell *matCellDef="let row;let i = index"><b>{{i+1}}</b></mat-cell>
+      </ng-container>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.codProductob.codigo}} </mat-cell>
+        <mat-cell *matCellDef="let row;let i = index">{{row.codProductob.codigo}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
@@ -142,13 +155,34 @@
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
-        <td mat-cell *matCellDef="let row ;let j = index;">
-          <button class="btn btn-primary" (click)="deleteTicket(j,row)">Eliminar</button>
+        <td mat-cell *matCellDef="let row; let j = index">
+          <button class="btn btn-primary" (click)="deleteTicket(row,j)">Eliminar</button>
         </td>
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-row *matRowDef="let row; columns:displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="1" [showFirstLastButtons]></mat-paginator>
   </div>
+  <div class="row" style="margin-top:15px;">
+    <div class="col-lg-4">
+      <mat-form-field>
+        <mat-label>Valor neto S/.</mat-label>
+        <input matInput name="valor_neto" [value]="valor_neto | number" type="text" readonly>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-4">
+      <mat-form-field>
+        <mat-label>Monto IGV S/.</mat-label>
+          <input matInput name="monto_igv" [value]="monto_igv | number" type="text"  readonly>
+      </mat-form-field>
+    </div>
+    <div class="col-lg-4">
+      <mat-form-field>
+        <mat-label>Monto Total S/.</mat-label>
+          <input matInput name="valor_total" [value]="valor_total | number" type="text" readonly>
+      </mat-form-field>
+  </div>
+
+    </div>
+</div>
  

@@ -52,7 +52,7 @@ export class NotacreditoComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  displayedColumns = ['id', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
+  displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   filter: any;
@@ -262,7 +262,7 @@ export class NotacreditoComponent implements OnInit {
       boleta.fechaEmision = fech;
       boleta.tipoMoneda = "PEN";
       boleta.ublVersion = "2.1";
-      boleta.tipDocAfectado = art.tipoDoc;
+      boleta.tipDocAfectado = art.tipDocAfectado;
       boleta.tipoDoc = art.tipoDoc;
       boleta.codMotivo = art.codMotivo;
       boleta.desMotivo = art.desMotivo;
@@ -276,7 +276,7 @@ export class NotacreditoComponent implements OnInit {
         boleta.client.rznSocial = art.cliente;
       }
 
-      if (art.tipDocAfectado == 'factura') {
+      if (art.tipDocAfectado == 'Factura') {
         boleta.serie = "FF01";
         boleta.correlativo = art.nro_nota.substring(5, 10);
         boleta.client.tipoDoc = "6";

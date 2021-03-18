@@ -1,3 +1,4 @@
+<div style="height: 490px;overflow-y:auto;overflow-x:hidden;padding-left: 10px;">
   <form #formGeneral="ngForm">
     <div mat-dialog-content>
       <h3>Registrar Nota de Debito/Credito</h3>
@@ -58,6 +59,13 @@
             </mat-radio-group>
           </div>-->
           <div class="col-lg-4">
+            <mat-form-field *ngIf="!data.tipDocAfectado">
+              <mat-label>Cliente</mat-label>
+          <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente">
+              <mat-option [value]="">Seleccionar</mat-option>
+              </mat-select>
+          </mat-form-field>
+
             <mat-form-field *ngIf="data.tipDocAfectado=='03'">
               <mat-label>Cliente con DNI</mat-label>
               <mat-select name="cliente" [(ngModel)]="data.cliente" (ngModelChange)="selectCliente(data.cliente)" required>
@@ -161,4 +169,4 @@
   <div mat-dialog-actions>
     <button mat-raised-button (click)="cancelar()" cdkFocusInitial>Cancelar</button>
     <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid">Registrar</button>
-  </div>
+  </div></div>

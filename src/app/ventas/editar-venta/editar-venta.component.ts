@@ -29,7 +29,7 @@ export const MY_MOMENT_FORMATS = {
 
 
 export class EditarVentaComponent implements OnInit {
-  displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal'];
+  displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataVendedores: any;
   dataProveedor:any;

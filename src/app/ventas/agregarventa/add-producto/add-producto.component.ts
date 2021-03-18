@@ -25,11 +25,11 @@ stock;
 stockPeso;
 dataExistencias:any;
 dataUnidades = [{ id: 'NIU', tipo: 'Unidades' }, { id: 'KGM', tipo: 'Kilogramo' }];
-constructor(private api:ApiService,
+constructor(
+  @Inject(MAT_DIALOG_DATA) public data: DetalleVenta,
+  private api:ApiService,
   private toastr: ToastrService,
-    @Inject(MAT_DIALOG_DATA) public data: DetalleVenta
     ) { 
-
     }
   getProductos(): void {
     this.api.getApi('productos').subscribe(data => {

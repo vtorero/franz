@@ -18,10 +18,10 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput name="cantidad" #cantidad="ngModel" [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
+          <input matInput name="cantidad" #cantidad="ngModel" autocomplete="off"  [(ngModel)]="data.cantidad" type="number" placeholder="Cantidad" required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput name="mtoValorUnitario" #mtoValorUnitario="ngModel" [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
+            <input matInput name="mtoValorUnitario" #mtoValorUnitario="ngModel" autocomplete="off"  [(ngModel)]="data.mtoValorUnitario" type="number" placeholder=" S/.Precio" required>
             </mat-form-field>
             </div>
   </div>

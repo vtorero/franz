@@ -127,31 +127,38 @@
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
         <mat-cell *matCellDef="let row;let i = index"><b>{{i+1}}</b></mat-cell>
+     
       </ng-container>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
         <mat-cell *matCellDef="let row;let i = index">{{row.codProductob.codigo}} </mat-cell>
+     
       </ng-container>
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.codProductob.nombre}} </mat-cell>
+      
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
+    
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.cantidad | number }} </mat-cell>
+
       </ng-container>
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
         <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario | number }} </mat-cell>
+   
       </ng-container>
       <ng-container matColumnDef="subtotal">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
         <mat-cell *matCellDef="let row">S/.{{ row.mtoValorUnitario*row.cantidad | number }}
         </mat-cell>
+      
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
@@ -161,6 +168,7 @@
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns:displayedColumns;"></mat-row>
+    
     </mat-table>
   </div>
   <div class="row" style="margin-top:15px;">

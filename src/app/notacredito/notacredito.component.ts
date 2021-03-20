@@ -4,6 +4,7 @@ import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../api.service';
 import { Global } from '../global';
+import { Boleta } from '../modelos/Boleta/boleta';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
 import { Details } from '../modelos/Boleta/details';
@@ -49,8 +50,10 @@ export class NotacreditoComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+   
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
   cancela: boolean = false;
   displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -94,7 +97,7 @@ export class NotacreditoComponent implements OnInit {
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, ''),
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, '',this.boleta),
       disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {

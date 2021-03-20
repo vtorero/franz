@@ -1,3 +1,4 @@
+import { Boleta } from "./Boleta/boleta";
 import { DetalleVenta } from "./detalleVenta";
 export class Venta {
     constructor(
@@ -16,6 +17,7 @@ export class Venta {
         public imprimir:boolean,
         public tipoDoc:string,
         public valor_neto:number,
-        public observacion:string
+        public observacion:string,
+        public boleta:Boleta
         ){}
 }

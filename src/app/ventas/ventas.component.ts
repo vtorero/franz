@@ -51,8 +51,9 @@ export class VentasComponent implements OnInit {
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
   cancela: boolean = false;
-  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
+  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','estado','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -83,7 +84,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,''),
+      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,'',this.boleta),
       disableClose: true,
       
     });
@@ -186,6 +187,7 @@ export class VentasComponent implements OnInit {
         boleta.legends = [{ code: "1000", value: "SON " + letra + " SOLES"+ "<hr>Observación: "+art.observacion }];
 
       //setTimeout(() => {
+        /*
         this.api.GuardarComprobante(boleta).subscribe(
           fact => {
             if (fact.sunatResponse.success) {
@@ -206,12 +208,14 @@ export class VentasComponent implements OnInit {
 
             }
             else {
-              /*guarda error*/
+             
               this.toastr.error("Factura/Boleta no recibida");
             }
             });
-            
+            */
+            art.boleta=boleta;
             this.api.GuardarVenta(art).subscribe(data => {
+              this.toastr.info(data['sunat'],"Mensaje Sunat");
                   this.toastr.success(data['messaje']);
                 },
                   error => { console.log(error) }
@@ -234,10 +238,9 @@ export class VentasComponent implements OnInit {
 
 
       setTimeout(() => {
-        this.cargando=false;
-        console.log("redeeeee");
       this.renderDataTable();
-      },3000);
+      this.cargando=false;
+      },2000);
 
     }
 
@@ -277,7 +280,7 @@ export class VentasComponent implements OnInit {
       boleta.tipoOperacion = "0101";
       boleta.tipoDoc = "01";
       boleta.serie = "F001";
-      boleta.correlativo = art.nro_comprobante.substring(4,10);
+      boleta.correlativo = art.nro_comprobante.substring(5,10);
       boleta.client.tipoDoc = "6";
       boleta.client.rznSocial = art.cliente;
     }

@@ -55,7 +55,7 @@
           </mat-radio-group>
         </div>-->
         <div class="col-lg-4">
-          <mat-form-field *ngIf="data.tipDocAfectado=='03'">
+          <mat-form-field *ngIf="data.tipDocAfectado=='Boleta'">
             <mat-label>Cliente con DNI</mat-label>
             <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente" readonly>
               <input class="buscador" (keyup)="onKeyCliente($event.target.value)" placeholder="Buscar cliente..">
@@ -65,7 +65,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field *ngIf="data.tipDocAfectado=='01'">
+          <mat-form-field *ngIf="data.tipDocAfectado=='Factura'">
             <mat-label>Cliente CON RUC</mat-label>
             <mat-select name="id_cliente" #id_cliente="ngModel" [(ngModel)]="data.id_cliente" required>
               <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
@@ -145,7 +145,7 @@
   <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="3" [showFirstLastButtons]></mat-paginator>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button (click)="cancelar()" cdkFocusInitial>Cancelar</button>
+  <button mat-raised-button (click)="cancelar()" cdkFocusInitial>Cerrar</button>
   <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid">Ver Nota</button>
 </div>
 </div>

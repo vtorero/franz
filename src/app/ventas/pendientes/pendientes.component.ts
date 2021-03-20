@@ -52,6 +52,7 @@ export class PendientesComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
   displayedColumns=['comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -83,7 +84,7 @@ export class PendientesComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,''),
+      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,'',this.boleta),
       disableClose: true,
       
     });

@@ -534,7 +534,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%m-%d-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%m-%d-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id and i.cantidad>0 order by i.id desc;");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%d-%m-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%d-%-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id and i.cantidad>0 order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -697,7 +697,7 @@ $app->get("/pendientes",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id, v.tipoDoc,v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') union all SELECT v.id,v.tipoDoc, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");
+    $resultado = $db->query("SELECT v.id, v.tipoDoc,v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') union all SELECT v.id,v.tipoDoc, v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -776,7 +776,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $data = json_decode($j['json']);
 
              try { 
-           $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
            $stmt->close();
@@ -798,7 +798,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
 $app->get("/guias",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, concat(c.nombre,' ',c.apellido) destinatario,c.num_documento ,g.`fecha_registro`, `usuario`  FROM `guias` g, `clientes` c where g.destinatario=c.id and g.tipo_destinatario='1' union all SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, (c.razon_social) destinatario, c.num_documento, g.`fecha_registro`, `usuario`  FROM `guias` g, `empresas` c where g.destinatario=c.id and g.tipo_destinatario='6' order by id desc;");
+    $resultado = $db->query("SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc, DATE_FORMAT(g.fechaemision, '%Y-%m-%d') `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, concat(c.nombre,' ',c.apellido) destinatario,c.num_documento ,g.`fecha_registro`, `usuario`  FROM `guias` g, `clientes` c where g.destinatario=c.id and g.tipo_destinatario='1' union all SELECT g.id,concat('T001-',g.id) numero, `tipoDoc`, if(destinatario=1,'DNI','RUC') doc,DATE_FORMAT(g.fechaemision, '%Y-%m-%d') `fechaemision`, `peso_bruto`, `nro_bultos`, `ubigeo_partida`, `partida`, `ubigeo_llegada`, `llegada`, `transp_tipoDoc`, `nro_transportista`, `nombre_transportista`, `nro_placa`, `observacion`,`tipo_destinatario`, (c.razon_social) destinatario, c.num_documento, g.`fecha_registro`, `usuario`  FROM `guias` g, `empresas` c where g.destinatario=c.id and g.tipo_destinatario='6' order by id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -864,7 +864,7 @@ $app->post("/guia",function() use($db,$app){
 /*notas*/
 $app->get("/notas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, tipoDoc , if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc,comprobante,nro_nota,nro_comprobante numDocfectado, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,clientes c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado,tipoDoc,if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc ,comprobante,nro_nota,nro_comprobante numDocfectado,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,empresas c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $resultado = $db->query("SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, tipoDoc , if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc,comprobante,nro_nota,nro_comprobante numDocfectado, DATE_FORMAT(v.fecha, '%d-%m-%y') fecha FROM notas v,usuarios u,clientes c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado,tipoDoc,if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc ,comprobante,nro_nota,nro_comprobante numDocfectado,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,empresas c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -934,7 +934,7 @@ $app->get("/nota/:id",function($id) use($db,$app){
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
                   try { 
-           $sql="call p_notacredito('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $sql="call p_notacredito('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
            $stmt->close();
@@ -959,7 +959,7 @@ $app->get("/nota/:id",function($id) use($db,$app){
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
                   try { 
-           $sql="call p_boleta('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}','{$data->xml}')";
+           $sql="call p_boleta('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
            $stmt->close();

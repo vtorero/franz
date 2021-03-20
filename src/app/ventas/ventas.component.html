@@ -28,6 +28,10 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha de emisión</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Estado</span></mat-header-cell>
+        <mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.estado=='Anulada' ? 'red':'black'}">{{row.estado}}</div></mat-cell>
+      </ng-container>
       <ng-container matColumnDef="observacion">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Observación</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.observacion}} </mat-cell>

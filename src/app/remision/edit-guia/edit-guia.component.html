@@ -1,6 +1,7 @@
 <div style="height: 490px;overflow-y:auto;overflow-x:hidden;padding-left: 10px;">
 <form #formGeneral="ngForm">
   <div mat-dialog-content>
+    <button class="close" mat-button mat-dialog-title (click)="cancelar()">x</button>
     <h3>Registro de Guía de Remisión</h3>
     <!--<span style="color:red" *ngIf="id_vendedor.touched && !id_vendedor.valid">Seleccionar el vendedor</span>-->
     <div style="display: flex;flex-direction:column; margin:0.5rem auto; width: 800px; padding: 1rem;">
@@ -135,6 +136,10 @@
 </div>
     </div>
 </form>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Ver comprobante</button>
+</div>
  <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:10px;">
   <mat-table [dataSource]="dataDetalle" matSort>
     <ng-container matColumnDef="id_producto">
@@ -165,8 +170,5 @@
   </mat-table>
   <mat-paginator [pageSizeOptions]="[6,10,20,50,100]" [pageSize]="2" [showFirstLastButtons]></mat-paginator>
 </div>
-<div mat-dialog-actions>
-  <button mat-raised-button (click)="cancelar()">Cancelar</button>
-  <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Ver comprobante</button>
-</div>
+
 </div>

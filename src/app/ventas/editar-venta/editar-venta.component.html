@@ -1,6 +1,7 @@
 <div style="height: 500px;overflow-y: auto;overflow-x: hidden;">
   <form #formGeneral="ngForm">
     <div mat-dialog-content>
+      <button class="close" mat-button mat-dialog-title (click)="cancelar()">x</button>
       <h3>Registro de Venta</h3>
       <!--<span style="color:red" *ngIf="id_vendedor.touched && !id_vendedor.valid">Seleccionar el vendedor</span>-->
       <div style="display: flex;flex-direction:column; margin:0.5rem auto; width: 800px; padding: 1rem;">

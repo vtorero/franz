@@ -91,10 +91,11 @@ export class RemisionComponent implements OnInit {
     const dialogo1 = this.dialog.open(AddGuiaComponent, {
       data: new Guia(0,localStorage.getItem("currentUser"),'',[],"","","","","",0,"","",this.Moment,0,0,0,[],false,"","150108","AV.LAS GAVIOTAS 925","",""),
       disableClose: true,
+      panelClass: 'my-dialog'
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
-        if (art.detalleVenta.length == 0 && this.cancela) {
+        if (art.detalleVenta.length == 0) {
           this.toastr.warning("Debe agregar el detalle de la guía", "Aviso");
         } else {
           this.agregar(art);

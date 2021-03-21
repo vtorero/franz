@@ -49,11 +49,11 @@ export const adminLteConf = {
     {label: 'Guías de Remision',iconClasses: 'fa fa-files-o',children:[
       {label: 'Listado', route: 'remision/listado'}
     ]},
-  /*
+  
     {label: 'Reportes',iconClasses: 'fa fa-files-o',children:[
       {label: 'Productos', route: 'dash/reportes'}
     ]},
-    
+  /*  
     {label: 'Dashboard', route: '/dash', iconClasses: 'fa fa-dashboard'},
    {label: 'Datos Bancarios', route: 'pagos/formulario',iconClasses: 'fa fa-money'},
     {label: 'Configuración', iconClasses: 'fa fa-th-list', children: [

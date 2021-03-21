@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { DateTimeAdapter } from 'ng-pick-datetime';
+import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Global } from 'src/app/global';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
@@ -33,6 +34,7 @@ export class AddGuiaComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
+    private toastr: ToastrService,
     private api: ApiService,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Guia,
@@ -92,6 +94,36 @@ export class AddGuiaComponent implements OnInit {
     });
   }
 
+  onLoadDatos(event:any){
+    if(event.target.value!="") {
+    this.api.getCliente(event.target.value).subscribe(data => {
+      if(data) {
+        console.log(data);
+        this.data.nombre_transportista=data['nombres'] +' '+data['apellidoPaterno'];
+      } 
+    },
+    error=>{
+      console.log(error)
+      this.toastr.error("Numero de DNI incorrecto");
+    } );
+  }else{
+    this.toastr.warning("Debe indicar el Numero de DNI");
+  }
+ }
+ deleteTicket(obj,i) {
+  console.log("rowid",i);
+  if (i > -1) {
+    this.data.detalleVenta.splice(i,1);
+    this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
+    this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
+    this.valor_total=this.valor_neto+this.monto_igv;
+    this.dataSource = new MatTableDataSource(this.data.detalleVenta);
+    //this.dataSource.sort = this.sort;
+    //this.dataSource.paginator = this.paginator;
+    
+  }
+}
+
   change(event)
   {
    console.log(event);
@@ -116,8 +148,8 @@ export class AddGuiaComponent implements OnInit {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      //this.dataSource.sort = this.sort;
+      //this.dataSource.paginator = this.paginator;
     });
   }
 

@@ -299,10 +299,12 @@ error => {
     Prism.highlightAll();
   }
 
+
+
 enviaFechas(){
 this.labels=[];
 this.values=[];
-var empresa = sessionStorage.getItem("hashsession");
+var empresa = sessionStorage.getItem("CurrentUser");
 var fec1 = this.selectedMoment.toDateString().split(" ",4); 
 var fec2 = this.selectedMoment2.toDateString().split(" ",4); 
 let ini=fec1[1]+fec1[2]+fec1[3];
@@ -311,8 +313,9 @@ let fin=fec2[1]+fec2[2]+fec2[3];
 this.fecha1=fec1[2]+'-'+fec1[1]+'-'+fec1[3];;
 this.fecha2=fec2[2]+'-'+fec2[1]+'-'+fec2[3];;
 
-this.loadDatos(ini,fin,empresa);
-this.renderDataTableConsulta(ini,fin,empresa);
+console.log(this.fecha1,this.fecha2);
+//this.loadDatos(ini,fin,empresa);
+//this.renderDataTableConsulta(ini,fin,empresa);
 
   }
 

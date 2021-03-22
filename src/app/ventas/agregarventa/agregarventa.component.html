@@ -17,7 +17,7 @@
         </mat-form-field>
         </div>
         <div class="col-lg-4">
-        <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
+        <mat-checkbox name="imprimir" *ngIf="data.comprobante!='Pendiente'" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
         </div>
         <div class="col-lg-4">
           <mat-radio-group aria-label="Seleccione tipo" name="tipoDoc" #tipoDoc="ngModel" [(ngModel)]="data.tipoDoc"  required *ngIf="data.comprobante=='Pendiente'">

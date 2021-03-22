@@ -42,5 +42,40 @@ $app->get("/inventario/:id",function($id) use($db,$app){
     
 });
 
+$app->post("/reporte",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $json = $app->request->getBody();
+    $dat = json_decode($json, true);
+    $arraymeses=array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+    $arraynros=array('01','02','03','04','05','06','07','08','09','10','11','12');
+   
+    $mes1=substr($dat['ini'], 3,3);
+    $mes2=substr($dat['fin'], 3,3);
+    
+    $dia1=substr($dat['ini'], 0,2);
+    $dia2=substr($dat['fin'], 0,2);
+    
+    $ano1=substr($dat['ini'], 7,4);
+    $ano2=substr($dat['fin'], 7,4);
+    
+    $fmes1=str_replace($arraymeses,$arraynros,$mes1);
+    $fmes2=str_replace($arraymeses,$arraynros,$mes2);
+    $ini=$ano1.'-'.$fmes1.'-'.$dia1;
+    $fin=$ano2.'-'.$fmes2.'-'.$dia2;
+    $inicio=$dia1.'/'.$fmes1;
+    $final=$dia2.'/'.$fmes2;
+
+
+
+    $ingreso=$db->query("SELECT * FROM ventas WHERE fecha between '".$ini."' and '".$fin."'");
+       $infoingreso=array();
+    while ($row = $ingreso->fetch_array()) {
+            $infoingreso[]=$row;
+        }
+
+        $data = array("status"=>200,"ingreso"=>$infoingreso,"inicio"=>$ini,"final"=>$fin);
+        echo json_encode($data);
+     });
+
 
 $app->run();

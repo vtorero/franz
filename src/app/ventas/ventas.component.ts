@@ -127,10 +127,6 @@ export class VentasComponent implements OnInit {
       if (art.cliente.nombre) {
         boleta.tipoDoc = "03";
         boleta.serie = "B001";
-        this.api.getMaxId('boletas').subscribe(id=>{
-          boleta.correlativo=id[0].ultimo.toString();
-          art.nro_comprobante="B001-"+id[0].ultimo.toString();
-          });
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
         art.tipoDoc="1"
@@ -138,10 +134,6 @@ export class VentasComponent implements OnInit {
       if (art.cliente.razon_social) {
         boleta.tipoDoc = "01";
         boleta.serie = "F001";
-        this.api.getMaxId('facturas').subscribe(id=>{
-        boleta.correlativo=id[0].ultimo.toString();
-        art.nro_comprobante="F001-"+id[0].ultimo.toString();
-        });
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
         art.tipoDoc="2";
@@ -240,7 +232,7 @@ export class VentasComponent implements OnInit {
       setTimeout(() => {
       this.renderDataTable();
       this.cargando=false;
-      },2000);
+      },3000);
 
     }
 

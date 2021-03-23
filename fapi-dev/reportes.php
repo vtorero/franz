@@ -48,16 +48,12 @@ $app->post("/reporte",function() use($db,$app){
     $dat = json_decode($json, true);
     $arraymeses=array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
     $arraynros=array('01','02','03','04','05','06','07','08','09','10','11','12');
-   
     $mes1=substr($dat['ini'], 3,3);
     $mes2=substr($dat['fin'], 3,3);
-    
     $dia1=substr($dat['ini'], 0,2);
     $dia2=substr($dat['fin'], 0,2);
-    
     $ano1=substr($dat['ini'], 7,4);
     $ano2=substr($dat['fin'], 7,4);
-    
     $fmes1=str_replace($arraymeses,$arraynros,$mes1);
     $fmes2=str_replace($arraymeses,$arraynros,$mes2);
     $ini=$ano1.'-'.$fmes1.'-'.$dia1;
@@ -66,15 +62,22 @@ $app->post("/reporte",function() use($db,$app){
     $final=$dia2.'/'.$fmes2;
 
 
-
-    $ingreso=$db->query("SELECT * FROM ventas WHERE fecha between '".$ini."' and '".$fin."'");
-       $infoingreso=array();
+    $ingreso=$db->query("SELECT v.id, v.tipoDoc,v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') and fecha  between '".$ini."' and '".$fin."' order by v.id desc");
+       $infoboleta=array();
     while ($row = $ingreso->fetch_array()) {
-            $infoingreso[]=$row;
+            $infoboleta[]=$row;
         }
 
-        $data = array("status"=>200,"ingreso"=>$infoingreso,"inicio"=>$ini,"final"=>$fin);
+        $factura=$db->query("SELECT v.id, v.tipoDoc,v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Factura') and fecha  between '".$ini."' and '".$fin."' order by v.id desc");
+        $infofactura=array();
+    while ($row = $factura->fetch_array()) {
+            $infofactura[]=$row;
+        }
+        $data = array("status"=>200,"boletas"=>$infoboleta,"facturas"=>$infofactura,"inicio"=>$ini,"final"=>$fin);
         echo json_encode($data);
+
+       
+
      });
 
 

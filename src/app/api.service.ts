@@ -19,10 +19,6 @@ import { Subcategoria } from './modelos/subcategoria';
 import { Vendedor } from './modelos/vendedor';
 import { Venta } from './modelos/ventas';
 import { Clientes } from './modelos/clientes';
-import { Client } from './modelos/Boleta/client';
-import { Dosimetria } from './modelos/dosimetria';
-import { Boleta } from './modelos/Boleta/boleta';
-import { RemisionComponent } from './remision/remision.component';
 import { Remision } from './modelos/remision';
 
 
@@ -348,6 +344,19 @@ public GuardarComprobante(Boleta):Observable<any>{
       { headers: this.headers }
     ).pipe(map(result => result));
   }
+
+/*reporte de ventas*/
+
+
+getVentaBoletas(inicio: string, final: string, empresa: string) {
+  const url = Global.BASE_API_URL + 'reportes.php/reporte';
+  return this._http.post(url, {
+    ini: inicio,
+    fin: final,
+    emp: empresa
+  }, { headers: this.headers }).pipe(map(data => data));
+}
+
 
 
   getReportes(inicio: string, final: string, empresa: string) {

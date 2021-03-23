@@ -534,7 +534,7 @@ $app->get("/compras",function() use($db,$app){
 
 $app->get("/almacen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%d-%m-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%d-%-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id and i.cantidad>0 order by i.id desc;");
+    $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%d-%m-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%d-%m-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id and i.cantidad>0 order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             
@@ -685,7 +685,7 @@ $app->get("/vendedores",function() use($db,$app){
 
 $app->get("/pendientes",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id,v.tipoDoc, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante ='Pendiente' and v.tipoDoc=1 union all SELECT v.id,v.tipoDoc,v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Pendiente' and v.tipoDoc=2;");
+    $resultado = $db->query("SELECT v.id,v.tipoDoc, v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante ='Pendiente' and v.tipoDoc=1 union all SELECT v.id,v.tipoDoc,v.id_usuario,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado, comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Pendiente' and v.tipoDoc=2 order by id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -720,51 +720,117 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
 
     $app->post("/venta",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-           $json = $app->request->getBody();
-           $j = json_decode($json,true);
-           $data = json_decode($j['json']);
-           $valor_total=0;
-           /*total de la venta*/
-           
-           foreach($data->detalleVenta as $value){
-                $valor_total+=$value->cantidad*$value->mtoValorUnitario;
+        $json = $app->request->getBody();
+        $j = json_decode($json,true);
+        
+        $data = json_decode($j['json']);
+        $valor_total=0;
+           //token desarrollo
+          // $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTUwMDAzNjUsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDUyMTA0ODgyNSIsImV4cCI6NDc2ODYwMDM2NX0.H7WTeu1DohAwLEwVDz8CMkfPMxBvExMmgtpnxZF8l544hP8bPIE3PEv6m4ozRCAUIALFlIfIXsMsreI_TQKFAOS3pSdSjDhp8jSkCJX1SyM2K-juVZ8W9D0v-wKTooKLUrgDEOME6sQZ8zzdak0mALJU39LmSU7Zmu5HKswjGqi1OXhTt_iri8KbLkoVOwtaCMESeURDlqWetoFDTHwtozIoQChq2GQK1kZNLZIgrpNPmMhLh-0A6Lb_iwKnNZ8skBWVUO94wJ-sFYJTnAwNpYNCcerwt9PdW8zvkaguhJOArX9n5Qi9mTJFeV4JR0PRV3lIgS5NQYsJMvSWXUh3CFx_vjPf0zgid0dwNvgPi0zcOGOR61Mduvh4kBkcYbERLlCWgWU9mVO0ql-qEvrYZRlI1fQcA7hUyaRxNtWtNPlw9216jcBMtiWS2CquDp06_R4vEeE5DeMSekpgvfyd6JqfM6cc-NuLk3mZDWKd9y77Edi2QORCXC6E195_2VeMvugiOsQd6Q0khxPQMV1Euzh0ePWNjTR-vvapzhT4QuT5tF1Vq9b1bGliofLK09787YDzujrbCngqjBnF-g6NQtMUEuJ3VP_I0-PL_1K4HL4UN02VJAl9gMYM821MCdAHGpArZBszPX7ZLWtBsnjxA3SjhbzXUDzzFYX1Ow8Ulfk";
+            
+          //toque produccion
+            $token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTAxNzI4ODYsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDYwNTE3NDA5NSIsImV4cCI6NDc2Mzc3Mjg4Nn0.nL93zWcOm8w3ZAkWm_Ia9vF7DaFnP_wzuSgeF7_X1CvzvQOotSK12WphLo7jFmBRfLJm2UBPoUucOSNzbk3zdbvjCdG1p2tQ7CQlypxWggSxQ76Wma6cFJL7NF9ULxOQEWGm3b2CVVfDq2MgSyE6xNmOGuzP_7CsSyukd-Q8MOqjgtefBRPeN0XtX85s0Ie-5Twy_AP-MXOFj1gYapEpSPWN4QrK4wibAu8tVs01ipczGsZXzrQWZFVpmozluXPtsx6hNHy_XAGhJSIU1Ftj8rc5xIa7RD2-VO-nJVlChmTPB5TGNH4YsQOASAaGXBtZmqxtpK9RJAmSFPpvxBr3XC6bcBGBRPUy0CmcH6VeVPJNTRcNzP7H11hFi49iS8P04ViccR8kMnUd-ABIGRSuhdxy6yv3JjV6P9MuyjSFmJFi1Mlw8lGFLI9UeHxLAr1AXk0MvD1-MtFMrHWc0JrqeiW8EU9RbwGAxGdVxCM9bVinQ6fYzou6W9lcjnHbktR3VqLiI6kkJlOIYRzByHLmOX59BlPhTcqJTC-jGKsuR7rJfMljKmknzDhnKy3eD16FShpzzpEXtta5tf_RvF4sMeX6XTT2WSN2z6RbtGvTyJ9bG3COpv7_iByUpHXh8VJTF5nzloKwS_lj7w45PP0_Rb7Al31POnfFOarU8dRM9LA";
+           if($data->comprobante=='Factura'){
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'facturas'";
+            $datos=$db->query($sql_comp);
+            $ultimo_id_fact=array();
+            while ($d = $datos->fetch_object()) {
+                $ultimo_id_fact=$d;
+            }
+            $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
            }
+           
+           if($data->comprobante=='Boleta'){
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'boletas'";
+            $datos=$db->query($sql_comp);
+            $ultimo_id_fact=array();
+            while ($d = $datos->fetch_object()) {
+                $ultimo_id_fact=$d;
+                }
+                $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
+           }
+       
+           $comprobante="";
+           if($data->comprobante!='Pendiente'){
 
-          try { 
-            $fecha=substr($data->fecha,0,10);
-            $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$data->nro_comprobante}','{$data->tipoDoc}','{$fecha}',{$valor_total},{$data->igv},'{$data->observacion}')";
+            $postdata = json_encode($data->boleta);
+           $ch = curl_init('https://facturacion.apisperu.com/api/v1/invoice/send');
+           curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,$postdata);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Authorization: Bearer '. $token));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $response_sunat=json_decode($result,false); 
+            } 
+            if(isset($response_sunat) and $response_sunat->sunatResponse->success==1){
+
+             if($data->comprobante=='Factura'){   
+            $sql="call p_factura('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
-            $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");
-            $ultimo_id=array();
-            while ($d = $datos->fetch_object()) {
-             $ultimo_id=$d;
-             }
-            foreach($data->detalleVenta as $valor){
-            /*inserta detalla*/
-            $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->codProducto},{$valor->codProductob->id},'{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
-            $stmt = mysqli_prepare($db,$proc);
-            mysqli_stmt_execute($stmt);
-            $stmt->close();
+                $comprobante='F001-'.$data->boleta->correlativo;
+            } 
 
-             //$proc="";
-            
-             /*actualiza inventario*/  
-      
-            $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
-            $stmtb = mysqli_prepare($db,$actualiza);
-            mysqli_stmt_execute($stmtb);
-            $stmtb->close();
+            if($data->comprobante=='Boleta'){
+                $sql="call p_boleta('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
+                $stmt = mysqli_prepare($db,$sql);
+                mysqli_stmt_execute($stmt);
+                 $comprobante='B001-'.$data->boleta->correlativo;
+            }    
+
             }
-           
-            $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente");
-            
-            }
-             catch(PDOException $e) {
+        
     
-            $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+                /*total venta*/
+                foreach($data->detalleVenta as $value){
+                $valor_total+=$value->cantidad*$value->mtoValorUnitario;
+                
+                }
+
+
+                try { 
+                    $fecha=substr($data->fecha,0,10);
+                    $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',{$valor_total},{$data->igv},'{$data->observacion}')";
+                   $stmt = mysqli_prepare($db,$sql);
+                    mysqli_stmt_execute($stmt);
+                    $datos=$db->query("SELECT max(id) ultimo_id FROM ventas");
+                    $ultimo_id=array();
+                    while ($d = $datos->fetch_object()) {
+                     $ultimo_id=$d;
+                     }
+                    foreach($data->detalleVenta as $valor){
+                    /*inserta detalla*/
+                    $proc="call p_venta_detalle({$ultimo_id->ultimo_id},{$valor->codProducto},{$valor->codProductob->id},'{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
+                    $stmt = mysqli_prepare($db,$proc);
+                    mysqli_stmt_execute($stmt);
+                    $stmt->close();
+        
+                     //$proc="";
+                    
+                     /*actualiza inventario*/  
+              
+                    $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
+                    $stmtb = mysqli_prepare($db,$actualiza);
+                    mysqli_stmt_execute($stmtb);
+                    $stmtb->close();
+                    }
+                    if(isset($response_sunat)){
+                       $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente","sunat"=> $response_sunat->sunatResponse->cdrResponse->description);
+                    }else{
+                        $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente");
+                    }
+                    
+                    }
+                     catch(PDOException $e) {
             
-        }
+                    $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
+                    
+                }          
+          
         
             echo  json_encode($result);   
     });

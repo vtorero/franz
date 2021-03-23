@@ -113,47 +113,102 @@
 </div>
 </mk-box>
 -->
-<!--
 
-<mk-box header="Datos consultados por día" [isCollapsable]="true" [isRemovable]="false">
-  <div class="example-header mat-elevation-z8">
-    <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" 
-      placeholder="Escriba algo para filtrar">
-    </mat-form-field>
-</div>
-<br>
-<div class="example-container mat-elevation-z8">
+
+<div class="export-container">
+	<button mat-raised-button color="secundary" (click)="exportTable('ExampleTable2','Facturas emitidas')">Exportar a PDF</button>
 </div>
 
-<div class="example-container mat-elevation-z8">
-  <mat-table [dataSource]="dataSource" matSort>
+<mk-box header="Facturas Emitidas" [isCollapsable]="true" [isRemovable]="false">
+<table id="ExampleTable2" mat-table [dataSource]="dataSourceFac" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="dimensiondate">
-          <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Fecha</span></mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.dimensiondate}} </mat-cell>
-    </ng-container>
+  <!-- Position Column -->
+  <ng-container matColumnDef="fecha">
+    <th mat-header-cell *matHeaderCellDef>Fecha emisión</th>
+    <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+  </ng-container>
 
-    <ng-container matColumnDef="columnad_exchange_ad_ecpm">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">CPM (USD)</span></mat-header-cell>
-          <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_ad_ecpm}} </mat-cell>
-    </ng-container>
+  <!-- Name Column -->
+  <ng-container matColumnDef="nro_comprobante">
+    <th mat-header-cell *matHeaderCellDef> Nro Comprobante </th>
+    <td mat-cell *matCellDef="let element"> {{element.nro_comprobante}} </td>
+  </ng-container>
 
+  <!-- Weight Column -->
+  <ng-container matColumnDef="num_documento">
+    <th mat-header-cell *matHeaderCellDef> Nro documento </th>
+    <td mat-cell *matCellDef="let element"> {{element.num_documento}} </td>
+  </ng-container>
 
-    <ng-container matColumnDef="columnad_exchange_estimated_revenue">
-          <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Ingresos (USD)</span></mat-header-cell>
-          <mat-cell *matCellDef="let row">$ {{row.columnad_exchange_estimated_revenue}} </mat-cell>
-    </ng-container>
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="cliente">
+    <th mat-header-cell *matHeaderCellDef> Nombre Cliente </th>
+    <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+  </ng-container>
+  <ng-container matColumnDef="valor_neto">
+    <th mat-header-cell *matHeaderCellDef> Monto Neto </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.valor_neto}} </td>
+  </ng-container>
+  <ng-container matColumnDef="monto_igv">
+    <th mat-header-cell *matHeaderCellDef> IGV </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.monto_igv}} </td>
+  </ng-container>
+  <ng-container matColumnDef="valor_total">
+    <th mat-header-cell *matHeaderCellDef> Monto total </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.valor_total}} </td>
+  </ng-container>
 
-     <ng-container matColumnDef="columnad_exchange_impressions">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Impresiones</span></mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.columnad_exchange_impressions}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
-</div>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
 </mk-box>
--->
+
+
+
+<div class="export-container">
+	<button mat-raised-button color="secundary" (click)="exportTable('ExampleTable','Boletas emitidas')">Exportar a PDF</button>
+</div>
+
+<mk-box header="Boletas Emitidas" [isCollapsable]="true" [isRemovable]="false">
+<table id="ExampleTable" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="fecha">
+    <th mat-header-cell *matHeaderCellDef>Fecha emisión</th>
+    <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="nro_comprobante">
+    <th mat-header-cell *matHeaderCellDef> Nro Comprobante </th>
+    <td mat-cell *matCellDef="let element"> {{element.nro_comprobante}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="num_documento">
+    <th mat-header-cell *matHeaderCellDef> Nro documento </th>
+    <td mat-cell *matCellDef="let element"> {{element.num_documento}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="cliente">
+    <th mat-header-cell *matHeaderCellDef> Nombre Cliente </th>
+    <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+  </ng-container>
+  <ng-container matColumnDef="valor_neto">
+    <th mat-header-cell *matHeaderCellDef> Monto Neto </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.valor_neto}} </td>
+  </ng-container>
+  <ng-container matColumnDef="monto_igv">
+    <th mat-header-cell *matHeaderCellDef> IGV </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.monto_igv}} </td>
+  </ng-container>
+  <ng-container matColumnDef="valor_total">
+    <th mat-header-cell *matHeaderCellDef> Monto total </th>
+    <td mat-cell *matCellDef="let element">S/. {{element.valor_total}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</mk-box>

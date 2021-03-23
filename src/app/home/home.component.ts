@@ -1,4 +1,4 @@
-import { Component, NgModule, ViewChild} from '@angular/core';
+import { Component, ElementRef, NgModule, ViewChild} from '@angular/core';
 import { Chart } from 'chart.js';  
 import {ApiService} from '../api.service';
 import * as Prism from 'prismjs';
@@ -11,6 +11,7 @@ import "ng-pick-datetime/assets/style/picker.min.css";
 import {MatPaginatorModule, PageEvent, MatPaginator} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { TableUtil } from "./tableUtil";
 
 
 
@@ -70,11 +71,12 @@ data:string= localStorage.getItem("data");
   dimensionad_exchange_creative_sizes: string;
   dimensiondate: string;
   dimensionad_exchange_device_category:string;
-  displayedColumns = ['dimensiondate','columnad_exchange_estimated_revenue','columnad_exchange_impressions','columnad_exchange_ad_ecpm'];
+  displayedColumns = ['fecha','nro_comprobante','num_documento','cliente','valor_neto','monto_igv','valor_total'];
   dataSource: any;
+  dataSourceFac: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  
   fec1= this.selectedMoment.toDateString().split(" ",4); 
   fec2 = this.selectedMoment2.toDateString().split(" ",4); 
   fecha1:string=this.fec1[2]+'-'+this.fec1[1]+'-'+this.fec1[3];
@@ -120,7 +122,7 @@ error => {
 } 
   
   ngOnInit() {
-    this.renderDataTable();
+   // this.renderDataTable();
     if(this._login.getCurrentUser==false){
       this.router.navigate(['']);
       }
@@ -314,12 +316,34 @@ this.fecha1=fec1[2]+'-'+fec1[1]+'-'+fec1[3];;
 this.fecha2=fec2[2]+'-'+fec2[1]+'-'+fec2[3];;
 
 console.log(this.fecha1,this.fecha2);
-//this.loadDatos(ini,fin,empresa);
+this.loadVentas(this.fecha1,this.fecha2,empresa);
 //this.renderDataTableConsulta(ini,fin,empresa);
-
-  }
+}
 
   /*carga datos click*/ 
+
+loadVentas(inicio:string,final:string,empresa:string){
+  this.api.getVentaBoletas(inicio,final,empresa)
+.subscribe(x => {
+  
+  this.dataSource = new MatTableDataSource();  
+  this.dataSource.data = x['boletas'];
+  this.dataSource.sort = this.sort;
+  this.dataSource.paginator = this.paginator;
+  
+  this.dataSourceFac = new MatTableDataSource();  
+  this.dataSourceFac.data = x['facturas'];
+  this.dataSourceFac.sort = this.sort;
+  this.dataSourceFac.paginator = this.paginator;
+
+});
+  
+}  
+
+exportTable(table:string,reporte:string){
+  TableUtil.exportToPdf(table,reporte);
+}
+
 
 loadDatos(inicio:string,final:string,empresa:string){
 
@@ -336,10 +360,9 @@ loadDatos(inicio:string,final:string,empresa:string){
 
       this.api.getReportes(inicio,final,empresa)
       .subscribe(res => {
-    
-        this.inicio=res['inicio'];
+          this.inicio=res['inicio'];
         this.final=res['final'];
-        this.ingreso_cpm= res['ingreso'].map(res => res.ingreso_cpm);
+        this.ingreso_cpm= 
         this.ingreso_total= res['ingreso'].map(res => res.ingreso_total);
         this.impresiones= res['ingreso'].map(res => res.impresiones);
         let alldates = res['data'].map(res => res.total)
@@ -495,8 +518,6 @@ loadDatos(inicio:string,final:string,empresa:string){
       }
   })
 this.cargando=false;
-
-
 })
 
 }

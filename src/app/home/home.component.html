@@ -21,11 +21,11 @@
       </div>
   </mk-box>
 <div class="row">
-    <div class="col-md-3 col-xs-12">
+    <div class="col-md-6 col-xs-12">
         <div class="small-box btn_ingreso">
             <div class="inner">
-                <h3> {{ingreso_total}}
-                  <sup style="font-size: 20px">$</sup>
+              <h3> S/. {{ingreso_total}}
+                  <sup style="font-size: 20px"></sup>    
                 </h3>
               <p>Ingresos</p>
             </div>
@@ -36,7 +36,7 @@
           </div>
 
   </div>
-  <div class="col-md-3 col-xs-12">
+ <!-- <div class="col-md-6 col-xs-12">
       <div class="small-box btn_cpm">
           <div class="inner">
               <h3> {{ingreso_cpm}}
@@ -51,7 +51,7 @@
         </div>
    
   </div>
-<!--  <div class="col-md-3 col-xs-12">
+  <div class="col-md-3 col-xs-12">
       <div class="small-box btn_imp">
           <div class="inner">
               <h3> {{impresiones}}
@@ -65,7 +65,7 @@
           <a href="#" class="small-box-footer">&nbsp;</a>
         </div>
   </div>-->
-  <div class="col-md-3 col-xs-12">
+  <div class="col-md-6 col-xs-12">
 
       <div class="small-box btn_per">
           <div class="inner">
@@ -126,40 +126,48 @@
   <ng-container matColumnDef="fecha">
     <th mat-header-cell *matHeaderCellDef>Fecha emisión</th>
     <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+    <td mat-footer-cell  *matFooterCellDef>Totales</td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="nro_comprobante">
     <th mat-header-cell *matHeaderCellDef> Nro Comprobante </th>
     <td mat-cell *matCellDef="let element"> {{element.nro_comprobante}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="num_documento">
     <th mat-header-cell *matHeaderCellDef> Nro documento </th>
     <td mat-cell *matCellDef="let element"> {{element.num_documento}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
 
   <!-- Symbol Column -->
   <ng-container matColumnDef="cliente">
     <th mat-header-cell *matHeaderCellDef> Nombre Cliente </th>
     <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
   <ng-container matColumnDef="valor_neto">
     <th mat-header-cell *matHeaderCellDef> Monto Neto </th>
     <td mat-cell *matCellDef="let element">S/. {{element.valor_neto}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{neto_factura}}</td>
   </ng-container>
   <ng-container matColumnDef="monto_igv">
     <th mat-header-cell *matHeaderCellDef> IGV </th>
     <td mat-cell *matCellDef="let element">S/. {{element.monto_igv}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{igv_factura}}</td>
   </ng-container>
   <ng-container matColumnDef="valor_total">
     <th mat-header-cell *matHeaderCellDef> Monto total </th>
     <td mat-cell *matCellDef="let element">S/. {{element.valor_total}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{total_factura}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
 </mk-box>
 
@@ -176,39 +184,47 @@
   <ng-container matColumnDef="fecha">
     <th mat-header-cell *matHeaderCellDef>Fecha emisión</th>
     <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+    <td mat-footer-cell  *matFooterCellDef>Totales</td>
   </ng-container>
 
   <!-- Name Column -->
   <ng-container matColumnDef="nro_comprobante">
     <th mat-header-cell *matHeaderCellDef> Nro Comprobante </th>
     <td mat-cell *matCellDef="let element"> {{element.nro_comprobante}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
 
   <!-- Weight Column -->
   <ng-container matColumnDef="num_documento">
     <th mat-header-cell *matHeaderCellDef> Nro documento </th>
     <td mat-cell *matCellDef="let element"> {{element.num_documento}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
 
   <!-- Symbol Column -->
   <ng-container matColumnDef="cliente">
     <th mat-header-cell *matHeaderCellDef> Nombre Cliente </th>
     <td mat-cell *matCellDef="let element"> {{element.cliente}} </td>
+    <td mat-footer-cell  *matFooterCellDef></td>
   </ng-container>
   <ng-container matColumnDef="valor_neto">
     <th mat-header-cell *matHeaderCellDef> Monto Neto </th>
     <td mat-cell *matCellDef="let element">S/. {{element.valor_neto}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{neto_boleta}}</td>
   </ng-container>
   <ng-container matColumnDef="monto_igv">
     <th mat-header-cell *matHeaderCellDef> IGV </th>
     <td mat-cell *matCellDef="let element">S/. {{element.monto_igv}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{igv_boleta}}</td>
   </ng-container>
   <ng-container matColumnDef="valor_total">
     <th mat-header-cell *matHeaderCellDef> Monto total </th>
     <td mat-cell *matCellDef="let element">S/. {{element.valor_total}} </td>
+    <td mat-footer-cell  *matFooterCellDef>S/. {{total_boleta}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
 </table>
 </mk-box>

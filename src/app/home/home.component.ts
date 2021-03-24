@@ -57,7 +57,15 @@ creat_dias=[];
 creat_total=[];
 ingreso_cpm:number;
 ingreso_total:number;
-impresiones:number;
+
+neto_boleta:number;
+igv_boleta:number;
+total_boleta:number;
+
+neto_factura:number;
+igv_factura:number;
+total_factura:number;
+
 datatable=[];
 startDate:Date = new Date();
 cargando:boolean=false;
@@ -137,7 +145,7 @@ error => {
       this.inicio=res['inicio'];
       this.final=res['final'];
       this.ingreso_total= res['ingreso'].map(res => res.ingreso_total);
-      this.impresiones= res['ingreso'].map(res => res.impresiones);
+      
       
       let alldates = res['data'].map(res => res.total)
       let  alllabels = res['data'].map(res => res.dimensionad_exchange_device_category)
@@ -270,7 +278,7 @@ error => {
               } , 
                 scaleLabel: {
                      display: true,
-                     labelString: 'Ingresos (USD)',
+                     labelString: 'Ingresos (S/.)',
                      fontSize: 14 
                   }
             }],
@@ -323,9 +331,28 @@ this.loadVentas(this.fecha1,this.fecha2,empresa);
   /*carga datos click*/ 
 
 loadVentas(inicio:string,final:string,empresa:string){
-  this.api.getVentaBoletas(inicio,final,empresa)
+
+this.labeldias=[];
+
+this.api.getVentaBoletas(inicio,final,empresa)
 .subscribe(x => {
-  
+  this.inicio=x['inicio'];
+  this.final=x['final'];
+  this.ingreso_total=x['totales'].map(res=>res.valor_total);
+
+  let dias = x['totaldias'].map(res=>res.fecha);
+  let dias_valdesck =x['totaldias'].map(res=>res.valor_total);
+ 
+  dias.forEach((res)=>{this.labeldias.push(res)})
+  dias_valdesck.forEach((res)=>{this.dias_value_desk.push(res)})
+
+  this.neto_boleta=x['totalboleta'].map(res=>res.valor_neto);
+  this.igv_boleta=x['totalboleta'].map(res=>res.monto_igv);
+  this.total_boleta=x['totalboleta'].map(res=>res.valor_total);
+
+  this.neto_factura=x['totalfactura'].map(res=>res.valor_neto);
+  this.igv_factura=x['totalfactura'].map(res=>res.monto_igv);
+  this.total_factura=x['totalfactura'].map(res=>res.valor_total);
   this.dataSource = new MatTableDataSource();  
   this.dataSource.data = x['boletas'];
   this.dataSource.sort = this.sort;
@@ -336,7 +363,136 @@ loadVentas(inicio:string,final:string,empresa:string){
   this.dataSourceFac.sort = this.sort;
   this.dataSourceFac.paginator = this.paginator;
 
+  this.barchar = new Chart('canvas2', {
+    type: 'line',
+    data: {
+      labels: this.labeldias,
+      datasets: [
+        {
+          //label: "Desktop",
+          fill: true,
+          lineTension: 0.3,
+          backgroundColor: "#2196f3ff",
+          borderColor: "#2196f3ff",
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: "rgba(6, 58, 228)",
+          pointBackgroundColor: "#000",
+          pointBorderWidth: 0,
+          pointHoverRadius: 1,
+          pointHoverBackgroundColor: "rgba(6, 58, 228)",
+          pointHoverBorderColor: "#2196f3ff",
+          pointHoverBorderWidth: 2,
+          pointRadius: 4,
+          pointHitRadius: 10,
+          //spanGaps: true,
+          data: this.dias_value_desk,
+          //spanGaps: true,
+        }
+       /* {
+          label: "Mobile",
+          fill: true,
+          lineTension: 0,
+          backgroundColor: "RGBA(61,0,255,0.3)",
+          //borderColor: "blue", // The main line color
+          borderCapStyle: 'butt',
+          borderDash: [], // try [5, 15] for instance
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: "blue",
+          pointBackgroundColor: "white",
+          pointBorderWidth: 1,
+          pointHoverRadius: 8,
+          pointHoverBackgroundColor: "blue",
+          pointHoverBorderColor: "blue",
+          pointHoverBorderWidth: 2,
+          pointRadius: 4,
+          pointHitRadius: 10,
+          // notice the gap in the data and the spanGaps: false
+          data:this.dias_value_movil,
+          spanGaps: false,
+        },
+        {
+          label: "Tablet",
+          fill: true,
+          lineTension: 0,
+          backgroundColor: "RGBA(246,91,246,0.3)",
+          //borderColor: "#F65BF6", // The main line color
+          borderCapStyle: 'butt',
+          borderDash: [], // try [5, 15] for instance
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: "#F65BF6",
+          pointBackgroundColor: "F65BF6",
+          pointBorderWidth: 1,
+          pointHoverRadius: 8,
+          pointHoverBackgroundColor: "#F65BF6",
+          pointHoverBorderColor: "#F65BF6",
+          pointHoverBorderWidth: 2,
+          pointRadius: 4,
+          pointHitRadius: 10,
+          // notice the gap in the data and the spanGaps: false
+          data: this.dias_value_tablet,
+          spanGaps: false,
+        }*/
+      ],
+   
+    },
+    options: {
+      legend: {
+        display: false,
+        },
+      responsive: true,
+      title:{
+          display:false,
+          text:'Ingresos por día',
+          fontSize:15
+      },
+      tooltips: {
+          mode: 'index',
+          intersect: true
+      },
+      hover: {
+          mode: 'nearest',
+          intersect: true
+      },
+      scales: {
+        xAxes:[{ gridLines: {
+              display:false
+          }}],
+        yAxes: [
+          {
+          gridLines: {
+              display:false
+          } , 
+            scaleLabel: {
+                 display: true,
+                 labelString: 'Ingresos (Soles)',
+                 fontSize: 14 
+              }
+        }],
+                    
+    }  
+  },
+  
+      plugins: {
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          formatter: Math.round,
+          font: {
+            weight: 'bold'
+          }
+        }
+      }
+  })
+
+
 });
+
+
   
 }  
 
@@ -362,9 +518,7 @@ loadDatos(inicio:string,final:string,empresa:string){
       .subscribe(res => {
           this.inicio=res['inicio'];
         this.final=res['final'];
-        this.ingreso_cpm= 
         this.ingreso_total= res['ingreso'].map(res => res.ingreso_total);
-        this.impresiones= res['ingreso'].map(res => res.impresiones);
         let alldates = res['data'].map(res => res.total)
         let  alllabels = res['data'].map(res => res.dimensionad_exchange_device_category)
 

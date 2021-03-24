@@ -60,3 +60,8 @@ table{width: 100%;}
   font-weight: bolder;
   font-size:22px;
 }
+
+.mat-footer-cell{
+  text-align: center;
+    font-weight: bold;
+}

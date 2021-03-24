@@ -36,6 +36,7 @@ $app->get("/inventario/:id",function($id) use($db,$app){
             $tot[]=$fila;
       }
 
+   
 
       $respuesta=json_encode(array("status"=>200,"data"=>$prods,"total"=>$tot));
     echo  $respuesta;
@@ -73,7 +74,43 @@ $app->post("/reporte",function() use($db,$app){
     while ($row = $factura->fetch_array()) {
             $infofactura[]=$row;
         }
-        $data = array("status"=>200,"boletas"=>$infoboleta,"facturas"=>$infofactura,"inicio"=>$ini,"final"=>$fin);
+
+        $totales=$db->query("SELECT sum(valor_neto) valor_neto,sum(monto_igv) monto_igv,sum(valor_total) valor_total  FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta','Factura') and fecha  between '".$ini."' and '".$fin."'");
+        $infototal=array();
+        while ($row = $totales->fetch_array()) {
+                $infototal[]=$row;
+            }
+
+            $totalboleta=$db->query("SELECT sum(valor_neto) valor_neto,sum(monto_igv) monto_igv,sum(valor_total) valor_total  FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') and fecha  between '".$ini."' and '".$fin."'");
+        $totalbo=array();
+        while ($row = $totalboleta->fetch_array()) {
+                $totalbo[]=$row;
+            }
+
+            $totalfactura=$db->query("SELECT sum(valor_neto) valor_neto,sum(monto_igv) monto_igv,sum(valor_total) valor_total  FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Factura') and fecha  between '".$ini."' and '".$fin."'");
+            $totalfac=array();
+            while ($row = $totalfactura->fetch_array()) {
+                    $totalfac[]=$row;
+                }
+
+                
+
+                $totalxdia=$db->query("SELECT DATE_FORMAT(v.fecha, '%d-%m-%y') fecha,sum(valor_neto) valor_neto,sum(monto_igv) monto_igv,sum(valor_total) valor_total  FROM ventas v,usuarios u,clientes c,vendedor ve where v.estado=1 and v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta','Factura') and fecha  between '".$ini."' and '".$fin."' group by 1");
+                $totaldias=array();
+                while ($row = $totalxdia->fetch_array()) {
+                        $totaldias[]=$row;
+                    }       
+
+
+        $data = array("status"=>200,
+        "boletas"=>$infoboleta,
+        "facturas"=>$infofactura,
+        "totales"=>$infototal,
+        "totalboleta"=>$totalbo,
+        "totalfactura"=>$totalfac,
+        "totaldias"=>$totaldias,
+        "inicio"=>$ini,"final"=>$fin);
+
         echo json_encode($data);
 
        

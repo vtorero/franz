@@ -264,7 +264,7 @@ export class VentasComponent implements OnInit {
       boleta.tipoOperacion = "0101";
       boleta.tipoDoc = "03";
       boleta.serie = "B001";
-      boleta.correlativo = art.nro_comprobante.substring(4,10);
+      boleta.correlativo = art.nro_comprobante.substring(5,10);
       boleta.client.tipoDoc = "1";
       boleta.client.rznSocial = art.cliente;
     }

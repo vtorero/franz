@@ -53,7 +53,7 @@ export class NotacreditoComponent implements OnInit {
    
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0, 0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
   cancela: boolean = false;
   displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;

@@ -17,6 +17,9 @@ export const MY_MOMENT_FORMATS = {
   monthYearA11yLabel: 'MM YYYY',
 };
 
+
+
+
 @Component({
   selector: 'app-agregarventa',
   templateUrl: './agregarventa.component.html',
@@ -28,6 +31,8 @@ export const MY_MOMENT_FORMATS = {
   imports: [BrowserModule,OwlDateTimeModule, OwlNativeDateTimeModule,MatPaginatorModule],
   providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: MY_MOMENT_FORMATS},]
 })
+
+
 export class AgregarventaComponent implements OnInit {
   displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
@@ -164,9 +169,9 @@ export class AgregarventaComponent implements OnInit {
     dialogo1.afterClosed().subscribe(art => {
       if (art){
       this.exampleArray.push(art)
-      this.valor_neto=this.valor_neto+(art.cantidad*art.mtoValorUnitario);  
-      this.monto_igv=this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV;  
-      this.valor_total=this.valor_neto+this.monto_igv;
+      this.valor_neto=parseFloat((this.valor_neto+(art.cantidad*art.mtoValorUnitario)).toFixed(2));
+      this.monto_igv=parseFloat((this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV).toFixed(2));  
+      this.valor_total=parseFloat((this.valor_neto+this.monto_igv).toFixed(2));
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
       this.data.detalleVenta = this.exampleArray;

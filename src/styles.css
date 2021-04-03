@@ -220,4 +220,24 @@ button.toast-close-button {
     padding: 15px 15px 15px 50px;
     width: 25em;
   }
+
+  .btn {
+    display: inline-block;
+    padding: 2px 2px;
+  }
+
+
+}
+@media (max-width: 768px) {
+  .btn {
+    display: inline-block;
+    padding: 2px 2px;
+  }
+
+
+  .mat-form-field {
+    font-size: 10px;
+    width: 100%;
+  }
+
 }

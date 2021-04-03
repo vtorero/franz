@@ -16,13 +16,18 @@ export class Boleta {
         public totalImpuestos:number,
         public valorVenta:number,
         public mtoImpVenta:number,
+        public subTotal:number,
         public mtoOperExoneradas:number,
         public ublVersion: string,
         public details:Array<Details>,
         public legends:[{
             code: string,
             value: string
-            }]
+            }],
+        public formaPago: {
+                moneda: string,
+                tipo: string,
+              }            
         ){}
 }
 

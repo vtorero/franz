@@ -731,7 +731,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
           //toque produccion
            // $token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTAxNzI4ODYsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDYwNTE3NDA5NSIsImV4cCI6NDc2Mzc3Mjg4Nn0.nL93zWcOm8w3ZAkWm_Ia9vF7DaFnP_wzuSgeF7_X1CvzvQOotSK12WphLo7jFmBRfLJm2UBPoUucOSNzbk3zdbvjCdG1p2tQ7CQlypxWggSxQ76Wma6cFJL7NF9ULxOQEWGm3b2CVVfDq2MgSyE6xNmOGuzP_7CsSyukd-Q8MOqjgtefBRPeN0XtX85s0Ie-5Twy_AP-MXOFj1gYapEpSPWN4QrK4wibAu8tVs01ipczGsZXzrQWZFVpmozluXPtsx6hNHy_XAGhJSIU1Ftj8rc5xIa7RD2-VO-nJVlChmTPB5TGNH4YsQOASAaGXBtZmqxtpK9RJAmSFPpvxBr3XC6bcBGBRPUy0CmcH6VeVPJNTRcNzP7H11hFi49iS8P04ViccR8kMnUd-ABIGRSuhdxy6yv3JjV6P9MuyjSFmJFi1Mlw8lGFLI9UeHxLAr1AXk0MvD1-MtFMrHWc0JrqeiW8EU9RbwGAxGdVxCM9bVinQ6fYzou6W9lcjnHbktR3VqLiI6kkJlOIYRzByHLmOX59BlPhTcqJTC-jGKsuR7rJfMljKmknzDhnKy3eD16FShpzzpEXtta5tf_RvF4sMeX6XTT2WSN2z6RbtGvTyJ9bG3COpv7_iByUpHXh8VJTF5nzloKwS_lj7w45PP0_Rb7Al31POnfFOarU8dRM9LA";
            if($data->comprobante=='Factura'){
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'facturas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'franzdev' AND TABLE_NAME = 'facturas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -741,7 +741,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            }
            
            if($data->comprobante=='Boleta'){
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'boletas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'franzdev' AND TABLE_NAME = 'boletas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -754,6 +754,8 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            if($data->comprobante!='Pendiente'){
 
             $postdata = json_encode($data->boleta);
+
+         
            $ch = curl_init('https://facturacion.apisperu.com/api/v1/invoice/send');
            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -1675,7 +1677,7 @@ $app->post("/inicio",function() use($db,$app){
         }
 
 
-              $resultado_desk = $db->query("SELECT concat(SUBSTRING(dimensiondate,6,2),'/',SUBSTRING(dimensiondate,9,2)) dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) as total FROM adops.11223363888
+   $resultado_desk = $db->query("SELECT concat(SUBSTRING(dimensiondate,6,2),'/',SUBSTRING(dimensiondate,9,2)) dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) as total FROM adops.11223363888
     where  dimensionad_exchange_network_partner_name='".$emp."' and 
     dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 1 asc");  
     $infodesk=array();

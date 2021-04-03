@@ -52,7 +52,7 @@ export class PendientesComponent implements OnInit {
   company: Company = new Company('', '', { direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
   displayedColumns=['comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -113,7 +113,7 @@ export class PendientesComponent implements OnInit {
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
-      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -254,7 +254,7 @@ export class PendientesComponent implements OnInit {
   editar(art) {
     this.cargando=true;
     let fech;
-    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0,0, '', [], [{ code: '', value: '' }]);
+    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
     fech=art.fecha+"T00:00:00-05:00"
     boleta.fechaEmision = fech  ;
     boleta.tipoMoneda = "PEN";

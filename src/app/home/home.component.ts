@@ -66,6 +66,10 @@ neto_factura:number;
 igv_factura:number;
 total_factura:number;
 
+neto_nota:number;
+igv_nota:number;
+total_nota:number;
+
 datatable=[];
 startDate:Date = new Date();
 cargando:boolean=false;
@@ -80,8 +84,10 @@ data:string= localStorage.getItem("data");
   dimensiondate: string;
   dimensionad_exchange_device_category:string;
   displayedColumns = ['fecha','nro_comprobante','num_documento','cliente','valor_neto','monto_igv','valor_total'];
+  displayedColumnsnotas = ['fecha','nro_nota','num_documento','cliente','valor_neto','monto_igv','valor_total','numDocfectado'];
   dataSource: any;
   dataSourceFac: any;
+  dataSourceNot: any;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   
@@ -332,8 +338,15 @@ this.loadVentas(this.fecha1,this.fecha2,empresa);
 
 loadVentas(inicio:string,final:string,empresa:string){
 
-this.labeldias=[];
-
+  this.labels=[];
+  this.values=[];
+  this.labeldias=[];
+  this.dias_value_desk=[];
+  this.creat_dias=[];
+  this.creat_total=[];
+  this.resetChart();
+  this.cargando=true;
+this.resetChart();
 this.api.getVentaBoletas(inicio,final,empresa)
 .subscribe(x => {
   this.inicio=x['inicio'];
@@ -353,6 +366,12 @@ this.api.getVentaBoletas(inicio,final,empresa)
   this.neto_factura=x['totalfactura'].map(res=>res.valor_neto);
   this.igv_factura=x['totalfactura'].map(res=>res.monto_igv);
   this.total_factura=x['totalfactura'].map(res=>res.valor_total);
+
+  this.neto_nota=x['totalnotas'].map(res=>res.valor_neto);
+  this.igv_nota=x['totalnotas'].map(res=>res.monto_igv);
+  this.total_nota=x['totalnotas'].map(res=>res.valor_total);
+
+
   this.dataSource = new MatTableDataSource();  
   this.dataSource.data = x['boletas'];
   this.dataSource.sort = this.sort;
@@ -362,6 +381,13 @@ this.api.getVentaBoletas(inicio,final,empresa)
   this.dataSourceFac.data = x['facturas'];
   this.dataSourceFac.sort = this.sort;
   this.dataSourceFac.paginator = this.paginator;
+
+
+  this.dataSourceNot = new MatTableDataSource();  
+  this.dataSourceNot.data = x['notas'];
+  this.dataSourceNot.sort = this.sort;
+  this.dataSourceNot.paginator = this.paginator;
+
 
   this.barchar = new Chart('canvas2', {
     type: 'line',
@@ -496,8 +522,8 @@ this.api.getVentaBoletas(inicio,final,empresa)
   
 }  
 
-exportTable(table:string,reporte:string){
-  TableUtil.exportToPdf(table,reporte);
+exportTable(table:string,fechas:string,reporte:string){
+  TableUtil.exportToPdf(table,fechas,reporte);
 }
 
 
@@ -677,14 +703,14 @@ this.cargando=false;
 }
 
 resetChart(){
-var pieChartContent = document.getElementById('pieChartContent');
-pieChartContent.innerHTML = '&nbsp;';
-pieChartContent.innerHTML='<canvas id="canvas"><canvas>';
+//var pieChartContent = document.getElementById('pieChartContent');
+//pieChartContent.innerHTML = '&nbsp;';
+//pieChartContent.innerHTML='<canvas id="canvas"><canvas>';
 var barChartContent = document.getElementById('barChartContent2');
 barChartContent.innerHTML = '&nbsp;';
 barChartContent.innerHTML='<canvas id="canvas2"><canvas>';
-var barChartContent4 = document.getElementById('barChartContent4');
-barChartContent4.innerHTML = '&nbsp;';
-barChartContent4.innerHTML='<canvas id="canvas4"><canvas>';
+//var barChartContent4 = document.getElementById('barChartContent4');
+//barChartContent4.innerHTML = '&nbsp;';
+//barChartContent4.innerHTML='<canvas id="canvas4"><canvas>';
 }
 }

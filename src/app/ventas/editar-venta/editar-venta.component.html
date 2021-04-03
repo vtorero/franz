@@ -111,7 +111,7 @@
     <mat-table [dataSource]="dataDetalle" matSort>
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
-        <mat-cell *matCellDef="let row;let i=index">{{i+1}} </mat-cell>
+        <mat-cell *matCellDef="let row;let i=index"><b>{{i+1}}</b></mat-cell>
       </ng-container>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>

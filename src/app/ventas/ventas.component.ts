@@ -49,7 +49,7 @@ export class VentasComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-  company: Company = new Company('', '', { direccion: '' });
+  company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
   cliente: Client = new Client('', '', '', { direccion: '' });
   boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
   cancela: boolean = false;
@@ -151,6 +151,12 @@ export class VentasComponent implements OnInit {
       /*company*/
       boleta.company.ruc =  Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.address.ubigueo="150131";
+      boleta.company.address.codigoPais="PE";
+      boleta.company.address.departamento="LIMA";
+      boleta.company.address.provincia="LIMA";
+      boleta.company.address.distrito="SAN ISIDRO";
+      boleta.company.address.urbanizacion="-";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
       art.detalleVenta.forEach(function (value: any) {
@@ -296,6 +302,12 @@ export class VentasComponent implements OnInit {
     /*company*/
     boleta.company.ruc = Global.RUC_EMPRESA;
     boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+    boleta.company.address.ubigueo="150131";
+    boleta.company.address.codigoPais="PE";
+    boleta.company.address.departamento="LIMA";
+    boleta.company.address.provincia="LIMA";
+    boleta.company.address.distrito="SAN ISIDRO";
+    boleta.company.address.urbanizacion="-";
     boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
     let total = 0;
     art.detalleVenta.forEach(function (value: any) {

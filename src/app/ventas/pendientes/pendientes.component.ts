@@ -49,7 +49,7 @@ export class PendientesComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-  company: Company = new Company('', '', { direccion: '' });
+  company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
   boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});

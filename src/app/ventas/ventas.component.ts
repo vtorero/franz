@@ -191,7 +191,7 @@ export class VentasComponent implements OnInit {
       boleta.formaPago.tipo="Contado";
 
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(letra => {
-        boleta.legends = [{ code: "1000", value: "SON " + letra + " SOLES"+ " -------------- Observación: "+art.observacion }];
+        boleta.legends = [{ code: "1000", value: "SON " + letra + " SOLES"}];
 
       //setTimeout(() => {
         /*

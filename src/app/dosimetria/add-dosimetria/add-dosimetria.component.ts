@@ -42,6 +42,7 @@ dataUnidades = [{ id: 'unidad', tipo: 'Unidades' }, { id: 'kilogramo', tipo: 'Ki
   }
 
   selectInsumo(ev,value){
+    console.log(value);
     if (ev.source.selected) {
     this.data.unidad=value.unidad;
     }

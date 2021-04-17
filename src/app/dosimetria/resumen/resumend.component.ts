@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Movimiento } from 'src/app/modelos/movimiento';
 import { AddDosimetriaComponent } from '../add-dosimetria/add-dosimetria.component';
+import { TableUtil } from "./tableUtil";
 
 @Component({
   selector: 'app-resumen',
@@ -72,6 +73,10 @@ export class ResumendComponent implements OnInit {
   ngOnInit() {
     this.renderDataTable();
 
+  }
+
+  exportTable(table:string,reporte:string){
+    TableUtil.exportToPdf(table,reporte);
   }
 
 }

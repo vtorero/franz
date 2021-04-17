@@ -1,35 +1,36 @@
 <mk-box header="Resumen de Dosimetrìa" [isCollapsable]="false" [isRemovable]="false">
+  <div class="export-container">
+    <button class="btn btn-primary" (click)="exportTable('tablaresumen','Resumen de dosimetria')">Exportar a PDF</button>
+  </div>
   <div class="example-header mat-elevation-z8">
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
     </mat-form-field>
   </div>
   <div class="example-container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort>
+    <table id="tablaresumen" mat-table  [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="codigo_insumo">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Codigo Insumo</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.codigo_insumo}} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Codigo Insumo</th>
+        <td mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.saldo>=1 ? 'black':'red'}">{{row.codigo_insumo}}</div> </td>
       </ng-container>
       <ng-container matColumnDef="descripcion">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Insumo</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Insumo</th>
+        <td mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.saldo>=1 ? 'black':'red'}">{{row.descripcion}}</div> </td>
       </ng-container>
       <ng-container matColumnDef="unidad">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.unidad}} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidad de medida</th>
+        <td mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.saldo>=1 ? 'black':'red'}">{{row.unidad}}</div> </td>
       </ng-container>
       <ng-container matColumnDef="saldo">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Saldo</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.saldo}} </mat-cell>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Saldo</th>
+        <td mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.saldo>=1 ? 'black':'red'}">{{row.saldo}}</div></td>
       </ng-container>
-      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <!--<mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]></mat-paginator>-->
   </div>
-  <ng-container>
 
-  </ng-container>
 </mk-box>
 <button mat-raised-button (click)="abrirDialogo()">Agregar Movimiento</button>

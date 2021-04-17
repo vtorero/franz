@@ -18,11 +18,12 @@ export class MovimientoComponent implements OnInit {
   startDate: Date = new Date();
   
   cancela: boolean = false;
-  displayedColumns = ['codigo', 'descripcion', 'movimiento','unidad','cantidad_ingreso','cantidad_salida','cantidad','fecha_movimiento' ];
+  displayedColumns = ['codigo', 'descripcion', 'movimiento','unidad','cantidad_ingreso','cantidad_salida','fecha_movimiento','borrar'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
     public dialog: MatDialog,
+    public dialogo: MatDialog,
     private toastr: ToastrService,
     dateTimeAdapter: DateTimeAdapter<any>) {
     dateTimeAdapter.setLocale('es-PE');
@@ -72,5 +73,27 @@ export class MovimientoComponent implements OnInit {
   ngOnInit() {
     this,this.renderDataTable();
   }
+
+  abrirDialog(templateRef,cod) {
+    let dialogRef = this.dialogo.open(templateRef, {
+   width: '500px',
+   disableClose: true });
+
+ dialogRef.afterClosed().subscribe(result => {
+ if(!this.cancela){
+     if(cod){
+     this.api.EliminarMovimiento(cod).subscribe(
+       data=>{
+       this.toastr.success(data['messaje']);
+       },
+       erro=>{console.log(erro)}
+         );
+     this.renderDataTable();
+   }
+
+ }
+
+});
+}
 
 }

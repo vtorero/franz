@@ -1,6 +1,6 @@
 
 export class TableUtil {
-    static exportToPdf(tableId: string,fecha:string, name: string) {
+    static exportToPdf(tableId: string, name: string) {
        let printContents, popupWin,fechas;
       printContents = document.getElementById(tableId).innerHTML;
       console.log(printContents)
@@ -14,8 +14,7 @@ export class TableUtil {
   <table>
   <tr> <td width="30%"><img width="150px" src="assets/img/vivian-food.png"></td><td width="70%" style="text-align:center;font-face:arial"><h1>${name}</h1></td></tr>
   </table>
-  <div style="text-align:center;font-size:11px">Desde ${fechas}</div><hr>
-  <table width="100%" style="text-align:center;font-family:arial;font-size:10px">${printContents}</table></body>
+  <table width="100%" border="1" spacing="0" style=" border-collapse:collapse;text-align:center;font-family:arial;font-size:10px">${printContents}</table></body>
     </html>`
       );
       popupWin.document.close();

@@ -141,6 +141,11 @@ public GuardarComprobante(Boleta):Observable<any>{
     return this._http.delete(Global.BASE_API_URL + 'api.php/inventario/'+dato, { headers: headers });
   }
 
+  public EliminarMovimiento(dato): Observable<any> {
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(Global.BASE_API_URL + 'api.php/movimiento/'+dato, { headers: headers });
+  }
+
 
   public EliminarDosimetria(dato):Observable<any> {
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');

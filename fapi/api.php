@@ -50,7 +50,7 @@ $app->get("/productos",function() use($db,$app){
 
  $app->get("/movimientos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT d.descripcion,m.* FROM frdash.dosimetria_movimientos m, dosimetria d where cantidad>0 and m.codigo_insumo=d.codigo order by m.id desc");  
+    $resultado = $db->query("SELECT d.descripcion,m.* FROM dosimetria_movimientos m, dosimetria d where  m.codigo_insumo=d.codigo order by m.id asc");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
@@ -62,7 +62,7 @@ $app->get("/productos",function() use($db,$app){
 
 $app->get("/movresumen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)-SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo group by 1,2,3");  
+    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)+SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo and m.unidad<>'' group by 1,2,3");  
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
@@ -110,16 +110,32 @@ $app->get("/movresumen",function() use($db,$app){
              echo  json_encode($result);   
 });
 
+$app->delete("/movimiento/:id",function($id) use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+       $json = $app->request->getBody();
+       $j = json_decode($json,true);
+       $data = json_decode($j['json']);
+                  $query ="DELETE FROM dosimetria_movimientos WHERE id='{$id}'";
+                  if($db->query($query)){
+       $result = array("STATUS"=>true,"messaje"=>"Movimiento  eliminado correctamente");
+       }
+       else{
+        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
+       }
+       
+        echo  json_encode($result);
+    });
+
 $app->post("/dosimetriamov",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
        try { 
-        
         $sql="call p_movimiento('{$data->codigo}','{$data->operacion}','{$data->unidad}',{$data->cantidad},'{$data->usuario}')";
         $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);
+        $stmt->close();
         $result = array("STATUS"=>true,"messaje"=>"Movimiento registrado correctamente");
         }
         catch(PDOException $e) {
@@ -772,14 +788,14 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             $sql="call p_factura('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
-                $comprobante='F001-'.$data->boleta->correlativo;
+                $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
             } 
 
             if($data->comprobante=='Boleta'){
                 $sql="call p_boleta('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
-                 $comprobante='B001-'.$data->boleta->correlativo;
+                 $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
             }    
 
             }

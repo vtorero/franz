@@ -317,24 +317,24 @@ export class VentasComponent implements OnInit {
       detalleBoleta.unidad = value.unidad_medida;
       detalleBoleta.descripcion = value.nombre;
       detalleBoleta.cantidad = Number(value.cantidad);
-      detalleBoleta.mtoValorUnitario = parseFloat(Number(value.precio).toFixed(2));
-      detalleBoleta.mtoValorVenta = parseFloat((Number(value.precio) * Number(value.cantidad)).toFixed(2));
-      detalleBoleta.mtoBaseIgv = parseFloat((Number(value.precio) * Number(value.cantidad)).toFixed(2));
+      detalleBoleta.mtoValorUnitario = parseFloat(Number(value.precio).toFixed(3));
+      detalleBoleta.mtoValorVenta = parseFloat((Number(value.precio) * Number(value.cantidad)).toFixed(3));
+      detalleBoleta.mtoBaseIgv = parseFloat((Number(value.precio) * Number(value.cantidad)).toFixed(3));
       detalleBoleta.porcentajeIgv = Global.BASE_IGV * 100;
-      detalleBoleta.igv = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(2));
-      detalleBoleta.totalImpuestos = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(2));
-      detalleBoleta.mtoPrecioUnitario = parseFloat((Number(value.precio) + (value.precio * Global.BASE_IGV)).toFixed(2));
+      detalleBoleta.igv = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(3));
+      detalleBoleta.totalImpuestos = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(3));
+      detalleBoleta.mtoPrecioUnitario = parseFloat((Number(value.precio) + (value.precio * Global.BASE_IGV)).toFixed(3));
       
       detalleBoleta.tipAfeIgv = 10;
       boleta.details.push(detalleBoleta);
     });
 
-    boleta.mtoOperGravadas = parseFloat(Number(art.valor_neto).toFixed(2));
-    boleta.mtoIGV = parseFloat(Number(art.monto_igv).toFixed(2));
-    boleta.totalImpuestos = parseFloat(Number(art.monto_igv).toFixed(2));
-    boleta.valorVenta = parseFloat(Number(art.valor_neto).toFixed(2));
-    boleta.mtoImpVenta = parseFloat(Number(art.valor_total).toFixed(2));
-    boleta.subTotal = parseFloat(Number(art.valor_total).toFixed(2)),
+    boleta.mtoOperGravadas = parseFloat(Number(art.valor_neto).toFixed(3));
+    boleta.mtoIGV = parseFloat(Number(art.monto_igv).toFixed(3));
+    boleta.totalImpuestos = parseFloat(Number(art.monto_igv).toFixed(3));
+    boleta.valorVenta = parseFloat(Number(art.valor_neto).toFixed(3));
+    boleta.mtoImpVenta = parseFloat(Number(art.valor_total).toFixed(3));
+    boleta.subTotal = parseFloat(Number(art.valor_total).toFixed(3)),
     boleta.company = this.company;
     boleta.formaPago.moneda="PEN";
       boleta.formaPago.tipo="Contado";
@@ -344,7 +344,7 @@ export class VentasComponent implements OnInit {
    
 
   //  setTimeout(() => {
-      sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
+      sendInvoice(JSON.stringify(boleta), art.nro_comprobante,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
       this.cargando=false;
    // },1000);
   });

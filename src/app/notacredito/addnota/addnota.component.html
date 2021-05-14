@@ -48,8 +48,7 @@
             </mat-form-field>
           </div>
           <div class="col-lg-4">
-            <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante
-            </mat-checkbox>
+            <mat-checkbox name="imprimir" #imprimir="ngModel" [(ngModel)]="data.imprimir">Visualizar comprobante</mat-checkbox>
           </div>
         </div>
         <div class="row">
@@ -77,7 +76,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="data.tipDocAfectado=='01'">
+            <mat-form-field *ngIf="data.tipDocAfectado=='01' || data.tipDocAfectado=='07'">
               <mat-label>Cliente CON RUC</mat-label>
               <mat-select name="cliente" [(ngModel)]="data.cliente" required>
                 <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">

@@ -50,9 +50,9 @@ export class NotacreditoComponent implements OnInit {
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-  company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
+  company: Company = new Company('', '', { ubigueo: '', codigoPais: '', departamento: '', provincia: '', distrito: '', urbanizacion: '', direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0, 0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }], { moneda: '', tipo: '' });
   cancela: boolean = false;
   displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -96,7 +96,7 @@ export class NotacreditoComponent implements OnInit {
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, '',this.boleta),
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, '', this.boleta),
       disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {
@@ -153,17 +153,30 @@ export class NotacreditoComponent implements OnInit {
       boleta.numDocfectado = art.numDocfectado;
       /**cliente*/
       if (art.cliente.nombre) {
-        boleta.serie = "BB01";
-        this.api.getMaxId('notascredito').subscribe(id => {
-          boleta.correlativo = id[0].ultimo.toString();
-          art.nro_comprobante = "BB01" + id[0].ultimo.toString();
-          art.comprobante = 'Boleta';
-          art.nro_nota = boleta.serie + '-' + boleta.correlativo;
-        });
+        if (art.tipoDoc == '07') {
+          this.api.getMaxId('notascredito').subscribe(id => {
+            boleta.serie = "BB01";
+            boleta.correlativo = id[0].ultimo.toString();
+            art.nro_comprobante = "BB01" + id[0].ultimo.toString();
+            art.comprobante = 'Boleta';
+            art.nro_nota = "BB01" + '-' + boleta.correlativo;
+          });
+        }
+        if (art.tipoDoc == '08') {
+          this.api.getMaxId('notasdebito').subscribe(id => {
+            boleta.serie = "BD01";
+            boleta.correlativo = id[0].ultimo.toString();
+            art.nro_comprobante = "BD01" + id[0].ultimo.toString();
+            art.comprobante = 'Boleta';
+            art.nro_nota = "BD01" + '-' + boleta.correlativo;
+          });
+
+        }
         boleta.client.tipoDoc = "1";
         boleta.client.rznSocial = art.cliente.nombre + ' ' + art.cliente.apellido;
       }
       if (art.cliente.razon_social) {
+        if (art.tipoDoc == '07') {
         boleta.serie = "FF01";
         this.api.getMaxId('notascredito').subscribe(id => {
           boleta.correlativo = id[0].ultimo.toString();
@@ -171,6 +184,17 @@ export class NotacreditoComponent implements OnInit {
           art.comprobante = 'Factura';
           art.nro_nota = boleta.serie + '-' + boleta.correlativo;
         });
+        }
+        if (art.tipoDoc == '08') {
+          this.api.getMaxId('notasdebito').subscribe(id => {
+            boleta.serie = "FD01";
+            boleta.correlativo = id[0].ultimo.toString();
+            art.nro_comprobante = "FD01" + id[0].ultimo.toString();
+            art.comprobante = 'Factura';
+            art.nro_nota = "FD01" + '-' + boleta.correlativo;
+          });
+        }
+
         boleta.client.tipoDoc = "6";
         boleta.client.rznSocial = art.cliente.razon_social;
       }
@@ -180,13 +204,13 @@ export class NotacreditoComponent implements OnInit {
 
       /*company*/
       boleta.company.ruc = Global.RUC_EMPRESA;
-      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
-      boleta.company.address.ubigueo="150131";
-      boleta.company.address.codigoPais="PE";
-      boleta.company.address.departamento="LIMA";
-      boleta.company.address.provincia="LIMA";
-      boleta.company.address.distrito="SAN ISIDRO";
-      boleta.company.address.urbanizacion="-";
+      boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
+      boleta.company.address.ubigueo = "150131";
+      boleta.company.address.codigoPais = "PE";
+      boleta.company.address.departamento = "LIMA";
+      boleta.company.address.provincia = "LIMA";
+      boleta.company.address.distrito = "SAN ISIDRO";
+      boleta.company.address.urbanizacion = "-";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
       art.detalleVenta.forEach(function (value: any) {
@@ -250,7 +274,7 @@ export class NotacreditoComponent implements OnInit {
         }
         //      }, 6000);
       });
-  
+
     }
 
     setTimeout(() => {
@@ -264,6 +288,7 @@ export class NotacreditoComponent implements OnInit {
   editar(art: NotaCredito) {
     this.cargando = true;
     if (art) {
+      console.log("arttt", art);
       let fech;
       var boleta: Nota = new Nota('', '', '', '', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }]);
       fech = art.fecha + "T00:00:00-05:00";
@@ -277,6 +302,7 @@ export class NotacreditoComponent implements OnInit {
       boleta.numDocfectado = art.numDocfectado;
       /**cliente*/
       if (art.tipDocAfectado == 'Boleta') {
+        boleta.tipDocAfectado = "03";
         boleta.serie = "BB01";
         boleta.correlativo = art.nro_nota.substring(5, 10);
         art.comprobante = 'Boleta';
@@ -285,10 +311,11 @@ export class NotacreditoComponent implements OnInit {
       }
 
       if (art.tipDocAfectado == 'Factura') {
+        boleta.tipDocAfectado = "01";
         boleta.serie = "FF01";
         boleta.correlativo = art.nro_nota.substring(5, 10);
         boleta.client.tipoDoc = "6";
-        boleta.client.rznSocial = art.cliente.razon_social;
+        boleta.client.rznSocial = art.cliente;
       }
 
       boleta.client.numDoc = art.num_documento;
@@ -296,13 +323,13 @@ export class NotacreditoComponent implements OnInit {
 
       /*company*/
       boleta.company.ruc = Global.RUC_EMPRESA;
-      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
-      boleta.company.address.ubigueo="150131";
-      boleta.company.address.codigoPais="PE";
-      boleta.company.address.departamento="LIMA";
-      boleta.company.address.provincia="LIMA";
-      boleta.company.address.distrito="SAN ISIDRO";
-      boleta.company.address.urbanizacion="-";
+      boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
+      boleta.company.address.ubigueo = "150131";
+      boleta.company.address.codigoPais = "PE";
+      boleta.company.address.departamento = "LIMA";
+      boleta.company.address.provincia = "LIMA";
+      boleta.company.address.distrito = "SAN ISIDRO";
+      boleta.company.address.urbanizacion = "-";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       let total = 0;
       art.detalleVenta.forEach(function (value: any) {

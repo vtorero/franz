@@ -104,12 +104,13 @@ export class RemisionComponent implements OnInit {
   }
 
   abrirEditar(cod: Guia) {
-    console.log(cod);
+    console.log("guiaaaaa",cod);
     const dialogo2 = this.dialog2.open(EditGuiaComponent, {
       data: cod,
       disableClose: true
     });
     dialogo2.afterClosed().subscribe(art => {
+      console.log("editar",cod);
       if (art != undefined){
        this.editar(art);
       }
@@ -133,7 +134,6 @@ export class RemisionComponent implements OnInit {
       fec1 = art.fechaemision.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
       /*Instancia Guia*/
 
@@ -143,9 +143,9 @@ export class RemisionComponent implements OnInit {
       this.api.getMaxId('guias').subscribe(id => {
       boleta.correlativo = id[0].ultimo.toString();
       });
-      boleta.fechaemision = fecha1;
+      boleta.fechaEmision = fecha1;
       boleta.company.ruc = Global.RUC_EMPRESA;
-      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       
       /*Destinatario*/
@@ -213,24 +213,26 @@ export class RemisionComponent implements OnInit {
 
 
   editar(art: Guia) {
-    console.log(art);
     this.cargando = true;
       let fec1;
       let fecha1;
      //var boleta:any;
       var boleta: Remision = new Remision('','','',this.destinatario,this.Moment,this.company,this.envio,[],"",localStorage.getItem("currentUser"));
-      /* var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      //fec1 = art.fechaemision;
+      fec1=art.fechaemision.toString()+"T00:00:00-05:00".split(" ", 4); 
+      console.log("fechaaaa",fec1)
+      var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
       /*Instancia Guia*/
-      fec1=boleta.fechaemision+"T00:00:00-05:00"
+      //fec1=boleta.fechaEmision+"T00:00:00-05:00"
       /*cabecera*/
       boleta.tipoDoc = "09";
       boleta.serie = "T001";
       boleta.correlativo = art.id;
-      boleta.fechaemision = fec1;
+      boleta.fechaEmision = fec1;
       boleta.company.ruc = Global.RUC_EMPRESA;
-      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
       
       /*Destinatario*/
@@ -252,7 +254,7 @@ export class RemisionComponent implements OnInit {
       boleta.envio.modTraslado="01";
       boleta.envio.codTraslado= "01"
       boleta.envio.desTraslado="VENTA"
-      boleta.envio.fecTraslado= fecha1;
+      boleta.envio.fecTraslado= fec1;
       boleta.envio.codPuerto= "123";
       boleta.envio.pesoTotal= art.peso_bruto;
       boleta.envio.undPesoTotal='KGM';
@@ -278,7 +280,7 @@ export class RemisionComponent implements OnInit {
         detalleBoleta.cantidad = value.cantidad;
         boleta.details.push(detalleBoleta);
       });
-
+        console.log("!print",boleta)
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
     
     this.cargando=false;
@@ -289,13 +291,11 @@ export class RemisionComponent implements OnInit {
     this.cancela = false;
   }
   renderDataTable() {
-    console.log("redner");
     this.api.getApi('guias').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      console.log("render");
     },
       error => {
         console.log('Error de conexion de datatable!' + error);

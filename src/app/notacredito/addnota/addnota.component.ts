@@ -31,7 +31,7 @@ export const MY_MOMENT_FORMATS = {
 export class AddnotaComponent implements OnInit {
   displayedColumns = ['id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
   dataComprobantes = [{ id: '07', tipo: 'Nota de Credito' }, { id: '08', tipo: 'Nota de Debito'}];
-  dataTipoDocumentos = [{ id: '01', tipo: 'Factura' }, { id:'03',tipo: 'Boleta' },{ id:'07',tipo: 'Nota de Credito' }];
+  dataTipoDocumentos = [{ id: '01', tipo: 'Factura' }, { id:'03',tipo: 'Boleta' }];
   dataMotivos = [{ id: '01', tipo: 'Anulación de la operación' }, { id: '02', tipo: 'Anulación por error en el RUC'},{id:'07',tipo:'Devolución por ítem'}];
   dataVendedores: any;
   dataClientes: any;

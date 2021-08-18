@@ -150,7 +150,7 @@ export class VentasComponent implements OnInit {
 
       /*company*/
       boleta.company.ruc =  Global.RUC_EMPRESA;
-      boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+      boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
       boleta.company.address.ubigueo="150131";
       boleta.company.address.codigoPais="PE";
       boleta.company.address.departamento="LIMA";
@@ -301,7 +301,7 @@ export class VentasComponent implements OnInit {
 
     /*company*/
     boleta.company.ruc = Global.RUC_EMPRESA;
-    boleta.company.razonSocial = "VVIAN FOODS S.A.C";
+    boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
     boleta.company.address.ubigueo="150131";
     boleta.company.address.codigoPais="PE";
     boleta.company.address.departamento="LIMA";
@@ -337,7 +337,7 @@ export class VentasComponent implements OnInit {
     boleta.subTotal = parseFloat(Number(art.valor_total).toFixed(3)),
     boleta.company = this.company;
     boleta.formaPago.moneda="PEN";
-      boleta.formaPago.tipo="Contado";
+    boleta.formaPago.tipo="Contado";
 
     this.api.getNumeroALetras(art.valor_total).then(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" + " | Observación: "+art.observacion }];

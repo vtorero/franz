@@ -908,7 +908,7 @@ $app->post("/guia",function() use($db,$app){
        $data = json_decode($j['json']);
 
        try { 
-        $fecha=substr($data->fechaemision,0,10);
+        $fecha=substr($data->fechaEmision,0,10);
         $sql="call p_guia('{$data->tipoDoc}','{$data->destinatario->tipoDoc}','{$data->destinatario->id}','{$fecha}','{$data->envio->pesoTotal}','{$data->envio->numBultos}','{$data->envio->partida->ubigueo}', '{$data->envio->partida->direccion}','{$data->envio->llegada->ubigueo}','{$data->envio->llegada->direccion}','{$data->envio->transportista->tipoDoc}','{$data->envio->transportista->choferDoc}','{$data->envio->transportista->rznSocial}','{$data->envio->transportista->placa}','{$data->observacion}','{$data->usuario}')";
        $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);

@@ -12,10 +12,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app = new Slim\Slim();
-$db = new mysqli("localhost","marife","libido16","frdash");
+$db = new mysqli("localhost","marife","libido16","frdash2");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-//mysqli_set_charset($db, 'utf8');
+mysqli_set_charset($db, 'utf8');
 if (mysqli_connect_errno()) {
     printf("Conexiónes fallida: %s\n", mysqli_connect_error());
     exit();
@@ -25,51 +25,51 @@ $data=array();
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT p.id,codigo,p.nombre,p.peso,c.nombre nombrecategoria,s.nombre subcategoria,costo,IGV,precio_sugerido,c.id id_categoria,id_subcategoria,usuario FROM  productos p, categorias c,sub_categorias s WHERE  p.id_subcategoria=s.id and p.id_categoria=c.id");  
+    $resultado = $db->query("SELECT p.id,codigo,p.nombre,p.peso,c.nombre nombrecategoria,s.nombre subcategoria,costo,IGV,precio_sugerido,c.id id_categoria,id_subcategoria,usuario FROM  productos p, categorias c,sub_categorias s WHERE  p.id_subcategoria=s.id and p.id_categoria=c.id");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
     });
 
     $app->get("/dosimetria",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id,codigo,descripcion,unidad,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");  
+        $resultado = $db->query("SELECT id,codigo,descripcion,unidad,inventario_inicial,fecha_registro,usuario FROM dosimetria order by id desc");
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
              $prods[]=$fila;
             }
             $respuesta=json_encode($prods);
             echo  $respuesta;
-            
+
  });
 
  $app->get("/movimientos",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT d.descripcion,m.* FROM dosimetria_movimientos m, dosimetria d where  m.codigo_insumo=d.codigo order by m.id asc");  
+$resultado = $db->query("SELECT d.descripcion,m.* FROM dosimetria_movimientos m, dosimetria d where  m.codigo_insumo=d.codigo order by m.id asc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->get("/movresumen",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)+SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo and m.unidad<>'' group by 1,2,3");  
+    $resultado = $db->query("SELECT m.codigo_insumo,d.descripcion,m.unidad,SUM(m.cantidad_ingreso)+SUM(cantidad_salida) saldo FROM dosimetria_movimientos m, dosimetria d where m.codigo_insumo=d.codigo group by 1,2,3");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 
@@ -85,7 +85,7 @@ $app->get("/movresumen",function() use($db,$app){
        else{
         $result = array("STATUS"=>false,"messaje"=>"Error al eliminar dosimetria");
        }
-       
+
         echo  json_encode($result);
     });
 
@@ -94,8 +94,8 @@ $app->get("/movresumen",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       try { 
-        
+       try {
+
         $sql="call p_dosimetria('{$data->codigo}','{$data->descripcion}','{$data->unidad}',{$data->inventario_inicial},'{$data->usuario}')";
         $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);
@@ -104,86 +104,70 @@ $app->get("/movresumen",function() use($db,$app){
         catch(PDOException $e) {
 
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-        
-    }
-    
-             echo  json_encode($result);   
-});
 
-$app->delete("/movimiento/:id",function($id) use($db,$app){
-    header("Content-type: application/json; charset=utf-8");
-       $json = $app->request->getBody();
-       $j = json_decode($json,true);
-       $data = json_decode($j['json']);
-                  $query ="DELETE FROM dosimetria_movimientos WHERE id='{$id}'";
-                  if($db->query($query)){
-       $result = array("STATUS"=>true,"messaje"=>"Movimiento  eliminado correctamente");
-       }
-       else{
-        $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
-       }
-       
-        echo  json_encode($result);
-    });
+    }
+
+             echo  json_encode($result);
+});
 
 $app->post("/dosimetriamov",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       try { 
-        $sql="call p_movimiento('{$data->codigo}','{$data->operacion}','{$data->unidad}',{$data->cantidad},'{$data->usuario}')";
+
+
+           try {
+         $sql="call p_movimiento('{$data->codigo}','{$data->operacion}','{$data->unidad}',{$data->cantidad},'{$data->usuario}')";
         $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);
         $stmt->close();
         $result = array("STATUS"=>true,"messaje"=>"Movimiento registrado correctamente");
         }
         catch(PDOException $e) {
-
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-        
-    }
-    
-             echo  json_encode($result);   
+        }
+
+             echo  json_encode($result);
 });
 
 
  $app->get("/dosimetria/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria where descripcion like '%{$criterio}%'");  
+    $resultado = $db->query("SELECT id,codigo,descripcion,inventario_inicial,fecha_registro,usuario FROM dosimetria where descripcion like '%{$criterio}%'");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
          $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->get("/categorias",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id, nombre  FROM  categorias order by id");  
+        $resultado = $db->query("SELECT id, nombre  FROM  categorias order by id");
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
-                
+
                 $prods[]=$fila;
             }
             $respuesta=json_encode($prods);
             echo  $respuesta;
-            
+
         });
 
         $app->get("/subcategorias",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
-            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id order by s.id");  
+            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id order by s.id");
             $prods=array();
                 while ($fila = $resultado->fetch_array()) {
-                    
+
                     $prods[]=$fila;
                 }
                 $respuesta=json_encode($prods);
                 echo  $respuesta;
-                
+
             });
 
 
@@ -192,9 +176,9 @@ $app->get("/categorias",function() use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-        
+
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
-           
+
             $query ="INSERT INTO categorias (nombre) VALUES ('"."{$nombre}"."')";
             $proceso=$db->query($query);
             if($proceso){
@@ -210,7 +194,7 @@ $app->get("/categorias",function() use($db,$app){
                $json = $app->request->getBody();
                $j = json_decode($json,true);
                $data = json_decode($j['json']);
-            
+
                $query ="INSERT INTO sub_categorias (id_categoria,nombre) VALUES ({$data->id_categoria},'{$data->nombre}')";
                 $proceso=$db->query($query);
                 if($proceso){
@@ -223,15 +207,15 @@ $app->get("/categorias",function() use($db,$app){
 
         $app->get("/subcategoria/:criterio",function($criterio) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
-            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id and c.id={$criterio} order by s.id");  
+            $resultado = $db->query("SELECT s.id,c.id id_categoria,c.nombre categoria,s.nombre FROM sub_categorias s,categorias c WHERE s.id_categoria=c.id and c.id={$criterio} order by s.id");
             $prods=array();
                 while ($fila = $resultado->fetch_array()) {
-                    
+
                     $prods[]=$fila;
                 }
                 $respuesta=json_encode($prods);
                 echo  $respuesta;
-                
+
         });
 
 
@@ -243,13 +227,13 @@ $app->get("/categorias",function() use($db,$app){
                $codigo=(is_array($data->id))? array_shift($data->id): $data->id;
                $query ="DELETE FROM categorias WHERE id="."'{$codigo}'";
                $operacion=$db->query($query);
-               if($operacion){        
+               if($operacion){
                $result = array("STATUS"=>true,"messaje"=>"Categoria eliminada correctamente");
             }else{
                 $result = array("STATUS"=>false,"messaje"=>'Ocurrio un error');
             }
                 echo  json_encode($result);
-            });        
+            });
 
     $app->post("/productodel",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
@@ -259,7 +243,7 @@ $app->get("/categorias",function() use($db,$app){
            $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
            $query ="DELETE FROM productos WHERE codigo="."'{$codigo}'";
            $db->query($query);
-                   
+
            $result = array("STATUS"=>true,"messaje"=>"Producto eliminado correctamente","string"=>$query);
             echo  json_encode($result);
         });
@@ -270,10 +254,10 @@ $app->get("/categorias",function() use($db,$app){
 $app->get("/producto/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
     try{
-    $resultado = $db->query("SELECT `id`, `codigo`, `nombre`,`peso` FROM `productos` where id ={$id}");  
+    $resultado = $db->query("SELECT `id`, `codigo`, `nombre`,`peso` FROM `productos` where id ={$id}");
     $prods=array();
     while ($fila = $resultado->fetch_array()) {
-        
+
         $prods[]=$fila;
     }
     $respuesta=json_encode($prods);
@@ -281,16 +265,16 @@ $app->get("/producto/:id",function($id) use($db,$app){
     $respuesta=json_encode(array("status"=>$e->message));
 }
              echo  $respuesta;
-        
+
 });
 
     $app->get("/productos/:criterio",function($criterio) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
             try{
-            $resultado = $db->query("SELECT `id`, `codigo`, `nombre` FROM `productos` where nombre like '%".$criterio."%'");  
+            $resultado = $db->query("SELECT `id`, `codigo`, `nombre` FROM `productos` where nombre like '%".$criterio."%'");
             $prods=array();
             while ($fila = $resultado->fetch_array()) {
-                
+
                 $prods[]=$fila;
             }
             $respuesta=json_encode($prods);
@@ -298,7 +282,7 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $respuesta=json_encode(array("status"=>$e->message));
         }
                      echo  $respuesta;
-                
+
         });
 
     $app->post("/producto",function() use($db,$app){
@@ -306,7 +290,7 @@ $app->get("/producto/:id",function($id) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-    
+
            $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $peso=(is_array($data->peso))? array_shift($data->peso): $data->peso;
@@ -314,8 +298,8 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $categoria=(is_array($data->id_categoria))? array_shift($data->id_categoria): $data->id_categoria;
             $sub_categoria=(is_array($data->id_subcategoria))? array_shift($data->id_subcategoria): $data->id_subcategoria;
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
-    
-        
+
+
            $query ="INSERT INTO productos (codigo,nombre,peso,costo,id_categoria,id_subcategoria,usuario) VALUES ("
           ."'{$codigo}',"
           ."'{$nombre}',"
@@ -324,9 +308,9 @@ $app->get("/producto/:id",function($id) use($db,$app){
           ."{$categoria},"
           ."{$sub_categoria},"
           ."'{$usuario}'".")";
-       
+
           $insert=$db->query($query);
-                   
+
            $result = array("STATUS"=>true,"messaje"=>"Producto creado correctamente");
             echo  json_encode($result);
         });
@@ -336,7 +320,7 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $json = $app->request->getBody();
             $j = json_decode($json,true);
             $data = json_decode($j['json']);
-             
+
             $codigo=(is_array($data->codigo))? array_shift($data->codigo): $data->codigo;
             $nombre=(is_array($data->nombre))? array_shift($data->nombre): $data->nombre;
             $peso=(is_array($data->peso))? array_shift($data->peso): $data->peso;
@@ -347,7 +331,7 @@ $app->get("/producto/:id",function($id) use($db,$app){
             $usuario=(is_array($data->usuario))? array_shift($data->usuario): $data->usuario;
 
             $sql = "UPDATE productos SET codigo='".$codigo."', nombre='".$nombre."',peso=".$peso.",costo=".$costo.", precio_sugerido=".$precio.",id_categoria=".$categoria.",id_subcategoria=".$sub_categoria.",usuario='".$usuario."' WHERE id={$data->id}";
-            try { 
+            try {
             $db->query($sql);
              $result = array("STATUS"=>true,"messaje"=>"Producto actualizado correctamente","string"=>$sql);
              echo  json_encode($result);
@@ -355,39 +339,39 @@ $app->get("/producto/:id",function($id) use($db,$app){
              catch(PDOException $e) {
         echo '{"error":{"text":'. $e->getMessage() .'}}';
         }
-                               
-        
+
+
          });
- 
+
 /*Proveedores*/
 $app->get("/proveedores",function() use($db,$app){
             header("Content-type: application/json; charset=utf-8");
-            $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` order by id desc");  
+            $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`departamento`,`provincia`,`distrito` FROM `proveedores` order by id desc");
             $prods=array();
                 while ($fila = $resultado->fetch_array()) {
-                    
+
                     $prods[]=$fila;
                 }
                 $respuesta=json_encode($prods);
                 echo  $respuesta;
-                
+
 });
 
 $app->get("/empresas",function() use($db,$app){
-    header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` order by id desc");  
+    header("Content-type: application/json;");
+    $resultado = $db->query("SELECT id, razon_social,num_documento,direccion,telefono,departamento,provincia,distrito,estado FROM  empresas order by id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 
-     
+
 $app->post("/proveedor",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();
@@ -411,8 +395,8 @@ $app->post("/proveedor",function() use($db,$app){
       ."'{$provincia}',"
       ."'{$distrito}'".")";
         $db->query($query);
-        
-               
+
+
        $result = array("STATUS"=>true,"messaje"=>"Proveedor registrado correctamente","string"=>$query);
         echo  json_encode($result);
     });
@@ -429,7 +413,7 @@ $app->post("/proveedor",function() use($db,$app){
            else{
             $result = array("STATUS"=>false,"messaje"=>"Error al eliminar el proveedor");
            }
-           
+
             echo  json_encode($result);
         });
 
@@ -440,7 +424,7 @@ $app->post("/compra",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       try { 
+       try {
         $fecha=substr($data->fecha,0,10);
         $sql="call p_compra('{$data->comprobante}',{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
         $stmt = mysqli_prepare($db,$sql);
@@ -458,15 +442,15 @@ $app->post("/compra",function() use($db,$app){
             $proc="";
         }
         $result = array("STATUS"=>true,"messaje"=>"Compra registrada correctamente","string"=>$fecha);
-        
+
         }
          catch(PDOException $e) {
 
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-        
+
     }
-    
-             echo  json_encode($result);   
+
+             echo  json_encode($result);
 });
 
 $app->post("/comprobante",function() use($db,$app){
@@ -485,11 +469,11 @@ $app->post("/comprobante",function() use($db,$app){
             mysqli_stmt_execute($stmt);
             $proc="";*/
         $result = array("STATUS"=>true,"messaje"=>"Compra actualizada correctamente");
-       
+
        /*  catch(PDOException $e) {
         $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
          }*/
-        echo  json_encode($data);   
+        echo  json_encode($data);
     });
 
 
@@ -501,7 +485,7 @@ $app->post("/compraedit",function() use($db,$app){
        $data = json_decode($j['json']);
 
        $sql = "UPDATE compras SET comprobante='".$data->comprobante."',id_proveedor=".$data->id_proveedor.",num_comprobante='".$data->num_comprobante."', descripcion='".$data->descripcion."',fecha='".substr($data->fecha,0,10)."' WHERE id=".$data->id;
-       try { 
+       try {
         $db->query($sql);
         $borra="DELETE FROM detalle_compras where id_compra={$data->id}";
         $db->query($borra);
@@ -518,31 +502,31 @@ $app->post("/compraedit",function() use($db,$app){
         $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
          }
         echo  json_encode($result);
-     
-      
+
+
 });
 
 $app->get("/compra/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `descripcion`, `cantidad`, `precio`, `id_articulo`, `id_compra` FROM `detalle_compras` where id_compra={$id}");  
+    $resultado = $db->query("SELECT `id`, `descripcion`, `cantidad`, `precio`, `id_articulo`, `id_compra` FROM `detalle_compras` where id_compra={$id}");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 
 $app->get("/compras",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT c.`id`, comprobante,`num_comprobante`, `descripcion`,DATE_FORMAT(fecha, '%Y-%m-%d') fecha, c.`id_proveedor`,p.razon_social, `id_usuario`,(select sum(precio) from detalle_compras where id_compra=c.id) total  FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");  
+    $resultado = $db->query("SELECT c.`id`, comprobante,`num_comprobante`, `descripcion`,DATE_FORMAT(fecha, '%Y-%m-%d') fecha, c.`id_proveedor`,p.razon_social, `id_usuario`,(select sum(precio) from detalle_compras where id_compra=c.id) total  FROM `compras` c, proveedores p where c.id_proveedor=p.id order by c.id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 
@@ -553,7 +537,7 @@ $app->get("/almacen",function() use($db,$app){
     $resultado=$db->query("SELECT i.id,id_producto,p.codigo,p.nombre,presentacion,unidad,id_producto,DATE_FORMAT(fecha_produccion, '%d-%m-%Y') fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%d-%m-%Y') fecha_vencimiento,observacion,granel,cantidad, ROUND(i.peso/1000,2) peso,merma FROM inventario i, productos p where i.id_producto=p.id and i.cantidad>0 order by i.id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
@@ -563,10 +547,10 @@ $app->get("/almacen",function() use($db,$app){
 
 $app->get("/inventarios",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,format((p.peso*i.cantidad)/1000,2) peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.cantidad>0 and i.id_producto=p.id");  
+    $resultado = $db->query("SELECT i.id,p.codigo,`id_producto`,p.nombre, `id_producto`,`presentacion`,`granel`,`cantidad`,format((p.peso*i.cantidad)/1000,2) peso,`merma`, DATE_FORMAT(fecha_produccion, '%Y-%m-%d')  fecha_produccion,DATE_FORMAT(fecha_vencimiento, '%Y-%m-%d')  fecha_vencimiento,datediff(fecha_vencimiento,now()) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.cantidad>0 and i.id_producto=p.id");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
@@ -577,8 +561,8 @@ $app->get("/inventarios",function() use($db,$app){
     $app->get("/alertaintentario",function() use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $prods=array();
-        $resultado = $db->query("SELECT i.id,id_producto,fecha_produccion,p.nombre,datediff(now(),fecha_produccion) dias FROM `inventario` i ,`productos` p where i.id_producto=p.id and datediff(now(),fecha_produccion) between 1 and 7 order by fecha_produccion");  
-        
+        $resultado = $db->query("SELECT i.id,id_producto,fecha_produccion,p.nombre,datediff(now(),fecha_produccion) dias FROM `inventario` i ,`productos` p where i.id_producto=p.id and datediff(now(),fecha_produccion) between 1 and 7 order by fecha_produccion");
+
         if($resultado->num_rows>0){
                while ($fila = $resultado->fetch_array()) {
 
@@ -597,7 +581,7 @@ $app->get("/inventarios",function() use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-           try { 
+           try {
             $fecha=substr($data->fecha_produccion,0,10);
             $fecha2=substr($data->fecha_vencimiento,0,10);
             $sql="call p_inventario({$data->id_producto},'{$data->presentacion}','{$data->unidad}',{$data->granel},{$data->cantidad},{$data->peso},{$data->merma},'{$fecha}','{$fecha2}','{$data->observacion}')";
@@ -608,7 +592,7 @@ $app->get("/inventarios",function() use($db,$app){
             catch(PDOException $e) {
                 $result = array("STATUS"=>true,"messaje"=>$e->getMessage());
                  }
-            
+
                  $respuesta=json_encode($result);
                 echo  $respuesta;
 
@@ -621,7 +605,7 @@ $app->get("/inventarios",function() use($db,$app){
                $json = $app->request->getBody();
                $j = json_decode($json,true);
                $data = json_decode($j['json']);
-               try { 
+               try {
                 $fecha_prod=substr($data->fecha_produccion,0,10);
                 $fecha_venc=substr($data->fecha_vencimiento,0,10);
                 $sql="call p_inventario_upd({$data->id},'{$fecha_prod}','{$fecha_venc}','{$data->presentacion}',{$data->cantidad})";
@@ -634,8 +618,25 @@ $app->get("/inventarios",function() use($db,$app){
                      }
                 $respuesta=json_encode($result);
                 echo  $respuesta;
-    
+
         });
+
+        $app->delete("/movimiento/:id",function($id) use($db,$app){
+            header("Content-type: application/json; charset=utf-8");
+               $json = $app->request->getBody();
+               $j = json_decode($json,true);
+               $data = json_decode($j['json']);
+                          $query ="DELETE FROM dosimetria_movimientos WHERE id='{$id}'";
+                          if($db->query($query)){
+               $result = array("STATUS"=>true,"messaje"=>"Movimiento  eliminado correctamente");
+               }
+               else{
+                $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
+               }
+
+                echo  json_encode($result);
+            });
+
 
         $app->delete("/inventario/:id",function($id) use($db,$app){
             header("Content-type: application/json; charset=utf-8");
@@ -649,7 +650,7 @@ $app->get("/inventarios",function() use($db,$app){
                else{
                 $result = array("STATUS"=>false,"messaje"=>"Error al eliminar item");
                }
-               
+
                 echo  json_encode($result);
             });
 
@@ -661,7 +662,7 @@ $app->post("/vendedores",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-    
+
        $query ="INSERT INTO vendedor (nombre,apellidos,dni,razon_social,ruc) VALUES ('{$data->nombre}','{$data->apellidos}','{$data->dni}','{$data->razon_social}','{$data->ruc}')";
         $proceso=$db->query($query);
         if($proceso){
@@ -674,10 +675,10 @@ $app->post("/vendedores",function() use($db,$app){
 
 $app->get("/vendedores",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc`,`fecha_registro` FROM `vendedor` order by id desc");  
+    $resultado = $db->query("SELECT `id`, `nombre`, `apellidos`, `dni`, `razon_social`, `ruc`,`fecha_registro` FROM `vendedor` order by id desc");
     $vendedores=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $vendedores[]=$fila;
         }
         $respuesta=json_encode($vendedores);
@@ -686,7 +687,7 @@ $app->get("/vendedores",function() use($db,$app){
 
     $app->delete("/vendedores/:id",function($id) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("DELETE FROM `vendedor` where  id={$id}");  
+        $resultado = $db->query("DELETE FROM `vendedor` where  id={$id}");
         var_dump($resultado);
         die();
         if($resultado){
@@ -696,7 +697,7 @@ $app->get("/vendedores",function() use($db,$app){
              }
              echo  json_encode($result);
         });
-    
+
 /*ventas*/
 
 $app->get("/pendientes",function() use($db,$app){
@@ -707,7 +708,7 @@ $app->get("/pendientes",function() use($db,$app){
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 
@@ -719,15 +720,15 @@ $app->get("/ventas",function() use($db,$app){
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 $app->get("/inventarios/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT i.id,p.codigo,id_producto,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,i.peso,i.unidad,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} and i.cantidad>0 order by fecha_produccion asc");  
+    $resultado = $db->query("SELECT i.id,p.codigo,id_producto,p.nombre,p.precio_sugerido precio,`presentacion`,`cantidad`,i.peso,i.unidad,DATE_FORMAT(fecha_produccion,'%Y-%m-%d')  fecha_produccion,datediff(now(),fecha_produccion) `dias`, `estado`, `ciclo`, `id_usuario` FROM `inventario` i, productos p where i.id_producto=p.id and id_producto={$id} and i.cantidad>0 order by fecha_produccion asc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
@@ -738,16 +739,16 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
         $json = $app->request->getBody();
         $j = json_decode($json,true);
-        
+
         $data = json_decode($j['json']);
         $valor_total=0;
            //token desarrollo
-          // $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTUwMDAzNjUsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDUyMTA0ODgyNSIsImV4cCI6NDc2ODYwMDM2NX0.H7WTeu1DohAwLEwVDz8CMkfPMxBvExMmgtpnxZF8l544hP8bPIE3PEv6m4ozRCAUIALFlIfIXsMsreI_TQKFAOS3pSdSjDhp8jSkCJX1SyM2K-juVZ8W9D0v-wKTooKLUrgDEOME6sQZ8zzdak0mALJU39LmSU7Zmu5HKswjGqi1OXhTt_iri8KbLkoVOwtaCMESeURDlqWetoFDTHwtozIoQChq2GQK1kZNLZIgrpNPmMhLh-0A6Lb_iwKnNZ8skBWVUO94wJ-sFYJTnAwNpYNCcerwt9PdW8zvkaguhJOArX9n5Qi9mTJFeV4JR0PRV3lIgS5NQYsJMvSWXUh3CFx_vjPf0zgid0dwNvgPi0zcOGOR61Mduvh4kBkcYbERLlCWgWU9mVO0ql-qEvrYZRlI1fQcA7hUyaRxNtWtNPlw9216jcBMtiWS2CquDp06_R4vEeE5DeMSekpgvfyd6JqfM6cc-NuLk3mZDWKd9y77Edi2QORCXC6E195_2VeMvugiOsQd6Q0khxPQMV1Euzh0ePWNjTR-vvapzhT4QuT5tF1Vq9b1bGliofLK09787YDzujrbCngqjBnF-g6NQtMUEuJ3VP_I0-PL_1K4HL4UN02VJAl9gMYM821MCdAHGpArZBszPX7ZLWtBsnjxA3SjhbzXUDzzFYX1Ow8Ulfk";
-            
+          //$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MjE5OTc5NjQsImV4cCI6NDc3NTU5Nzk2NCwidXNlcm5hbWUiOiJ2dG9yZXJvIiwiY29tcGFueSI6IjIwNTIxMDQ4ODI1In0.bHutFGMZAqODBqfJnlSQNMuonyC3d5elHpy1wIXRwB3QtIPk7y3rnELjk1JBZF7G54vy5AsyJQPSpRLGs8Llo1QUC2g0yC83LBI1QGhpZ5W85PyPnTqldUoYTtXMvmChlz9CnExb-5sReOPTFlhy2IgUSpNdYIXC5G3YUZ32XgkRiiRWytS1swMQ-Nk52CBzzwH34oD6JwjMUS71T7_949CgsCyHZq5mSclXdGsIq6jfqi1JBo0na3OY0KmSpuJfsSmomJrbeqZauPLg50obAE029sgdjD7uW739aPNh1MP-_ZETa9b36gFcDQ_q3gytfVMissnLjNl1r92efY_WQ4wewa897hRPDm6i7XbRCkILPiYiWDxQ3tNsQIvg1Kg9Gu-090jdcdo5Mwx2mD4KGugPsYzfbmxCBUIRciFIaNiKnNFzQyELu7N0ghWJ6d-2vV1hQLEaZJPScqvVQbcJWwqawZEJ7cPLnlDXS2z-s59RtcMlH3gkVT9aT5df6oOe4yJzOpEa_zoPnumFwKHGVO5G0m2gzsNfEjz7B-zLa32lTxjPEUBUgFnuh7Xdoo88PHmKgAZ_JhxpU-Tq7dM3_dMZJwBigw_kLO1n3SI6ozPiPkBOQ0_un2ZP3dVRZ1ABfCjp2KK8NF0FIJAkLk-alrGCwNT4HgprxMnV0DmQyQU";
+
           //toque produccion
             $token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTAxNzI4ODYsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDYwNTE3NDA5NSIsImV4cCI6NDc2Mzc3Mjg4Nn0.nL93zWcOm8w3ZAkWm_Ia9vF7DaFnP_wzuSgeF7_X1CvzvQOotSK12WphLo7jFmBRfLJm2UBPoUucOSNzbk3zdbvjCdG1p2tQ7CQlypxWggSxQ76Wma6cFJL7NF9ULxOQEWGm3b2CVVfDq2MgSyE6xNmOGuzP_7CsSyukd-Q8MOqjgtefBRPeN0XtX85s0Ie-5Twy_AP-MXOFj1gYapEpSPWN4QrK4wibAu8tVs01ipczGsZXzrQWZFVpmozluXPtsx6hNHy_XAGhJSIU1Ftj8rc5xIa7RD2-VO-nJVlChmTPB5TGNH4YsQOASAaGXBtZmqxtpK9RJAmSFPpvxBr3XC6bcBGBRPUy0CmcH6VeVPJNTRcNzP7H11hFi49iS8P04ViccR8kMnUd-ABIGRSuhdxy6yv3JjV6P9MuyjSFmJFi1Mlw8lGFLI9UeHxLAr1AXk0MvD1-MtFMrHWc0JrqeiW8EU9RbwGAxGdVxCM9bVinQ6fYzou6W9lcjnHbktR3VqLiI6kkJlOIYRzByHLmOX59BlPhTcqJTC-jGKsuR7rJfMljKmknzDhnKy3eD16FShpzzpEXtta5tf_RvF4sMeX6XTT2WSN2z6RbtGvTyJ9bG3COpv7_iByUpHXh8VJTF5nzloKwS_lj7w45PP0_Rb7Al31POnfFOarU8dRM9LA";
            if($data->comprobante=='Factura'){
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'facturas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash2' AND TABLE_NAME = 'facturas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -755,9 +756,9 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             }
             $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
            }
-           
+
            if($data->comprobante=='Boleta'){
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash' AND TABLE_NAME = 'boletas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash2' AND TABLE_NAME = 'boletas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -765,11 +766,13 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
                 }
                 $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
            }
-       
+
            $comprobante="";
            if($data->comprobante!='Pendiente'){
 
             $postdata = json_encode($data->boleta);
+
+
            $ch = curl_init('https://facturacion.apisperu.com/api/v1/invoice/send');
            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -780,35 +783,35 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Authorization: Bearer '. $token));
             $result = curl_exec($ch);
             curl_close($ch);
-            $response_sunat=json_decode($result,false); 
-            } 
+            $response_sunat=json_decode($result,false);
+            }
             if(isset($response_sunat) and $response_sunat->sunatResponse->success==1){
 
-             if($data->comprobante=='Factura'){   
+             if($data->comprobante=='Factura'){
             $sql="call p_factura('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
             mysqli_stmt_execute($stmt);
-                $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
-            } 
+            $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
+            }
 
             if($data->comprobante=='Boleta'){
                 $sql="call p_boleta('{$response_sunat->hash}',{$response_sunat->sunatResponse->cdrResponse->code},'{$response_sunat->sunatResponse->cdrResponse->description}','{$response_sunat->sunatResponse->cdrResponse->id}','{$response_sunat->sunatResponse->cdrZip}','{$response_sunat->sunatResponse->success}')";
                 $stmt = mysqli_prepare($db,$sql);
                 mysqli_stmt_execute($stmt);
-                 $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
-            }    
+                $comprobante=$response_sunat->sunatResponse->cdrResponse->id;
+            }
 
             }
-        
-    
+
+
                 /*total venta*/
                 foreach($data->detalleVenta as $value){
                 $valor_total+=$value->cantidad*$value->mtoValorUnitario;
-                
+
                 }
 
 
-                try { 
+                try {
                     $fecha=substr($data->fecha,0,10);
                     $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',{$valor_total},{$data->igv},'{$data->observacion}')";
                    $stmt = mysqli_prepare($db,$sql);
@@ -824,11 +827,11 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
                     $stmt = mysqli_prepare($db,$proc);
                     mysqli_stmt_execute($stmt);
                     $stmt->close();
-        
+
                      //$proc="";
-                    
-                     /*actualiza inventario*/  
-              
+
+                     /*actualiza inventario*/
+
                     $actualiza="call p_actualiza_inventario({$valor->codProductob->id},{$valor->codProducto},{$valor->cantidad},{$valor->peso},'{$valor->unidadmedida}')";
                     $stmtb = mysqli_prepare($db,$actualiza);
                     mysqli_stmt_execute($stmtb);
@@ -839,16 +842,16 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
                     }else{
                         $result = array("STATUS"=>true,"messaje"=>"Venta registrada correctamente");
                     }
-                    
+
                     }
                      catch(PDOException $e) {
-            
+
                     $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-                    
-                }          
-          
-        
-            echo  json_encode($result);   
+
+                }
+
+
+            echo  json_encode($result);
     });
 
     $app->post("/factura",function() use($db,$app){
@@ -857,7 +860,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
 
-             try { 
+             try {
            $sql="call p_factura('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
@@ -867,13 +870,13 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
            while ($d = $datos->fetch_object()) {
             $ultimo_id=$d;
             }
-               
+
             $result = array("STATUS"=>true,"messaje"=>"Factura grabada correctamente","max"=>$ultimo_id);
             }
              catch(PDOException $e) {
                 $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
         }
-            echo  json_encode($result);   
+            echo  json_encode($result);
      });
 
      /*guia remision*/
@@ -886,18 +889,18 @@ $app->get("/guias",function() use($db,$app){
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 $app->get("/guia/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad` FROM `guia_detalle` v ,productos p where v.id_producto=p.codigo and id_guia={$id}");  
+    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad` FROM `guia_detalle` v ,productos p where v.id_producto=p.codigo and id_guia={$id}");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 
@@ -907,7 +910,7 @@ $app->post("/guia",function() use($db,$app){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-       try { 
+       try {
         $fecha=substr($data->fechaEmision,0,10);
         $sql="call p_guia('{$data->tipoDoc}','{$data->destinatario->tipoDoc}','{$data->destinatario->id}','{$fecha}','{$data->envio->pesoTotal}','{$data->envio->numBultos}','{$data->envio->partida->ubigueo}', '{$data->envio->partida->direccion}','{$data->envio->llegada->ubigueo}','{$data->envio->llegada->direccion}','{$data->envio->transportista->tipoDoc}','{$data->envio->transportista->choferDoc}','{$data->envio->transportista->rznSocial}','{$data->envio->transportista->placa}','{$data->observacion}','{$data->usuario}')";
        $stmt = mysqli_prepare($db,$sql);
@@ -922,23 +925,23 @@ $app->post("/guia",function() use($db,$app){
         $proc="call p_guia_detalle({$ultimo_id->ultimo_id},'{$valor->codigo}','{$valor->id}','{$valor->unidad}',{$valor->cantidad})";
         $stmt1 = mysqli_prepare($db,$proc);
         mysqli_stmt_execute($stmt1);
-        
+
 
         $actualiza="call p_actualiza_inventario({$valor->id},'{$valor->codigo}',{$valor->cantidad},{$valor->cantidad},'{$valor->unidad}')";
             $stmtb = mysqli_prepare($db,$actualiza);
             mysqli_stmt_execute($stmtb);
-            
+
         }
         $result = array("STATUS"=>true,"messaje"=>"Guía registrada correctamente con el nro:".$ultimo_id->ultimo_id,"string-actualiza"=>$actualiza);
-        
+
         }
          catch(PDOException $e) {
 
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-        
+
     }
-    
-        echo  json_encode($result);   
+
+        echo  json_encode($result);
 });
 
 
@@ -946,13 +949,13 @@ $app->post("/guia",function() use($db,$app){
 /*notas*/
 $app->get("/notas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, tipoDoc , if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc,comprobante,nro_nota,nro_comprobante numDocfectado, DATE_FORMAT(v.fecha, '%d-%m-%y') fecha FROM notas v,usuarios u,clientes c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado,tipoDoc,if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc ,comprobante,nro_nota,nro_comprobante numDocfectado,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,empresas c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");  
+    $resultado = $db->query("SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total, estado, tipoDoc , if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc,comprobante,nro_nota,nro_comprobante numDocfectado, DATE_FORMAT(v.fecha, '%d-%m-%y') fecha FROM notas v,usuarios u,clientes c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Boleta' union all SELECT v.id,v.codMotivo,if(v.tipDocAfectado='01','Factura','Boleta') tipDocAfectado,v.desMotivo,v.id_usuario,u.nombre usuario,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total, v.estado,tipoDoc,if(tipoDoc= '07','Nota Credito','Nota Debito') NombreDoc ,comprobante,nro_nota,nro_comprobante numDocfectado,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha FROM notas v,usuarios u,empresas c where v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante='Factura' order by id desc;");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
 
@@ -963,12 +966,12 @@ $app->post("/nota",function() use($db,$app){
        $data = json_decode($j['json']);
        $valor_total=0;
        /*total de la venta*/
-       
+
        foreach($data->detalleVenta as $value){
             $valor_total+=$value->cantidad*$value->mtoValorUnitario;
        }
 
-      try { 
+      try {
         $fecha=substr($data->fecha,0,10);
         $sql="call p_nota('{$data->id_usuario}','{$data->cliente->id}','{$data->tipoDoc}','{$data->codMotivo}','{$data->desMotivo}','{$data->tipDocAfectado}', '{$data->comprobante}','{$data->numDocfectado}','{$data->nro_nota}','{$fecha}',{$valor_total},{$data->igv})";
         $stmt = mysqli_prepare($db,$sql);
@@ -979,7 +982,7 @@ $app->post("/nota",function() use($db,$app){
          $ultimo_id=$d;
          }
         foreach($data->detalleVenta as $valor){
-        
+
                      /*inserta detalle*/
         $proc="call p_nota_detalle({$ultimo_id->ultimo_id},'{$valor->codProducto->id}','{$valor->unidadmedida}',{$valor->cantidad},{$valor->peso},{$valor->mtoValorUnitario})";
         $stmt = mysqli_prepare($db,$proc);
@@ -988,26 +991,26 @@ $app->post("/nota",function() use($db,$app){
 
         }
         $result = array("STATUS"=>true,"messaje"=>"Nota registrada correctamente con el nro:".$ultimo_id->ultimo_id);
-        
+
         }
          catch(PDOException $e) {
 
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
-        
+
     }
-    
-        echo  json_encode($result);   
+
+        echo  json_encode($result);
 });
 
 $app->get("/nota/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad`,v.`peso` ,`precio`, `subtotal` FROM `nota_detalle` v ,productos p where v.id_producto=p.id and id_venta={$id}");  
+    $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad`,v.`peso` ,`precio`, `subtotal` FROM `nota_detalle` v ,productos p where v.id_producto=p.id and id_venta={$id}");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
-        echo  $respuesta;    
+        echo  $respuesta;
 });
 
      $app->post("/notacredito",function() use($db,$app){
@@ -1015,7 +1018,7 @@ $app->get("/nota/:id",function($id) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-                  try { 
+                  try {
            $sql="call p_notacredito('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
@@ -1025,13 +1028,13 @@ $app->get("/nota/:id",function($id) use($db,$app){
            while ($d = $datos->fetch_object()) {
             $ultimo_id=$d;
             }
-               
+
             $result = array("STATUS"=>true,"messaje"=>"Nota  registrada correctamente","max"=>$ultimo_id);
             }
              catch(PDOException $e) {
                 $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
         }
-            echo  json_encode($result);   
+            echo  json_encode($result);
      });
 
 
@@ -1040,7 +1043,7 @@ $app->get("/nota/:id",function($id) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-                  try { 
+                  try {
            $sql="call p_boleta('{$data->hash}',{$data->sunatResponse->cdrResponse->code},'{$data->sunatResponse->cdrResponse->description}','{$data->sunatResponse->cdrResponse->id}','{$data->sunatResponse->cdrZip}','{$data->sunatResponse->success}')";
            $stmt = mysqli_prepare($db,$sql);
            mysqli_stmt_execute($stmt);
@@ -1050,19 +1053,19 @@ $app->get("/nota/:id",function($id) use($db,$app){
            while ($d = $datos->fetch_object()) {
             $ultimo_id=$d;
             }
-               
+
             $result = array("STATUS"=>true,"messaje"=>"Boleta grabada correctamente","max"=>$ultimo_id);
             }
              catch(PDOException $e) {
                 $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
         }
-            echo  json_encode($result);   
+            echo  json_encode($result);
      });
 
 
     $app->get("/correlativo/:tabla",function($tabla) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");  
+        $resultado = $db->query("SELECT max(id)+1 ultimo  FROM {$tabla}");
 
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
@@ -1073,19 +1076,19 @@ $app->get("/nota/:id",function($id) use($db,$app){
                 }
             }
             $respuesta=json_encode($prods);
-            echo  $respuesta;    
+            echo  $respuesta;
     });
 
 
     $app->get("/venta/:id",function($id) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad`,v.`peso` ,`precio`, `subtotal` FROM `venta_detalle` v ,productos p where v.id_producto=p.id and id_venta={$id}");  
+        $resultado = $db->query("SELECT v.`id`, `id_producto`,p.codigo,p.`nombre`,`unidad_medida` ,`cantidad`,v.`peso` ,`precio`, `subtotal` FROM `venta_detalle` v ,productos p where v.id_producto=p.id and id_venta={$id}");
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
                 $prods[]=$fila;
             }
             $respuesta=json_encode($prods);
-            echo  $respuesta;    
+            echo  $respuesta;
     });
 
 /*clientes*/
@@ -1093,15 +1096,15 @@ $app->get("/nota/:id",function($id) use($db,$app){
 
 $app->get("/clientes",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT id, nombre, apellido, direccion,telefono,num_documento FROM clientes order by id desc");  
+    $resultado = $db->query("SELECT id, nombre, apellido, direccion,telefono,num_documento FROM clientes order by id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->post("/cliente",function() use($db,$app){
@@ -1109,7 +1112,7 @@ $app->post("/cliente",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       try { 
+       try {
         $query ="INSERT INTO clientes (nombre,apellido,direccion,telefono,num_documento) VALUES ('{$data->nombre}','{$data->apellido}','{$data->direccion}','{$data->telefono}','{$data->num_documento}')";
         $db->query($query);
         $result = array("STATUS"=>true,"messaje"=>"Ciente registrado correctamente");
@@ -1117,33 +1120,33 @@ $app->post("/cliente",function() use($db,$app){
          catch(PDOException $e) {
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
     }
-        echo  json_encode($result);   
+        echo  json_encode($result);
 });
 
 $app->get("/clientes/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");  
+    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where apellido like '%".$criterio."%' or nombre like '%".$criterio."%'");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->get("/cliente/:id",function($id) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where id={$id}");  
+    $resultado = $db->query("SELECT `id`, `nombre`,`apellido`,`direccion`,`num_documento` FROM `clientes` where id={$id}");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->put("/cliente",function() use($db,$app){
@@ -1151,7 +1154,7 @@ $app->put("/cliente",function() use($db,$app){
        $json = $app->request->getBody();
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
-       try { 
+       try {
         $query ="UPDATE clientes SET nombre='{$data->nombre}',apellido='{$data->apellido}',direccion='{$data->direccion}',telefono='{$data->telefono}',num_documento='{$data->num_documento}' where id={$data->id}";
         $db->query($query);
         $result = array("STATUS"=>true,"messaje"=>"Ciente actualizado correctamente");
@@ -1159,7 +1162,7 @@ $app->put("/cliente",function() use($db,$app){
          catch(PDOException $e) {
         $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
     }
-        echo  json_encode($result);   
+        echo  json_encode($result);
 });
 
 
@@ -1175,7 +1178,7 @@ $app->delete("/cliente/:dni",function($dni) use($db,$app){
        else{
         $result = array("STATUS"=>false,"messaje"=>"Error al eliminar el cliente");
        }
-       
+
         echo  json_encode($result);
     });
 
@@ -1183,15 +1186,15 @@ $app->delete("/cliente/:dni",function($dni) use($db,$app){
 
 $app->get("/empresas/:criterio",function($criterio) use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` where razon_social like '%".$criterio."%'");  
+    $resultado = $db->query("SELECT `id`, `razon_social`,`num_documento`, `direccion`,`telefono`,`departamento`,`provincia`,`distrito`,`estado` FROM `empresas` where razon_social like '%".$criterio."%'");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $prods[]=$fila;
         }
         $respuesta=json_encode($prods);
         echo  $respuesta;
-        
+
 });
 
 $app->delete("/empresa/:ruc",function($ruc) use($db,$app){
@@ -1206,7 +1209,7 @@ $app->delete("/empresa/:ruc",function($ruc) use($db,$app){
        else{
         $result = array("STATUS"=>false,"messaje"=>"Error al eliminar empresa");
        }
-       
+
         echo  json_encode($result);
     });
 
@@ -1215,7 +1218,7 @@ $app->delete("/empresa/:ruc",function($ruc) use($db,$app){
            $json = $app->request->getBody();
            $j = json_decode($json,true);
            $data = json_decode($j['json']);
-           try { 
+           try {
             $query ="UPDATE empresas SET razon_social='{$data->razon_social}',direccion='{$data->direccion}',telefono='{$data->telefono}',departamento='{$data->departamento}',provincia='{$data->provincia}',distrito='{$data->distrito}' where id={$data->id}";
             $db->query($query);
             $result = array("STATUS"=>true,"messaje"=>"Ciente actualizado correctamente");
@@ -1223,9 +1226,9 @@ $app->delete("/empresa/:ruc",function($ruc) use($db,$app){
              catch(PDOException $e) {
             $result = array("STATUS"=>false,"messaje"=>$e->getMessage());
         }
-            echo  json_encode($result);   
+            echo  json_encode($result);
     });
-    
+
 $app->post("/empresa",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
        $json = $app->request->getBody();
@@ -1242,12 +1245,12 @@ $app->post("/empresa",function() use($db,$app){
       ."'{$data->estado}'".")";
          $exe=$db->query($query);
         if($exe){
-        $result = array("STATUS"=>true,"messaje"=>"Cliente registrado correctamente");    
+        $result = array("STATUS"=>true,"messaje"=>"Cliente registrado correctamente");
         }else {
-            $result = array("STATUS"=>false,"messaje"=>"Cliente no registrado correctamente");    
+            $result = array("STATUS"=>false,"messaje"=>"Cliente no registrado correctamente");
         }
-        
-      echo  json_encode($result); 
+
+      echo  json_encode($result);
     });
 
     $app->get("/numeroletras/:cantidad",function($cantidad) use($db,$app){
@@ -1255,8 +1258,8 @@ $app->post("/empresa",function() use($db,$app){
         $json = file_get_contents("https://nal.azurewebsites.net/api/Nal?num={$cantidad}");
         $data = json_decode($json);
            echo json_encode($data->letras);
-        });   
-    
+        });
+
 
 $app->post("/bancosget",function() use($db,$app) {
 header("Content-type: application/json; charset=utf-8");
@@ -1295,7 +1298,7 @@ header("Content-type: application/json; charset=utf-8");
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-        
+
         $empresa=(is_array($data->empresa))? array_shift($data->empresa): $data->empresa;
         $entidad=(is_array($data->entidad))? array_shift($data->entidad): $data->entidad;
         $beneficiario=(is_array($data->beneficiario))? array_shift($data->beneficiario): $data->beneficiario;
@@ -1305,13 +1308,13 @@ header("Content-type: application/json; charset=utf-8");
         $sucursal=(is_array($data->sucursal))? array_shift($data->sucursal): $data->sucursal;
         $tipocuenta=(is_array($data->tipocuenta))? array_shift($data->tipocuenta): $data->tipocuenta;
         $numerocta=(is_array($data->numerocta))? array_shift($data->numerocta): $data->numerocta;
-        $aba=(is_array($data->aba))? array_shift($data->aba): $data->aba;            
+        $aba=(is_array($data->aba))? array_shift($data->aba): $data->aba;
         $swift=(is_array($data->swift))? array_shift($data->swift): $data->swift;
         $contactobco=(is_array($data->contactobco))? array_shift($data->contactobco): $data->contactobco;
         $tlfcontacto=(is_array($data->tlfcontacto))? array_shift($data->tlfcontacto): $data->tlfcontacto;
         $bancointer=(is_array($data->bancointer))? array_shift($data->bancointer): $data->bancointer;
         $abainter=(is_array($data->abainter))? array_shift($data->abainter): $data->abainter;
-        
+
 
 
         $contar=array();
@@ -1321,7 +1324,7 @@ header("Content-type: application/json; charset=utf-8");
         }
 
 
-if(count($contar)>0){ 
+if(count($contar)>0){
 
      $query ="UPDATE api.dash_bancario  SET "
         ."entidad ='{$entidad}',"
@@ -1339,10 +1342,10 @@ if(count($contar)>0){
         ."bancointer = '{$bancointer}',"
         ."abainter = '{$abainter}'"
         ." WHERE usuario='{$empresa}'";
-          
+
           $update=$db->query($query);
 
-      
+
     }else{
         $query ="INSERT INTO api.dash_bancario (usuario,entidad,beneficiario,persona,dom_entidad,ciudad,sucursal,tipocuenta,numerocta,aba,swift,contactobco,
         tlfcontacto,bancointer,abainter) VALUES ("
@@ -1362,7 +1365,7 @@ if(count($contar)>0){
       ."'{$bancointer}',"
       ."'{$abainter}'"
         .")";
-   
+
       $insert=$db->query($query);
     }
        if(count($contar)>0){
@@ -1381,7 +1384,7 @@ if(count($contar)>0){
        $j = json_decode($json,true);
        $data = json_decode($j['json']);
 
-        
+
         $nombres=(is_array($data->nombres))? array_shift($data->nombres): $data->nombres;
         $correo=(is_array($data->correo))? array_shift($data->correo): $data->correo;
         $telefono=(is_array($data->telefono))? array_shift($data->telefono): $data->telefono;
@@ -1390,7 +1393,7 @@ if(count($contar)>0){
         $rut=(is_array($data->rut))? array_shift($data->rut): $data->rut;
         $domicilio=(is_array($data->domicilio))? array_shift($data->domicilio): $data->domicilio;
         $calle=(is_array($data->calle))? array_shift($data->calle): $data->calle;
-        $numero=(is_array($data->numero))? array_shift($data->numero): $data->numero;            
+        $numero=(is_array($data->numero))? array_shift($data->numero): $data->numero;
         $ciudad=(is_array($data->ciudad))? array_shift($data->ciudad): $data->ciudad;
         $pais=(is_array($data->pais))? array_shift($data->pais): $data->pais;
         $confinanzas=(is_array($data->confinanzas))? array_shift($data->confinanzas): $data->confinanzas;
@@ -1408,7 +1411,7 @@ if(count($contar)>0){
         }
 
 
-if(count($contar)>0){ 
+if(count($contar)>0){
 
      $query ="UPDATE api.dash_general  SET "
         ."nombres ='{$nombres}',"
@@ -1427,10 +1430,10 @@ if(count($contar)>0){
         ."correofinan = '{$correofinan}',"
         ."medios = '{$medios}'"
         ." WHERE empresa='{$empresa}'";
-          
+
           $update=$db->query($query);
 
-      
+
     }else{
         $query ="INSERT INTO api.dash_general (correo,empresa,nombres,telefono,sociedad,paginas,rut,domicilio,calle,numero,ciudad,pais,confinanzas,tlffinanzas,correofinan,medios) VALUES ("
       ."'{$correo}',"
@@ -1450,7 +1453,7 @@ if(count($contar)>0){
       ."'{$correofinan}',"
       ."'{$medios}'"
           .")";
-   
+
       $insert=$db->query($query);
     }
        if(count($contar)>0){
@@ -1466,7 +1469,7 @@ if(count($contar)>0){
          $json = $app->request->getBody();
         $data = json_decode($json, true);
 
-        $resultado = $db->query("SELECT * FROM usuarios where nombre='".$data['usuario']."' and contrasena='".$data['password']."'");  
+        $resultado = $db->query("SELECT * FROM usuarios where nombre='".$data['usuario']."' and contrasena='".$data['password']."'");
         $usuario=array();
         while ($fila = $resultado->fetch_object()) {
         $usuario[]=$fila;
@@ -1481,7 +1484,7 @@ if(count($contar)>0){
 
     $app->get("/vendedor/:criterio",function($criterio) use($db,$app){
         header("Content-type: application/json; charset=utf-8");
-        $resultado = $db->query("SELECT id, nombre,apellidos FROM `vendedor` where nombre like '%{$criterio}%'");  
+        $resultado = $db->query("SELECT id, nombre,apellidos FROM `vendedor` where nombre like '%{$criterio}%'");
         $prods=array();
             while ($fila = $resultado->fetch_array()) {
                 $prods[]=$fila;
@@ -1498,15 +1501,15 @@ $app->get("/reportesubcategoria",function() use($db,$app){
        $fechafin=$dat["fin"];
        $sucur=array();
        $result=$db->query("SELECT s.nombre,count(*) total from productos p,  sub_categorias s where p.id_subcategoria=s.id  group by 1 order by 2 desc");
-    
+
       $datos=array();
        while ($filas = $result->fetch_array()){
                $datos[]=$filas;
            }
             $data = array("status"=>200,"data"=>$datos);
-   
+
              echo  json_encode($data);
-   
+
    });
 
 /*dashboard adops*/
@@ -1540,7 +1543,7 @@ $app->get("/reportesubcategoria",function() use($db,$app){
         $tasa=(float) $infocliente[0]["tasa"];
         $emp=$infocliente[0]["empresa"];
         $cpm=(float) $infocliente[0]["cpm"];
-        
+
         if($emp=='Latina.pe' and $fmes1=='08' and $fmes2=='08'){
             $tasa=1;
             $cpm=1;
@@ -1560,56 +1563,56 @@ $ingreso=$db->query("SELECT FORMAT(sum(columnad_exchange_estimated_revenue*".$cp
             $infoingreso[]=$row;
         }
 
-   
+
               $resultado_desk = $db->query("SELECT concat(SUBSTRING(dimensiondate,6,2),'/',SUBSTRING(dimensiondate,9,2)) dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) as total FROM adops.11223363888
-    where  dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 1 asc");  
+    where  dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 1 asc");
     $infodesk=array();
         while ($filadesk= $resultado_desk->fetch_array()) {
-            
-            $infodesk[]=$filadesk;
-        }    
 
-        
+            $infodesk[]=$filadesk;
+        }
+
+
 
           $resultado_table = $db->query("SELECT dimensiondate,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where  dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='Tablets' group by 1 order by 1 asc");  
+    where  dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='Tablets' group by 1 order by 1 asc");
     $infotablet=array();
         while ($filatab = $resultado_table->fetch_array()) {
-            
+
             $infotablet[]=$filatab;
         }
 
 
           $resultado_mobil = $db->query("SELECT dimensiondate,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='High-end mobile devices' group by 1 order by 1 asc");  
+    where dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='High-end mobile devices' group by 1 order by 1 asc");
     $infomovil=array();
         while ($filamob = $resultado_mobil->fetch_array()) {
-            
+
             $infomovil[]=$filamob;
         }
 
 
     $resultado = $db->query("SELECT REPLACE(dimensionad_exchange_device_category,'High-end mobile devices','Mobile') dimensionad_exchange_device_category,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where  dimensionad_exchange_network_partner_name='".$emp."'  and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc");  
+    where  dimensionad_exchange_network_partner_name='".$emp."'  and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc");
     $info=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $info[]=$fila;
         }
 
      $result_creative = $db->query("SELECT dimensionad_exchange_creative_sizes,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."'  and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc limit 5");  
+    where dimensionad_exchange_network_partner_name='".$emp."'  and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc limit 5");
     $info_creative=array();
         while ($filac = $result_creative->fetch_array()) {
-            
+
             $info_creative[]=$filac;
         }
-        
+
         $data = array("status"=>200,"data"=>$info,"ingreso"=>$infoingreso,"creatives"=>$info_creative,"diario_desktop"=>$infodesk,"diario_tablet"=>$infotablet,"inicio"=>$inicio,"final"=>$final);
         echo json_encode($data);
         });
@@ -1622,7 +1625,7 @@ $app->post("/dashb",function() use($db,$app){
     $fechainicio= $dat["inicio"];
     $fechafin=$dat["fin"];
     $sucur=array();
-  
+
     $sucursales = $db->query("SELECT id,sucursal FROM dashboard.usuario where id<>1");
     while ($filatabla = $sucursales->fetch_array()) {
             $sucur[]=$filatabla;
@@ -1659,7 +1662,7 @@ $app->post("/inicio",function() use($db,$app){
     $final=date("d/m",strtotime("- 1 days"));
     $hash=$dat['emp'];
 
-    
+
     $datocliente=$db->query("SELECT * FROM api.usuarios where hash='".$hash."'");
        $infocliente=array();
       while ($cliente = $datocliente->fetch_array()) {
@@ -1671,83 +1674,83 @@ $app->post("/inicio",function() use($db,$app){
         $cpm=(float) $infocliente[0]["cpm"];
 
   $resultado_diario = $db->query("SELECT dimensiondate ,dimensionad_exchange_creative_sizes ,dimensionad_exchange_device_category  ,columnad_exchange_impressions ,columnad_exchange_estimated_revenue*".$tasa." columnad_exchange_estimated_revenue FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00  order by 1 desc");  
+    where dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00  order by 1 desc");
     $infotabla=array();
         while ($filatabla = $resultado_diario->fetch_array()) {
-            
+
             $infotabla[]=$filatabla;
         }
 
 
 
   $resultado_diario = $db->query("SELECT dimensiondate,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 1 asc");  
+    where dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 1 asc");
     $infodia=array();
         while ($filadia = $resultado_diario->fetch_array()) {
-            
+
             $infodia[]=$filadia;
         }
 
 
-              $resultado_desk = $db->query("SELECT concat(SUBSTRING(dimensiondate,6,2),'/',SUBSTRING(dimensiondate,9,2)) dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) as total FROM adops.11223363888
-    where  dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 1 asc");  
+   $resultado_desk = $db->query("SELECT concat(SUBSTRING(dimensiondate,6,2),'/',SUBSTRING(dimensiondate,9,2)) dimensiondate,FORMAT(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) as total FROM adops.11223363888
+    where  dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 1 asc");
     $infodesk=array();
         while ($filadesk= $resultado_desk->fetch_array()) {
-            
-            $infodesk[]=$filadesk;
-        }    
 
-        
+            $infodesk[]=$filadesk;
+        }
+
+
 
           $resultado_table = $db->query("SELECT dimensiondate,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='Tablets' group by 1 order by 1 asc");  
+    where dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='Tablets' group by 1 order by 1 asc");
     $infotablet=array();
         while ($filatab = $resultado_table->fetch_array()) {
-            
+
             $infotablet[]=$filatab;
         }
 
 
           $resultado_mobil = $db->query("SELECT dimensiondate,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."' and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='High-end mobile devices' group by 1 order by 1 asc");  
+    where dimensionad_exchange_network_partner_name='".$emp."' and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 and dimensionad_exchange_device_category='High-end mobile devices' group by 1 order by 1 asc");
     $infomovil=array();
         while ($filamob = $resultado_mobil->fetch_array()) {
-            
+
             $infomovil[]=$filamob;
         }
 
 
 
     $resultado = $db->query("SELECT REPLACE(dimensionad_exchange_device_category,'High-end mobile devices','Mobile') dimensionad_exchange_device_category,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where dimensionad_exchange_network_partner_name='".$emp."'  and 
-    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 2 desc");  
+    where dimensionad_exchange_network_partner_name='".$emp."'  and
+    dimensiondate between '".$ini."' and '".$fin."' group by 1 order by 2 desc");
     $info=array();
         while ($fila = $resultado->fetch_array()) {
-            
+
             $info[]=$fila;
         }
 
     $result_creative = $db->query("SELECT dimensionad_exchange_creative_sizes,round(sum(columnad_exchange_estimated_revenue),2)*".$tasa." as total FROM adops.11223363888
-    where  dimensionad_exchange_network_partner_name='".$emp."'  and 
-    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc limit 5");  
+    where  dimensionad_exchange_network_partner_name='".$emp."'  and
+    dimensiondate between '".$ini."' and '".$fin."' and round(columnad_exchange_estimated_revenue,2)>0.00 group by 1 order by 2 desc limit 5");
     $info_creative=array();
         while ($filac = $result_creative->fetch_array()) {
-            
+
             $info_creative[]=$filac;
         }
 
-        
+
        $ingreso=$db->query("SELECT FORMAT(sum(columnad_exchange_estimated_revenue*".$cpm.")/(sum(columnad_exchange_impressions))*1000,2) ingreso_cpm,FORMAT(ROUND(sum(columnad_exchange_estimated_revenue)*".$tasa.",2),2) ingreso_total,FORMAT(sum(columnad_exchange_impressions),0) impresiones  FROM adops.11223363888   where  dimensionad_exchange_network_partner_name='".$emp."' and dimensiondate between '".$ini."' and '".$fin."'");
        $infoingreso=array();
   while ($row = $ingreso->fetch_array()) {
             $infoingreso[]=$row;
         }
-        
+
         $data = array("status"=>200,"data"=>$info,"ingreso"=>$infoingreso,"diario"=>$infodia,"diario_desktop"=>$infodesk,"diario_tablet"=>$infotablet,"diario_movil"=>$infomovil,"creatives"=>$info_creative,"inicio"=>$inicio,"final"=>$final);
         echo  json_encode($data);
 
@@ -1762,11 +1765,11 @@ $app->post("/inicio",function() use($db,$app){
 
 function traer_datos($ini,$fin,$emp,$tasa){
 $db=new mysqli("localhost","marife","libido16","adops");
-    
+
     $sql="SELECT ROUND(sum(columnad_exchange_ad_ecpm)*".$tasa.",2) ingreso_cpm,ROUND(sum(columnad_exchange_estimated_revenue)*".$tasa.",2) ingreso_total  FROM adops.11223363888   where dimensionad_exchange_network_partner_name='".$emp."' and dimensiondate between ".$ini." and ".$fin;
 
  $ingreso=$db->query($sql);
-    
+
      $data=array();
        while ($row = $ingreso->fetch_array()) {
          $data[]=$row;

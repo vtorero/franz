@@ -24,13 +24,14 @@ export const MY_MOMENT_FORMATS = {
 
 @NgModule({
   imports: [OwlDateTimeModule,OwlNativeDateTimeModule,BrowserModule,MatPaginatorModule],
-  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: {useUtc: true}}] 
+  providers:[{provide: OWL_DATE_TIME_FORMATS, useValue: {useUtc: true}}]
 })
 
 
 export class EditarVentaComponent implements OnInit {
   displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
+  dataFormapago = [{ id: 'Contado' }, { id: 'Credito' }];
   dataVendedores: any;
   dataProveedor:any;
   dataDetalle:any;
@@ -51,8 +52,8 @@ export class EditarVentaComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:Venta,
     dateTimeAdapter: DateTimeAdapter<any>,
     private toastr: ToastrService
-  ) { 
-    
+  ) {
+
   }
 
   getVendedores(): void {
@@ -79,12 +80,11 @@ export class EditarVentaComponent implements OnInit {
   }
 
   ngOnInit() {
-     console.log(this.data.id)
-    this.api.GetDetalleVenta(this.data.id).subscribe(x => {  
+ this.api.GetDetalleVenta(this.data.id).subscribe(x => {
     this.dataDetalle = new MatTableDataSource();
     this.exampleArray=x;
     this.dataDetalle=this.exampleArray
-    this.data.detalleVenta=this.exampleArray; 
+    this.data.detalleVenta=this.exampleArray;
 
     });
 

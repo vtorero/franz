@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { DateTimeAdapter } from 'ng-pick-datetime';
 import { ToastrService } from 'ngx-toastr';
+import { ignoreElements } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { Global } from '../global';
 import { Boleta } from '../modelos/Boleta/boleta';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
+import { Cuota } from '../modelos/Boleta/cuota';
 import { Details } from '../modelos/Boleta/details';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
@@ -47,13 +49,14 @@ export class VentasComponent implements OnInit {
   client: any;
   letras: any;
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Sin Comprobante', tipo: 'Pendiente' }];
+  dataFormapago = [{ id: 'Contado' }, { id: 'Credito' }];
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
   cancela: boolean = false;
-  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','estado','observacion','valor_total', 'opciones'];
+  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','estado','formaPago','fechaPago','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -84,11 +87,11 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,'',this.boleta),
+      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment,this.Moment, Global.BASE_IGV, 0, 0, [],false,'',0,'',this.boleta,''),
       disableClose: true,
-      
+
     });
-    
+
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
       if (art.detalleVenta.length==0 && this.cancela) {
@@ -108,17 +111,21 @@ export class VentasComponent implements OnInit {
     return str;
   }
 
-  agregar(art: Venta) {
+  agregar(art:Venta) {
     this.cargando=true;
     if (art.comprobante != 'Pendiente') {
       let fec1;
+      let fec2;
       let fecha1;
-      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+      let fecha2;
+      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
       fec1 = art.fecha.toDateString().split(" ", 4);
+      fec2 = art.fechaPago.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
       fecha1 = fec1[3] + '-' + this.replaceStr(fec1[1], find, replace) + '-' + fec1[2] + "T00:00:00-05:00";
+      fecha2 = fec2[3] + '-' + this.replaceStr(fec2[1], find, replace) + '-' + fec2[2] + "T00:00:00-05:00";
       boleta.fechaEmision = fecha1;
       boleta.tipoMoneda = "PEN";
       boleta.ublVersion = "2.1";
@@ -144,7 +151,7 @@ export class VentasComponent implements OnInit {
           boleta.correlativo=id[0].ultimo.toString();
              });
       }
-      
+
       boleta.client.numDoc = art.cliente.num_documento;
       boleta.client.address.direccion = art.cliente.direccion;
 
@@ -187,9 +194,22 @@ export class VentasComponent implements OnInit {
       boleta.mtoImpVenta = parseFloat((total + (total * Global.BASE_IGV)).toFixed(2));
       boleta.subTotal = parseFloat((total + (total * Global.BASE_IGV)).toFixed(2));
       boleta.company = this.company;
+
+      if(art.formaPago=='Credito' && art.cliente.razon_social){
+      boleta.formaPago.tipo="Credito";
+      boleta.formaPago.moneda="PEN";
+      boleta.formaPago.monto=parseFloat((total + (total * Global.BASE_IGV)).toFixed(2))
+
+      let detalleCuota: Cuota = new Cuota('',0,this.Moment);
+      detalleCuota.moneda="PEN";
+      detalleCuota.monto= parseFloat((total + (total * Global.BASE_IGV)).toFixed(2));
+      detalleCuota.fechaPago=fecha2;
+      boleta.cuotas.push(detalleCuota);
+    }else{
       boleta.formaPago.moneda="PEN";
       boleta.formaPago.tipo="Contado";
-
+    }
+    console.log("art",art);
       this.api.getNumeroALetras(total +(total * Global.BASE_IGV)).then(letra => {
         boleta.legends = [{ code: "1000", value: "SON " + letra + " SOLES"}];
 
@@ -199,7 +219,7 @@ export class VentasComponent implements OnInit {
           fact => {
             if (fact.sunatResponse.success) {
               this.toastr.info(fact.sunatResponse.cdrResponse.description,"Mensaje Sunat");
-              
+
               if(art.cliente.razon_social){
                 this.api.GuardarFactura(fact).subscribe(dat=>{
                   boleta.correlativo=dat['max'];
@@ -209,13 +229,13 @@ export class VentasComponent implements OnInit {
             if(art.cliente.nombre){
               this.api.GuardarBoleta(fact).subscribe(dat=>{
                 boleta.correlativo=dat['max'];
-                art.nro_comprobante=dat.max.ultimo_id.toString(); 
+                art.nro_comprobante=dat.max.ultimo_id.toString();
             });
           }
 
             }
             else {
-             
+
               this.toastr.error("Factura/Boleta no recibida");
             }
             });
@@ -227,17 +247,17 @@ export class VentasComponent implements OnInit {
                 },
                   error => { console.log(error) }
             );
-         
-        
+
+
         if (art.imprimir) {
 
-          
+
 
 
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
         this.cargando=false;
-    
+
     });
     }else{
       this.api.GuardarVenta(art).subscribe(data => {
@@ -269,11 +289,13 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  editar(art) {
+   editar(art) {
     this.cargando=true;
     let fech;
-    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0, 0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+    let fechaPago;
+    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0, 0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
     fech=art.fecha+"T00:00:00-05:00"
+    fechaPago=art.fechaPago+"T00:00:00-05:00"
     boleta.fechaEmision = fech  ;
     boleta.tipoMoneda = "PEN";
     boleta.ublVersion = "2.1";
@@ -311,7 +333,7 @@ export class VentasComponent implements OnInit {
     boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
     let total = 0;
     art.detalleVenta.forEach(function (value: any) {
-      
+
       let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
       detalleBoleta.codProducto = value.codigo;
       detalleBoleta.unidad = value.unidad_medida;
@@ -324,7 +346,7 @@ export class VentasComponent implements OnInit {
       detalleBoleta.igv = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(3));
       detalleBoleta.totalImpuestos = parseFloat(((Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV).toFixed(3));
       detalleBoleta.mtoPrecioUnitario = parseFloat((Number(value.precio) + (value.precio * Global.BASE_IGV)).toFixed(3));
-      
+
       detalleBoleta.tipAfeIgv = 10;
       boleta.details.push(detalleBoleta);
     });
@@ -334,14 +356,26 @@ export class VentasComponent implements OnInit {
     boleta.totalImpuestos = parseFloat(Number(art.monto_igv).toFixed(3));
     boleta.valorVenta = parseFloat(Number(art.valor_neto).toFixed(3));
     boleta.mtoImpVenta = parseFloat(Number(art.valor_total).toFixed(3));
-    boleta.subTotal = parseFloat(Number(art.valor_total).toFixed(3)),
+    boleta.subTotal = parseFloat(Number(art.valor_total).toFixed(3));
     boleta.company = this.company;
+    if(art.formaPago=='Credito'){
+    boleta.formaPago.tipo=art.formaPago;
+    let detalleCuota: Cuota = new Cuota('',0,this.Moment);
+    detalleCuota.moneda="PEN"
+    detalleCuota.monto= parseFloat(Number(art.valor_total).toFixed(3));
+    detalleCuota.fechaPago=fechaPago;
+    boleta.cuotas.push(detalleCuota);
+
+  }else{
     boleta.formaPago.moneda="PEN";
-    boleta.formaPago.tipo="Contado";
+    boleta.formaPago.tipo=art.formaPago;
+  }
+
+  console.log("reviewa",boleta);
 
     this.api.getNumeroALetras(art.valor_total).then(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" + " | Observación: "+art.observacion }];
-   
+
 
   //  setTimeout(() => {
       sendInvoice(JSON.stringify(boleta), art.nro_comprobante,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
@@ -350,22 +384,22 @@ export class VentasComponent implements OnInit {
   });
   }
 
-  cancelar() {
+   cancelar() {
     this.dialog.closeAll();
     this.cancela = false;
   }
-  renderDataTable() {
-    console.log("redner");
+   renderDataTable() {
+
     this.api.getApi('ventas').subscribe(x => {
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = x;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      console.log("render");
-    },
+        },
       error => {
         console.log('Error de conexion de datatable!' + error);
       });
   }
-
 }
+
+

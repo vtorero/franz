@@ -22,15 +22,22 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.cliente}} </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Estado</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.estado}} </mat-cell>
+      </ng-container>
 
-
-      <ng-container matColumnDef="fecha">
+        <ng-container matColumnDef="fecha">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha de emisión</span></mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.fecha}} </mat-cell>
       </ng-container>
-      <ng-container matColumnDef="estado">
-        <mat-header-cell *matHeaderCellDef mat-sort-header><span class="titulotabla">Estado</span></mat-header-cell>
-        <mat-cell *matCellDef="let row"><div [ngStyle]="{'color':row.estado=='Anulada' ? 'red':'black'}">{{row.estado}}</div></mat-cell>
+      <ng-container matColumnDef="formaPago">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Forma de Pago</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.formaPago}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fechaPago">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Fecha de Pago</span></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.fechaPago}} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="observacion">
         <mat-header-cell *matHeaderCellDef mat-sort-header> <span class="titulotabla">Observación</span></mat-header-cell>

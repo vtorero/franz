@@ -66,11 +66,10 @@
         <div class="col-lg-4">
         <mat-form-field>
           <mat-label>Vendedor</mat-label>
-          
+
           <mat-select name="id_vendedor" #id_vendedor="ngModel" [(ngModel)]="data.id_vendedor" required>
             <input class="buscador" (keyup)="onKeyVendedor($event.target.value)" placeholder="Buscar vendedor..">
-            <mat-option [value]="">Seleccionar</mat-option>
-            <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}} {{ven.apellidos}}
+             <mat-option *ngFor="let ven of dataVendedores" [value]="ven.id">{{ven.nombre}} {{ven.apellidos}}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="id_vendedor.hasError('required')">Seleccionar</mat-error>
@@ -104,15 +103,34 @@
                 <input matInput name="valor_total" [value]="valor_total | number" type="text" readonly>
             </mat-form-field>
         </div>
-     
+
           </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <mat-form-field>
+                <mat-label>Forma de Pago</mat-label>
+                <mat-select name="formaPago" #formaPago="ngModel" [(ngModel)]="data.formaPago" required>
+                  <mat-option *ngFor="let cat of dataFormapago" [value]="cat.id">{{cat.id}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formaPago.hasError('required')">Seleccionar</mat-error>
+               </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field *ngIf="data.formaPago=='Credito'">
+                <mat-label>Fecha de Pago</mat-label>
+                <input matInput [matDatepicker]="myPicker2" name="fechaPago" #fechaPago="ngModel" [(ngModel)]="data.fechaPago" placeholder="Fecha de pago" required>
+                <mat-datepicker-toggle matSuffix [for]="myPicker2"></mat-datepicker-toggle>
+                <mat-datepicker #myPicker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            </div>
           <div class="row">
               <mat-form-field style="width:97%;">
                 <mat-label>Observación</mat-label>
                 <textarea matInput name="observacion" name="observacion" #observacion="ngModel" [(ngModel)]="data.observacion" rows="1"></textarea>
               </mat-form-field>
-              
-            
+
+
           </div>
   </div>
       </div>
@@ -121,29 +139,29 @@
     <button mat-raised-button (click)="cancelar()">Cancelar</button>
     <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
   </div>
-   
+
   <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:5px;">
     <button mat-raised-button class="btn btn-success addproducto" (click)="abrirDialog()" [disabled]="!formGeneral.form.valid">Agregar Items</button>
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Item</mat-header-cell>
         <mat-cell *matCellDef="let row;let i = index"><b>{{i+1}}</b></mat-cell>
-     
+
       </ng-container>
       <ng-container matColumnDef="id_producto">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
         <mat-cell *matCellDef="let row;let i = index">{{row.codProductob.codigo}} </mat-cell>
-     
+
       </ng-container>
       <ng-container matColumnDef="nombre">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.codProductob.nombre}} </mat-cell>
-      
+
       </ng-container>
       <ng-container matColumnDef="cantidad">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.unidadmedida}} </mat-cell>
-    
+
       </ng-container>
       <ng-container matColumnDef="peso">
         <mat-header-cell *matHeaderCellDef mat-sort-header>cantidad</mat-header-cell>
@@ -153,13 +171,13 @@
       <ng-container matColumnDef="precio">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Precio</mat-header-cell>
         <mat-cell *matCellDef="let row">S/. {{row.mtoValorUnitario | number }} </mat-cell>
-   
+
       </ng-container>
       <ng-container matColumnDef="subtotal">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Subtotal</mat-header-cell>
         <mat-cell *matCellDef="let row">S/.{{ row.mtoValorUnitario*row.cantidad | number }}
         </mat-cell>
-      
+
       </ng-container>
       <ng-container matColumnDef="borrar">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
@@ -169,7 +187,7 @@
       </ng-container>
       <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
       <mat-row *matRowDef="let row; columns:displayedColumns;"></mat-row>
-    
+
     </mat-table>
   </div>
   <div class="row" style="margin-top:15px;">
@@ -194,4 +212,4 @@
 
     </div>
 </div>
- 
+

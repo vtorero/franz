@@ -36,6 +36,7 @@ export const MY_MOMENT_FORMATS = {
 export class AgregarventaComponent implements OnInit {
   displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
   dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
+  dataFormapago = [{ id: 'Contado' }, { id: 'Credito' }];
   dataVendedores: any;
   dataClientes: any;
   dataClient: any;
@@ -93,7 +94,7 @@ export class AgregarventaComponent implements OnInit {
     {
      console.log(event);
     if(event.source){
-      this.data.cliente.push(event.source.value);  
+      this.data.cliente.push(event.source.value);
   }
 }
 
@@ -170,7 +171,7 @@ export class AgregarventaComponent implements OnInit {
       if (art){
       this.exampleArray.push(art)
       this.valor_neto=parseFloat((this.valor_neto+(art.cantidad*art.mtoValorUnitario)).toFixed(2));
-      this.monto_igv=parseFloat((this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV).toFixed(2));  
+      this.monto_igv=parseFloat((this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV).toFixed(2));
       this.valor_total=parseFloat((this.valor_neto+this.monto_igv).toFixed(2));
       this.dataSource = new MatTableDataSource();
       this.dataSource.data = this.exampleArray;
@@ -195,13 +196,13 @@ export class AgregarventaComponent implements OnInit {
     if (i > -1) {
       console.log("datasoruce",this.dataSource);
       this.data.detalleVenta.splice(i,1);
-      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);  
-      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;  
+      this.valor_neto=this.valor_neto-(obj.cantidad*obj.mtoValorUnitario);
+      this.monto_igv=this.monto_igv-(obj.cantidad*obj.mtoValorUnitario) * Global.BASE_IGV;
       this.valor_total=this.valor_neto+this.monto_igv;
       this.dataSource = new MatTableDataSource(this.data.detalleVenta);
       //this.dataSource.sort = this.sort;
       //this.dataSource.paginator = this.paginator;
-      
+
     }
   }
 

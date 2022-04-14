@@ -17,7 +17,9 @@ import { AddGuiaComponent } from './add-guia/add-guia.component';
 import { EditGuiaComponent } from './edit-guia/edit-guia.component';
 
 
-function sendInvoice(data, nro, url) {
+function sendInvoice(data,nro,url) {
+
+  console.log("datafactura",data);
   fetch(url, {
     method: 'post',
     headers: {
@@ -140,14 +142,12 @@ export class RemisionComponent implements OnInit {
       /*cabecera*/
       boleta.tipoDoc = "09";
       boleta.serie = "T001";
-      this.api.getMaxId('guias').subscribe(id => {
-      boleta.correlativo = id[0].ultimo.toString();
-      });
+
       boleta.fechaEmision = fecha1;
       boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
-      
+
       /*Destinatario*/
       boleta.destinatario.id=art.destinatario.id;
       boleta.destinatario.tipoDoc=art.tipo_destinatario;
@@ -174,7 +174,7 @@ export class RemisionComponent implements OnInit {
       boleta.envio.numBultos= art.nro_bultos;
       boleta.envio.transportista.tipoDoc="6"
       boleta.envio.transportista.numDoc= "";
-      boleta.envio.transportista.rznSocial=art.nombre_transportista; 
+      boleta.envio.transportista.rznSocial=art.nombre_transportista;
       boleta.envio.transportista.placa= art.nro_placa;
       boleta.envio.transportista.choferTipoDoc= "1";
       boleta.envio.transportista.choferDoc=art.nro_transportista
@@ -182,11 +182,11 @@ export class RemisionComponent implements OnInit {
       boleta.envio.llegada.direccion= art.llegada;
       boleta.envio.partida.ubigueo="150108"
       boleta.envio.partida.direccion= "AV.LAS GAVIOTAS 925";
-        
-      
+
+
       art.detalleVenta.forEach(function (value: any) {
       let detalleBoleta: Guiadetalle = new Guiadetalle('','', '', '',0);
-        detalleBoleta.id = value.codProductob.id;  
+        detalleBoleta.id = value.codProductob.id;
         detalleBoleta.codigo = value.codProductob.codigo;
         detalleBoleta.descripcion = value.codProductob.nombre;
         detalleBoleta.unidad = value.unidadmedida;
@@ -194,20 +194,35 @@ export class RemisionComponent implements OnInit {
         boleta.details.push(detalleBoleta);
       });
 
-      this.api.GuardarGuia(boleta).subscribe(data => {
-        this.toastr.success(data['messaje']);
-      },
-        error => { console.log(error)});
-      
-    if (art.imprimir) {
-        sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
-      }
 
-    setTimeout(() => {
+      this.api.getMaxId('guias').toPromise().then(id => {
+        this.boletacorrelativo=id[0].ultimo.toString();
+        boleta.correlativo =id[0].ultimo.toString();
+        console.log("correlativo",id[0].ultimo.toString());
+        });
+
+      this.api.GuardarGuia(boleta).toPromise().then(data => {
+        console.log("response",data['ultimo_id']);
+        boleta.correlativo=data['ultimo_id'];
+        this.toastr.success(data['messaje']);
+
+
+        if (art.imprimir) {
+          console.log("boleta a imprimir",boleta.correlativo);
+           sendInvoice(JSON.stringify(boleta),boleta.serie+boleta.correlativo,'https://facturacion.apisperu.com/api/v1/despatch/pdf');
+          }
+
+      },
+        error => { console.log(error)}
+      );
+
+
+
+       setTimeout(() => {
       this.cargando=false;
       this.renderDataTable();
-      
-    }, 3000);
+
+    }, 2000);
 
   }
 
@@ -219,7 +234,7 @@ export class RemisionComponent implements OnInit {
      //var boleta:any;
       var boleta: Remision = new Remision('','','',this.destinatario,this.Moment,this.company,this.envio,[],"",localStorage.getItem("currentUser"));
       //fec1 = art.fechaemision;
-      fec1=art.fechaemision.toString()+"T00:00:00-05:00".split(" ", 4); 
+      fec1=art.fechaemision.toString()+"T00:00:00-05:00".split(" ", 4);
       console.log("fechaaaa",fec1)
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -229,12 +244,12 @@ export class RemisionComponent implements OnInit {
       /*cabecera*/
       boleta.tipoDoc = "09";
       boleta.serie = "T001";
-      boleta.correlativo = art.id;
+      boleta.correlativo = art.id.toString();
       boleta.fechaEmision = fec1;
       boleta.company.ruc = Global.RUC_EMPRESA;
       boleta.company.razonSocial = "VÍVIAN FOODS S.A.C";
       boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
-      
+
       /*Destinatario*/
       boleta.destinatario.id=art.destinatario.id;
       boleta.destinatario.tipoDoc=art.tipo_destinatario;
@@ -261,7 +276,7 @@ export class RemisionComponent implements OnInit {
       boleta.envio.numBultos= art.nro_bultos;
       boleta.envio.transportista.tipoDoc="6"
       boleta.envio.transportista.numDoc= "";
-      boleta.envio.transportista.rznSocial=art.nombre_transportista; 
+      boleta.envio.transportista.rznSocial=art.nombre_transportista;
       boleta.envio.transportista.placa= art.nro_placa;
       boleta.envio.transportista.choferTipoDoc= "1";
       boleta.envio.transportista.choferDoc=art.nro_transportista
@@ -269,11 +284,11 @@ export class RemisionComponent implements OnInit {
       boleta.envio.llegada.direccion= art.llegada;
       boleta.envio.partida.ubigueo="150108"
       boleta.envio.partida.direccion= "AV.LAS GAVIOTAS 925";
-        
-      
+
+
       art.detalleVenta.forEach(function (value: any) {
       let detalleBoleta: Guiadetalle = new Guiadetalle('','', '', '',0);
-        detalleBoleta.id = value.id;  
+        detalleBoleta.id = value.id;
         detalleBoleta.codigo = value.codigo;
         detalleBoleta.descripcion = value.nombre;
         detalleBoleta.unidad = value.unidad;
@@ -282,7 +297,7 @@ export class RemisionComponent implements OnInit {
       });
         console.log("!print",boleta)
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
-    
+
     this.cargando=false;
   }
 

@@ -10,6 +10,7 @@ export class Venta {
         public comprobante:string,
         public nro_comprobante:string,
         public fecha:any,
+        public fechaPago:any,
         public igv:number,
         public monto_igv:number,
         public valor_total:number,
@@ -18,6 +19,7 @@ export class Venta {
         public tipoDoc:string,
         public valor_neto:number,
         public observacion:string,
-        public boleta:Boleta
+        public boleta:Boleta,
+        public formaPago:string
         ){}
 }

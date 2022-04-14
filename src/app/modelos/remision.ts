@@ -7,7 +7,7 @@ export class Remision {
     constructor(
         public tipoDoc:string,
         public serie:string,
-        public correlativo:any,
+        public correlativo:string,
         public destinatario:Destinatario,
         public fechaEmision:Date,
         public company:Company,

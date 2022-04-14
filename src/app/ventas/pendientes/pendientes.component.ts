@@ -52,7 +52,7 @@ export class PendientesComponent implements OnInit {
   company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
   cliente: Client = new Client('', '', '', { direccion: '' });
   cancela: boolean = false;
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
   displayedColumns=['comprobante','cliente', 'fecha','observacion','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -84,11 +84,11 @@ export class PendientesComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'', 0, 0, '','', this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,'',this.boleta),
+      data: new Venta(0,localStorage.getItem("currentId"),'', 0, 0, '','',this.Moment, this.Moment, Global.BASE_IGV, 0, 0, [], false,'',0,'',this.boleta,''),
       disableClose: true,
-      
+
     });
-    
+
     dialogo1.afterClosed().subscribe(art => {
       if (art != undefined)
       if (art.detalleVenta.length==0 && this.cancela) {
@@ -113,7 +113,7 @@ export class PendientesComponent implements OnInit {
     if (art.comprobante != 'Pendiente') {
       let fec1;
       let fecha1;
-      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+      var boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0,0, 0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
       fec1 = art.fecha.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       var replace = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -189,7 +189,7 @@ export class PendientesComponent implements OnInit {
           data => {
             if (data.sunatResponse.success) {
               this.toastr.info(data.sunatResponse.cdrResponse.description,"Mensaje Sunat");
-              
+
               if(art.cliente.razon_social){
                 this.api.GuardarFactura(data).subscribe(dat=>{
                   boleta.correlativo=dat['max'];
@@ -199,7 +199,7 @@ export class PendientesComponent implements OnInit {
           if(art.cliente.nombre){
               this.api.GuardarBoleta(data).subscribe(dat=>{
                 boleta.correlativo=dat['max'];
-                art.nro_comprobante=dat.max.ultimo_id.toString(); 
+                art.nro_comprobante=dat.max.ultimo_id.toString();
             });
           }
 
@@ -211,9 +211,9 @@ export class PendientesComponent implements OnInit {
             } else {
               this.toastr.error(art.comprobante + " no recibida");
             }
-            
+
           });
-        
+
         if (art.imprimir) {
           sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo,'https://facturacion.apisperu.com/api/v1/invoice/pdf');
         }
@@ -254,7 +254,7 @@ export class PendientesComponent implements OnInit {
   editar(art) {
     this.cargando=true;
     let fech;
-    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:''});
+    let boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0,0, 0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
     fech=art.fecha+"T00:00:00-05:00"
     boleta.fechaEmision = fech  ;
     boleta.tipoMoneda = "PEN";
@@ -287,7 +287,7 @@ export class PendientesComponent implements OnInit {
     boleta.company.address.direccion = "AV. PARDO Y ALIAGA N° 699 INT. 802";
     let total = 0;
     art.detalleVenta.forEach(function (value: any) {
-      
+
       let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
       detalleBoleta.codProducto = value.codigo;
       detalleBoleta.unidad = value.unidad_medida;
@@ -300,7 +300,7 @@ export class PendientesComponent implements OnInit {
       detalleBoleta.igv = (Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV;
       detalleBoleta.totalImpuestos = (Number(value.precio) * Number(value.cantidad)) * Global.BASE_IGV;
       detalleBoleta.mtoPrecioUnitario = Number(value.precio) + (value.precio * Global.BASE_IGV);
-      
+
       detalleBoleta.tipAfeIgv = 10;
       boleta.details.push(detalleBoleta);
     });
@@ -313,7 +313,7 @@ export class PendientesComponent implements OnInit {
     boleta.company = this.company;
     this.api.getNumeroALetras(art.valor_total).then(data => {
       boleta.legends = [{ code: "1000", value: "SON " + data + " SOLES" + "<hr>Observación: "+art.observacion }];
-   
+
 
   //  setTimeout(() => {
       sendInvoice(JSON.stringify(boleta), boleta.serie + art.id,'https://facturacion.apisperu.com/api/v1/invoice/pdf');

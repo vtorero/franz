@@ -1,5 +1,6 @@
 import { Client } from "./client";
 import { Company } from "./company";
+import { Cuota } from "./cuota";
 import { Details } from "./details";
 export class Boleta {
     constructor(
@@ -24,10 +25,12 @@ export class Boleta {
             code: string,
             value: string
             }],
-        public formaPago: {
+      public formaPago: {
                 moneda: string,
                 tipo: string,
-              }            
+                monto:number
+              },
+        public cuotas:Array<Cuota>
         ){}
 }
 

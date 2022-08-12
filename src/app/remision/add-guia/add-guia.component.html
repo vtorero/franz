@@ -15,7 +15,7 @@
                   </mat-select>
                   <mat-error *ngIf="tipo_destinatario.hasError('required')">Seleccionar</mat-error>
               </mat-form-field>
-        </div>
+        </div> 
         <div class="col-lg-4">
             <mat-form-field *ngIf="!data.tipo_destinatario">
                 <mat-label>Destinatario</mat-label>
@@ -60,14 +60,15 @@
           <div class="col-lg-4">
             <mat-form-field>
                 <mat-label>Nro Doc Transportista</mat-label>
-            <input matInput name="nro_transportista" #nro_transportista="ngModel" (focusout)="onLoadDatos($event)" [(ngModel)]="data.nro_transportista" type="text" placeholder="Nro Doc. Transportista" required>
+            <!--<input matInput name="nro_transportista" #nro_transportista="ngModel" (focusout)="onLoadDatos($event)" [(ngModel)]="data.nro_transportista" type="text" placeholder="Nro Doc. Transportista" required>-->
+                <input matInput name="nro_transportista" #nro_transportista="ngModel" [(ngModel)]="data.nro_transportista" type="text" placeholder="Nro Doc. Transportista" required>
             </mat-form-field>
    
         </div>
         <div class="col-lg-4">
             <mat-form-field style="width: 100%;">
          <mat-label>Nombre Conductor</mat-label>
-            <input matInput name="nombre_transportista" #nombre_transportista="ngModel" [(ngModel)]="data.nombre_transportista" type="text" placeholder="Nombre conductor" required>
+            <input matInput name="nombre_transportista" #nombre_transportista="ngModel" [(ngModel)]="data.nombre_transportista" type="text" autocomplete="off" placeholder="Nombre conductor" required>
             </mat-form-field>
      </div>
      <div class="col-lg-4">

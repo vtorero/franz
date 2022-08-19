@@ -52,7 +52,7 @@ export class NotacreditoComponent implements OnInit {
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', { ubigueo: '', codigoPais: '', departamento: '', provincia: '', distrito: '', urbanizacion: '', direccion: '' });
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, 0, '', [], [{ code: '', value: '' }], { moneda: '', tipo: '',monto:0 },[]);
+  boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, 0,0,0, '', [], [{ code: '', value: '' }], { moneda: '', tipo: '',monto:0 },[]);
   cancela: boolean = false;
   displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -215,7 +215,7 @@ export class NotacreditoComponent implements OnInit {
       let total = 0;
       art.detalleVenta.forEach(function (value: any) {
 
-        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0,0);
         detalleBoleta.codProducto = value.codProducto.codigo;
         detalleBoleta.descripcion = value.codProducto.nombre;
         detalleBoleta.mtoValorUnitario = value.mtoValorUnitario;
@@ -334,7 +334,7 @@ export class NotacreditoComponent implements OnInit {
       let total = 0;
       art.detalleVenta.forEach(function (value: any) {
 
-        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        let detalleBoleta: Details = new Details('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0,0);
         detalleBoleta.codProducto = value.codigo;
         detalleBoleta.descripcion = value.nombre;
         detalleBoleta.mtoValorUnitario = value.precio;

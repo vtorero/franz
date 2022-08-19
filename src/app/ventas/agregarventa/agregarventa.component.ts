@@ -4,6 +4,7 @@ import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_T
 import { BrowserModule } from '@angular/platform-browser';
 import { ApiService } from 'src/app/api.service';
 import { DetalleVenta } from 'src/app/modelos/detalleVenta';
+import { ToastrService } from 'ngx-toastr';
 import { Venta } from 'src/app/modelos/ventas';
 import { AddProductoComponent } from './add-producto/add-producto.component';
 import { Global } from 'src/app/global';
@@ -35,7 +36,7 @@ export const MY_MOMENT_FORMATS = {
 
 export class AgregarventaComponent implements OnInit {
   displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal', 'borrar'];
-  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
+  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' },{ id: 'Factura Gratuita', tipo: 'Factura Gratuita' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataFormapago = [{ id: 'Contado' }, { id: 'Credito' }];
   dataVendedores: any;
   dataClientes: any;
@@ -51,10 +52,12 @@ export class AgregarventaComponent implements OnInit {
   valor_neto:number=0;
   monto_igv:number=0;
   valor_total:number=0;
+  habilita_envio:boolean=false;
   cancela:boolean=false;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
+    private toastr: ToastrService,
      private api: ApiService,
       public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: Venta,
@@ -163,12 +166,15 @@ export class AgregarventaComponent implements OnInit {
 
 
   abrirDialog() {
+
     const dialogo1 = this.dialog.open(AddProductoComponent, {
       data: new DetalleVenta('','','',0,0,0,0,0,0,0,0,0,0,0,''),
       disableClose:true
     });
     dialogo1.afterClosed().subscribe(art => {
       if (art){
+      this.Comparar(art.fecha,art.fechaPago);
+      this.habilita_envio=true;
       this.exampleArray.push(art)
       this.valor_neto=parseFloat((this.valor_neto+(art.cantidad*art.mtoValorUnitario)).toFixed(2));
       this.monto_igv=parseFloat((this.monto_igv+(art.cantidad*art.mtoValorUnitario) * Global.BASE_IGV).toFixed(2));
@@ -189,10 +195,21 @@ export class AgregarventaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.data.detalleVenta);
   }
   }*/
+  Comparar(f1,f2){
 
+    let fe1  = new Date(f1);
+    let fe2  = new Date(f2);
+  if(fe2.getTime()<=fe1.getTime()){
+    this.toastr.error("Fecha de pago no puede ser menor o igual a la fecha de facturación","Error de fecha");
+
+  }
+}
 
   deleteTicket(obj,i) {
     console.log("rowid",i);
+    if(i==0){
+      this.habilita_envio=false;
+    }
     if (i > -1) {
       console.log("datasoruce",this.dataSource);
       this.data.detalleVenta.splice(i,1);

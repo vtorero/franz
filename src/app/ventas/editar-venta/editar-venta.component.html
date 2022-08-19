@@ -168,7 +168,8 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="5" [showFirstLastButtons]></mat-paginator>
   </div>
   <div mat-dialog-actions>
-    <button mat-raised-button (click)="cancelar()">Cerrar</button>
-    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" cdkFocusInitial>Ver Comprobante</button>
+    <button class="btn btn-danger" mat-raised-button (click)="cancelar()">Cerrar</button>
+    <button class="btn btn-info"  mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid" >Ver Comprobante</button>
+    <button class="btn btn-success" mat-raised-button (click)="verCDR(data.nro_comprobante)" [disabled]="!formGeneral.form.valid" >Descargar CDR</button>
   </div>
 </div>

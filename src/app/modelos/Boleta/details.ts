@@ -1,3 +1,5 @@
+import { DecimalPipe } from "@angular/common";
+
 export class Details {
     constructor(
         public codProducto: string,
@@ -11,6 +13,7 @@ export class Details {
         public  igv: number,
         public  tipAfeIgv: number,
         public totalImpuestos: number,
-        public  mtoPrecioUnitario: number
+        public  mtoPrecioUnitario: number,
+        public mtoValorGratuito: number
 ){}
 }

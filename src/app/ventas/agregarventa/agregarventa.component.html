@@ -51,7 +51,7 @@
             </mat-select>
             <mat-error *ngIf="cliente.hasError('required')">Seleccionar</mat-error>
         </mat-form-field>
-        <mat-form-field *ngIf="data.comprobante=='Factura' || (data.comprobante=='Pendiente' && filter=='2')">
+        <mat-form-field *ngIf="data.comprobante=='Factura' || data.comprobante=='Factura Gratuita' ||  (data.comprobante=='Pendiente' && filter=='2')">
           <mat-label>Cliente CON RUC</mat-label>
           <mat-select name="cliente" #cliente="ngModel" [(ngModel)]="data.cliente" (onSelectionChange)="change($event)" required>
             <input class="buscador" (keyup)="onKeyRuc($event.target.value)" placeholder="Buscar con RUC..">
@@ -107,7 +107,7 @@
           </div>
           <div class="row">
             <div class="col-lg-4">
-              <mat-form-field>
+              <mat-form-field *ngIf="data.comprobante!='Factura Gratuita'">
                 <mat-label>Forma de Pago</mat-label>
                 <mat-select name="formaPago" #formaPago="ngModel" [(ngModel)]="data.formaPago" required>
                   <mat-option *ngFor="let cat of dataFormapago" [value]="cat.id">{{cat.id}}</mat-option>
@@ -118,7 +118,7 @@
             <div class="col-lg-4">
               <mat-form-field *ngIf="data.formaPago=='Credito'">
                 <mat-label>Fecha de Pago</mat-label>
-                <input matInput [matDatepicker]="myPicker2" name="fechaPago" #fechaPago="ngModel" [(ngModel)]="data.fechaPago" placeholder="Fecha de pago" required>
+                <input (dateInput)="Comparar(data.fecha,data.fechaPago)" matInput [matDatepicker]="myPicker2" name="fechaPago" #fechaPago="ngModel" [(ngModel)]="data.fechaPago" placeholder="Fecha de pago" required>
                 <mat-datepicker-toggle matSuffix [for]="myPicker2"></mat-datepicker-toggle>
                 <mat-datepicker #myPicker2></mat-datepicker>
               </mat-form-field>
@@ -136,8 +136,8 @@
       </div>
   </form>
   <div style="text-align:right;margin-bottom:-48px;padding-right:23px;">
-    <button mat-raised-button (click)="cancelar()">Cancelar</button>
-    <button mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid && data.detalleVenta" cdkFocusInitial>Registrar</button>
+    <button class="btn btn-danger" [disabled]="!formGeneral.form.valid && data.detalleVenta"   mat-raised-button (click)="cancelar()">Cancelar</button>
+    <button class="btn btn-primary" mat-raised-button [mat-dialog-close]="data" [disabled]="!formGeneral.form.valid || !habilita_envio" cdkFocusInitial>Registrar</button>
   </div>
 
   <div class="example-container mat-elevation-z8" style="overflow-y:scroll;height:auto;margin-top:5px;">

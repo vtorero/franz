@@ -98,12 +98,16 @@ import { EditGuiaComponent } from './remision/edit-guia/edit-guia.component';
     MkAlertModule,AlertModule,
     CommonModule,
     BrowserAnimationsModule, // required animations module
-    ToastrModule.forRoot()
- 
+    ToastrModule.forRoot({
+      timeOut : 100000,
+      positionClass : 'toast-top-right' ,
+      preventDuplicates : true ,
+    })
+
   ],
   providers:[{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}]
   ,
-  entryComponents: 
+  entryComponents:
   [DialogoarticuloComponent,
     ProductosComponent,
     EditarProductoComponent,

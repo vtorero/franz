@@ -5,6 +5,7 @@ import { DateTimeAdapter, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_T
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'src/app/api.service';
 import { Venta } from 'src/app/modelos/ventas';
+import { Global } from '../../global';
 
 export const MY_MOMENT_FORMATS = {
   parseInput: 'l LT',
@@ -15,6 +16,28 @@ export const MY_MOMENT_FORMATS = {
   dateA11yLabel: 'LL',
   monthYearA11yLabel: 'MM YYYY',
 };
+
+function getCDR(nro,url) {
+  console.log("nro",nro.substring(5,10))
+  var serie = nro.substring(0,4)
+  var letra = nro.substring(0,1);
+  var tipo = (letra=="F"?"01":"03");
+  console.log(serie)
+  fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/x-zip-compressed'
+    },
+    body: JSON.stringify({"rucSol":"20605174095","userSol":"PUREADYS","passSol":"bleusiger","ruc":"20605174095","tipo":tipo,"serie":serie,"numero":nro.substring(5,10)})
+  })
+    .then(response => response.blob())
+    .then(blob => {
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "20605174095-"+tipo+"-"+serie +"-"+nro.substring(5,10) +".zip";
+      link.click();
+    });
+  }
 
 @Component({
   selector: 'app-editar-venta',
@@ -30,7 +53,7 @@ export const MY_MOMENT_FORMATS = {
 
 export class EditarVentaComponent implements OnInit {
   displayedColumns = ['id','id_producto', 'nombre', 'cantidad', 'peso', 'precio','subtotal'];
-  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
+  dataComprobantes = [{ id: 'Factura', tipo: 'Factura' },{ id: 'Factura Gratuita', tipo: 'Factura Gratuita' }, { id: 'Boleta', tipo: 'Boleta' }, { id: 'Pendiente', tipo: 'Pendiente' }];
   dataFormapago = [{ id: 'Contado' }, { id: 'Credito' }];
   dataVendedores: any;
   dataProveedor:any;
@@ -93,6 +116,10 @@ export class EditarVentaComponent implements OnInit {
     this.getEmpresas();
   }
 
+  verCDR(codigo){
+    getCDR(codigo,Global.DOWNLOAD_CDR);
+    console.log(codigo);
+ }
   cancelar() {
     this.dialogRef.close();
   }

@@ -4,6 +4,7 @@ import { Cuota } from "./cuota";
 import { Details } from "./details";
 export class Boleta {
     constructor(
+        public comprobante:string,
         public tipoOperacion:string,
         public tipoDoc:string,
         public serie:string,
@@ -19,6 +20,8 @@ export class Boleta {
         public mtoImpVenta:number,
         public subTotal:number,
         public mtoOperExoneradas:number,
+        public mtoOperGratuitas:number,
+        public mtoIGVGratuitas:number,
         public ublVersion: string,
         public details:Array<Details>,
         public legends:[{

@@ -204,7 +204,7 @@ export class RemisionComponent implements OnInit {
       this.api.GuardarGuia(boleta).toPromise().then(data => {
         console.log("response",data['ultimo_id']);
         boleta.correlativo=data['ultimo_id'];
-        this.toastr.success(data['messaje']);
+        this.toastr.success(data['sunat'],"Mensaje SUNAT",{timeOut: 10000});
 
 
         if (art.imprimir) {

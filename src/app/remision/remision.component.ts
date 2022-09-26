@@ -203,19 +203,21 @@ export class RemisionComponent implements OnInit {
 
       this.api.GuardarGuia(boleta).toPromise().then(data => {
         console.log("response",data['ultimo_id']);
-        boleta.correlativo=data['ultimo_id'];
+        //boleta.correlativo=data['ultimo_id'];
         this.toastr.success(data['sunat'],"Mensaje SUNAT",{timeOut: 10000});
 
 
         if (art.imprimir) {
           console.log("boleta a imprimir",boleta.correlativo);
-           sendInvoice(JSON.stringify(boleta),boleta.serie+boleta.correlativo,'https://facturacion.apisperu.com/api/v1/despatch/pdf');
+      setTimeout(() => {
+           sendInvoice(JSON.stringify(boleta), boleta.serie+ boleta.correlativo ,'https://facturacion.apisperu.com/api/v1/despatch/pdf');
+      },2000);
+
           }
 
       },
         error => { console.log(error)}
       );
-
 
 
        setTimeout(() => {
@@ -295,7 +297,7 @@ export class RemisionComponent implements OnInit {
         detalleBoleta.cantidad = value.cantidad;
         boleta.details.push(detalleBoleta);
       });
-        console.log("!print",boleta)
+        //console.log("!print",boleta)
         sendInvoice(JSON.stringify(boleta), boleta.serie + boleta.correlativo, 'https://facturacion.apisperu.com/api/v1/despatch/pdf');
 
     this.cargando=false;

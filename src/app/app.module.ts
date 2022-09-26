@@ -71,6 +71,7 @@ import { RemisionComponent } from './remision/remision.component';
 import { AddGuiaComponent } from './remision/add-guia/add-guia.component';
 import { PendientesComponent } from './ventas/pendientes/pendientes.component';
 import { EditGuiaComponent } from './remision/edit-guia/edit-guia.component';
+import { ExportarComponent } from './reportes/exportar/exportar.component';
 
 
 
@@ -176,7 +177,8 @@ EditGuiaComponent],
     RemisionComponent,
     AddGuiaComponent,
     PendientesComponent,
-    EditGuiaComponent
+    EditGuiaComponent,
+    ExportarComponent
     ],
   bootstrap: [AppComponent]
 })

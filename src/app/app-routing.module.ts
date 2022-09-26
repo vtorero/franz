@@ -24,6 +24,7 @@ import { ResumendComponent } from './dosimetria/resumen/resumend.component';
 import { RemisionComponent } from './remision/remision.component';
 import { AgregarventaComponent } from './ventas/agregarventa/agregarventa.component';
 import { PendientesComponent } from './ventas/pendientes/pendientes.component';
+import { ExportarComponent } from './reportes/exportar/exportar.component';
 
 
 const routes: Routes = [
@@ -56,9 +57,14 @@ const routes: Routes = [
     component:RemisionComponent
     }
   ]},
+  {path:'exportar',children:[
+    {path:'excel',
+    component:ExportarComponent
+    }
+  ]},
 
   {path:'general',
-  
+
     children: [
       {
         path:'pendientes',
@@ -96,34 +102,34 @@ const routes: Routes = [
     {
       path: 'productos',
       component:  ProductosComponent
-    
+
     },
     {
       path: 'proveedores',
       component:  ProveedoresComponent
-    
+
     }, {
       path: 'clientes',
       component:  ClientesComponent
-    
+
     },{
     path: 'empresas',
       component:  EmpresasComponent
-    
+
     },
     {
       path: 'vendedores',
       component:  VendedoresComponent
-    
+
     },
     {
       path: 'ventas',
       component:  VentasComponent
-    
+
     },
     {path:'agregarventa',
     component:AgregarventaComponent}
-    
+
   ]
   },
   {path:'categorias',component:CategoriaComponent},

@@ -50,6 +50,12 @@ export class ApiService {
     ).pipe(map(result => result));
   }
 
+  getExcel(ini: string,fin:string) {
+    return this._http.get(Global.BASE_API_URL + 'reportes.php/exportar' ,
+      { headers: this.headers }
+    ).pipe(map(result => result));
+  }
+
   getMaxId(tabla:string){
     return this._http.get(Global.BASE_API_URL + 'api.php/correlativo/' +tabla,
       { headers: this.headers }
@@ -97,7 +103,7 @@ public GuardarComprobante(Boleta):Observable<any>{
     let headers = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Authorization', `Bearer ${Global.TOKEN_FACTURACION}`);
-    return this._http.post('https://facturacion.apisperu.com/api/v1/note/send',JSON.stringify(Boleta), { headers: headers });
+    return this._http.post('https://facturacion.apisperu.com/api/v1/note/send1',JSON.stringify(Boleta), { headers: headers });
   }
 
   public GuardarFactura(datos):Observable<any>{

@@ -71,6 +71,7 @@
           <input matInput name="fecha" #fecha="ngModel" [(ngModel)]="data.fecha" type="text" readonly>
         </mat-form-field>
         </div>
+
         </div>
         <div class="row">
           <div class="col-lg-4">
@@ -109,6 +110,12 @@
                 <mat-label>Fecha de Pago</mat-label>
                 <input matInput name="fechaPago" #fechaPago="ngModel" [(ngModel)]="data.fechaPago" type="text" readonly>
               </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+              <mat-form-field>
+                <mat-label>Monto descuento S/.</mat-label>
+                <input matInput name="descuento" [(ngModel)]="data.descuento"  #descuento="ngModel"  type="text" placeholder="S/" readonly>
+                </mat-form-field>
             </div>
             </div>
           <div class="row">

@@ -2,6 +2,7 @@ import { Client } from "./client";
 import { Company } from "./company";
 import { Cuota } from "./cuota";
 import { Details } from "./details";
+import { Descuentos } from './descuento';
 export class Boleta {
     constructor(
         public comprobante:string,
@@ -13,6 +14,7 @@ export class Boleta {
         public tipoMoneda:string,
         public client:Client,
         public company:Company,
+        public descuentos:[ Descuentos],
         public mtoOperGravadas: number,
         public mtoIGV:number,
         public totalImpuestos:number,

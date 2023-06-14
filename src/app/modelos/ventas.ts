@@ -20,6 +20,7 @@ export class Venta {
         public valor_neto:number,
         public observacion:string,
         public boleta:Boleta,
-        public formaPago:string
+        public formaPago:string,
+        public descuento:number
         ){}
 }

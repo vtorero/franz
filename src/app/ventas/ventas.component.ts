@@ -8,6 +8,7 @@ import { Boleta } from '../modelos/Boleta/boleta';
 import { Client } from '../modelos/Boleta/client';
 import { Company } from '../modelos/Boleta/company';
 import { Cuota } from '../modelos/Boleta/cuota';
+import {  Descuentos } from '../modelos/Boleta/descuento';
 import { Details } from '../modelos/Boleta/details';
 import { DetalleVenta } from '../modelos/detalleVenta';
 import { Venta } from '../modelos/ventas';
@@ -69,10 +70,11 @@ export class VentasComponent implements OnInit {
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', {ubigueo:'',codigoPais:'',departamento:'',provincia:'',distrito:'',urbanizacion:'',direccion:''});
+  descuento:Descuentos = new Descuentos('',0,0,0);
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company,0,0,0,0,0,0,0,0,0,'', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
+  boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company,[this.descuento],0,0,0,0,0,0,0,0,0,'', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
   cancela: boolean = false;
-  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','estado','formaPago','fechaPago','observacion','valor_total', 'opciones'];
+  displayedColumns=['nro_comprobante','comprobante','cliente', 'fecha','estado','formaPago','fechaPago','observacion','descuento','valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(private api: ApiService,
@@ -103,7 +105,7 @@ export class VentasComponent implements OnInit {
 
   agregarVenta() {
     const dialogo1 = this.dialog.open(AgregarventaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment,this.Moment, Global.BASE_IGV, 0, 0, [],false,'',0,'',this.boleta,''),
+      data: new Venta(0, localStorage.getItem("currentId"),'',0, 0, '','', this.Moment,this.Moment, Global.BASE_IGV, 0, 0, [],false,'',0,'',this.boleta,'',0),
       disableClose: true,
 
     });
@@ -136,7 +138,7 @@ export class VentasComponent implements OnInit {
       let fec2;
       let fecha1;
       let fecha2;
-      var boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0,0, 0,0,0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
+      var boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company,[this.descuento], 0, 0, 0,0, 0,0,0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
       fec1 = art.fecha.toDateString().split(" ", 4);
       fec2 = art.fechaPago.toDateString().split(" ", 4);
       var find = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -232,6 +234,12 @@ export class VentasComponent implements OnInit {
         boleta.subTotal = 0;
         boleta.company = this.company;
       }else{
+          if(art.descuento>0){
+          boleta.descuentos=[{codTipo:"02",monto:art.descuento,factor:1,montoBase:art.descuento}]
+          console.log(art.descuento);
+         total=total - art.descuento;
+        }
+
         boleta.mtoOperGravadas = parseFloat(total.toFixed(2));
         boleta.mtoIGV = parseFloat((total * Global.BASE_IGV).toFixed(2));
         boleta.totalImpuestos = parseFloat((total * Global.BASE_IGV).toFixed(2));
@@ -344,6 +352,7 @@ export class VentasComponent implements OnInit {
 
 
   abrirEditar(cod: Venta) {
+    console.log("cod",cod)
     const dialogo2 = this.dialog2.open(EditarVentaComponent, {
       data: cod,
       disableClose: true
@@ -360,7 +369,7 @@ export class VentasComponent implements OnInit {
     this.cargando=true;
     let fech;
     let fechaPago;
-    let boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0,0, 0, 0, 0,0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
+    let boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company,[this.descuento], 0, 0,0, 0, 0, 0,0,0,0, '', [], [{ code: '', value: '' }],{moneda:'',tipo:'',monto:0},[]);
     fech=art.fecha+"T00:00:00-05:00"
     fechaPago=art.fechaPago+"T00:00:00-05:00"
     boleta.fechaEmision = fech  ;
@@ -417,6 +426,13 @@ export class VentasComponent implements OnInit {
       detalleBoleta.tipAfeIgv = 10;
       boleta.details.push(detalleBoleta);
     });
+
+
+    if(art.descuento>0){
+      boleta.descuentos=[{codTipo:"02",monto:art.descuento,factor:1,montoBase:art.descuento}]
+      console.log(art.descuento);
+     total=total - art.descuento;
+    }
 
     boleta.mtoOperGravadas = parseFloat(Number(art.valor_neto).toFixed(2));
     boleta.mtoIGV = parseFloat(Number(art.monto_igv).toFixed(2));

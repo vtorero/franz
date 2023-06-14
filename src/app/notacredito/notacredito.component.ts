@@ -14,6 +14,7 @@ import { NotaCredito } from '../modelos/notacredito';
 import { Venta } from '../modelos/ventas';
 import { AddnotaComponent } from './addnota/addnota.component';
 import { VernotaComponent } from './vernota/vernota.component';
+import { Descuentos } from '../modelos/Boleta/descuento';
 
 function sendInvoice(data, nro, url) {
   fetch(url, {
@@ -51,8 +52,9 @@ export class NotacreditoComponent implements OnInit {
   startDate: Date = new Date();
   detalleVenta: DetalleVenta = new DetalleVenta('', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
   company: Company = new Company('', '', { ubigueo: '', codigoPais: '', departamento: '', provincia: '', distrito: '', urbanizacion: '', direccion: '' });
+  descuento:Descuentos = new Descuentos('',0,0,0);
   cliente: Client = new Client('', '', '', { direccion: '' });
-  boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company, 0, 0, 0, 0, 0, 0, 0,0,0, '', [], [{ code: '', value: '' }], { moneda: '', tipo: '',monto:0 },[]);
+  boleta: Boleta = new Boleta('','', '', '', '', this.Moment, '', this.cliente, this.company,[this.descuento],0, 0, 0, 0, 0, 0, 0,0,0, '', [], [{ code: '', value: '' }], { moneda: '', tipo: '',monto:0 },[]);
   cancela: boolean = false;
   displayedColumns = ['nro_nota', 'cliente', 'tipDocAfectado', 'NombreDoc', 'numDocfectado', 'fecha', 'valor_total', 'opciones'];
   @ViewChild(MatSort) sort: MatSort;
@@ -96,7 +98,7 @@ export class NotacreditoComponent implements OnInit {
 
   agregarNota() {
     const dialogo1 = this.dialog.open(AddnotaComponent, {
-      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment,this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, '', this.boleta,''),
+      data: new Venta(0, localStorage.getItem("currentId"), 0, 0, 0, '', '', this.Moment,this.Moment, Global.BASE_IGV, 0, 0, [], false, '', 0, '', this.boleta,'',0),
       disableClose: true
     });
     dialogo1.afterClosed().subscribe(art => {

@@ -123,6 +123,12 @@
                 <mat-datepicker #myPicker2></mat-datepicker>
               </mat-form-field>
             </div>
+            <div class="col-lg-4">
+              <mat-form-field>
+                <mat-label>Monto descuento S/.</mat-label>
+                <input matInput name="descuento" [(ngModel)]="data.descuento"  #descuento="ngModel"  type="text" placeholder="S/.">
+                </mat-form-field>
+            </div>
             </div>
           <div class="row">
               <mat-form-field style="width:97%;">

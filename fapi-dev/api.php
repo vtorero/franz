@@ -8,11 +8,13 @@ if($method == "OPTIONS") {
     die();
 }
 require_once 'vendor/autoload.php';
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 $app = new Slim\Slim();
-$db = new mysqli("localhost","marife","libido16","frdash_dev");
+//$db = new mysqli("localhost","marife","libido16","no-whaste");
+$db = new mysqli("localhost","marife","libido16","no-whaste");
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 mysqli_set_charset($db, 'utf8');
@@ -21,6 +23,21 @@ if (mysqli_connect_errno()) {
     exit();
 }
 $data=array();
+
+/*usuarios*/
+
+$app->get("/usuarios",function() use($db,$app){
+    header("Content-type: application/json; charset=utf-8");
+    $resultado = $db->query("SELECT * FROM  usuarios order by id ");
+    $prods=array();
+        while ($fila = $resultado->fetch_array()) {
+
+            $prods[]=$fila;
+        }
+        $respuesta=json_encode($prods);
+        echo  $respuesta;
+
+    });
 
 /*Productos*/
 $app->get("/productos",function() use($db,$app){
@@ -426,7 +443,7 @@ $app->post("/compra",function() use($db,$app){
        $data = json_decode($j['json']);
        try {
         $fecha=substr($data->fecha,0,10);
-        $sql="call p_compra('{$data->comprobante}',{$data->num_comprobante},'{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
+        $sql="call p_compra('{$data->comprobante}','{$data->num_comprobante}','{$data->descripcion}','{$fecha}',{$data->id_proveedor})";
         $stmt = mysqli_prepare($db,$sql);
         mysqli_stmt_execute($stmt);
         $datos=$db->query("SELECT max(id) ultimo_id FROM compras");
@@ -713,7 +730,7 @@ $app->get("/pendientes",function() use($db,$app){
 
 $app->get("/ventas",function() use($db,$app){
     header("Content-type: application/json; charset=utf-8");
-     $resultado = $db->query("SELECT v.id, v.tipoDoc,v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,formaPago,DATE_FORMAT(v.fechaPago, '%Y-%m-%d') fechaPago ,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') union all SELECT v.id,v.tipoDoc, v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,valor_total,  comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,formaPago,DATE_FORMAT(v.fechaPago, '%Y-%m-%d') fechaPago ,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Factura','Factura Gratuita') order by id desc");
+     $resultado = $db->query("SELECT v.id, v.tipoDoc,v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.nombre,' ',c.apellido) cliente,igv,monto_igv,valor_neto,descuento,valor_total,  comprobante,nro_comprobante, DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,formaPago,DATE_FORMAT(v.fechaPago, '%Y-%m-%d') fechaPago ,observacion FROM ventas v,usuarios u,clientes c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Boleta') union all SELECT v.id,v.tipoDoc, v.id_usuario,case  v.estado when '1' then 'Enviada' when '3' then 'Anulada' end as estado,u.nombre usuario,ve.id id_vendedor,concat(ve.nombre,' ',ve.apellidos) vendedor,c.id id_cliente,c.num_documento,c.direccion,concat(c.razon_social) cliente,igv,monto_igv,valor_neto,descuento,valor_total,  comprobante,nro_comprobante,DATE_FORMAT(v.fecha, '%Y-%m-%d') fecha,formaPago,DATE_FORMAT(v.fechaPago, '%Y-%m-%d') fechaPago ,observacion FROM ventas v,usuarios u,empresas c,vendedor ve where v.id_vendedor=ve.id and v.id_cliente=c.id and v.id_usuario=u.id and v.comprobante in('Factura','Factura Gratuita') order by id desc");
     $prods=array();
         while ($fila = $resultado->fetch_array()) {
             $prods[]=$fila;
@@ -748,7 +765,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             //toque produccion
             //$token="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MTAxNzI4ODYsInVzZXJuYW1lIjoidnRvcmVybyIsImNvbXBhbnkiOiIyMDYwNTE3NDA5NSIsImV4cCI6NDc2Mzc3Mjg4Nn0.nL93zWcOm8w3ZAkWm_Ia9vF7DaFnP_wzuSgeF7_X1CvzvQOotSK12WphLo7jFmBRfLJm2UBPoUucOSNzbk3zdbvjCdG1p2tQ7CQlypxWggSxQ76Wma6cFJL7NF9ULxOQEWGm3b2CVVfDq2MgSyE6xNmOGuzP_7CsSyukd-Q8MOqjgtefBRPeN0XtX85s0Ie-5Twy_AP-MXOFj1gYapEpSPWN4QrK4wibAu8tVs01ipczGsZXzrQWZFVpmozluXPtsx6hNHy_XAGhJSIU1Ftj8rc5xIa7RD2-VO-nJVlChmTPB5TGNH4YsQOASAaGXBtZmqxtpK9RJAmSFPpvxBr3XC6bcBGBRPUy0CmcH6VeVPJNTRcNzP7H11hFi49iS8P04ViccR8kMnUd-ABIGRSuhdxy6yv3JjV6P9MuyjSFmJFi1Mlw8lGFLI9UeHxLAr1AXk0MvD1-MtFMrHWc0JrqeiW8EU9RbwGAxGdVxCM9bVinQ6fYzou6W9lcjnHbktR3VqLiI6kkJlOIYRzByHLmOX59BlPhTcqJTC-jGKsuR7rJfMljKmknzDhnKy3eD16FShpzzpEXtta5tf_RvF4sMeX6XTT2WSN2z6RbtGvTyJ9bG3COpv7_iByUpHXh8VJTF5nzloKwS_lj7w45PP0_Rb7Al31POnfFOarU8dRM9LA";
            if($data->comprobante=='Factura'){
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash_dev' AND TABLE_NAME = 'facturas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'no-whaste' AND TABLE_NAME = 'facturas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -757,9 +774,18 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
             $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
            }
 
+           if($data->descuento==0){
+            unset($data->boleta->descuentos->codTipo);
+            unset($data->boleta->descuentos->montoBase);
+            unset($data->boleta->descuentos->factor);
+            unset($data->boleta->descuentos->monto);
+            unset($data->boleta->descuentos);
+
+        }
+
            if($data->comprobante=='Boleta'){
             unset($data->boleta->formaPago->monto);
-            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'frdash_dev' AND TABLE_NAME = 'boletas'";
+            $sql_comp="SELECT AUTO_INCREMENT  as ultimo_id FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'no-whaste' AND TABLE_NAME = 'boletas'";
             $datos=$db->query($sql_comp);
             $ultimo_id_fact=array();
             while ($d = $datos->fetch_object()) {
@@ -768,7 +794,7 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
                 $data->boleta->correlativo=$ultimo_id_fact->ultimo_id;
            }
 
-           $comprobante="";
+             $comprobante="";
            if($data->comprobante!='Pendiente'){
 
             $postdata = json_encode($data->boleta);
@@ -824,9 +850,9 @@ $app->get("/inventarios/:id",function($id) use($db,$app){
                     $fechaPago=$fecha;
                 }
                 if($data->comprobante=='Factura Gratuita'){
-                $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',0,{$data->igv},'{$data->observacion}','{$data->boleta->formaPago->tipo}','{$fechaPago}')";
+                $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',{$data->descuento},0,{$data->igv},'{$data->observacion}','{$data->boleta->formaPago->tipo}','{$fechaPago}')";
                 }else{
-                    $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',{$valor_total},{$data->igv},'{$data->observacion}','{$data->boleta->formaPago->tipo}','{$fechaPago}')";
+                    $sql="call p_venta('{$data->id_usuario}',{$data->id_vendedor},'{$data->cliente->id}','{$data->comprobante}','{$comprobante}','{$data->tipoDoc}','{$fecha}',{$data->descuento},{$valor_total},{$data->igv},'{$data->observacion}','{$data->boleta->formaPago->tipo}','{$fechaPago}')";
                 }
                    $stmt = mysqli_prepare($db,$sql);
                     mysqli_stmt_execute($stmt);

@@ -430,8 +430,8 @@ export class VentasComponent implements OnInit {
 
     if(art.descuento>0){
       boleta.descuentos=[{codTipo:"02",monto:art.descuento,factor:1,montoBase:art.descuento}]
-      console.log(art.descuento);
-     total=total - art.descuento;
+      console.log("descc",art.descuento);
+
     }
 
     boleta.mtoOperGravadas = parseFloat(Number(art.valor_neto).toFixed(2));

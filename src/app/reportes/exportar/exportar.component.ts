@@ -35,6 +35,7 @@ export const MY_MOMENT_FORMATS = {
   dateA11yLabel: 'LL',
   monthYearA11yLabel: 'MM YYYY',
 };
+
 @Component({
   selector: 'app-exportar',
   templateUrl: './exportar.component.html',
@@ -50,6 +51,7 @@ export class ExportarComponent implements OnInit {
   public selectedMoment = new Date();
   public selectedMoment2 = new Date();
   dataSource: any;
+  startDate:any;
   fec1= this.selectedMoment.toDateString().split(" ",4);
   fec2 = this.selectedMoment2.toDateString().split(" ",4);
   fecha1:string=this.fec1[2]+'-'+this.fec1[1]+'-'+this.fec1[3];
